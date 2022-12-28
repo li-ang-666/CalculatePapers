@@ -1,5 +1,9 @@
-create table test(
-    ...
-    ...
-    ...
-);
+HcmBizModel.java
+HcmBizModelAttribute.java
+HcmBizModelAttributeValue.java
+HcmFileTemplateCategory.java
+HcmHrEmployee.java
+HcmHrOfficelnfo.java
+HcmHrPositionManagement.java
+HcmHrRanklnfo.java
+HcmOrganizationPayrollCurrent.java 

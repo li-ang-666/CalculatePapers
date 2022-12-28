@@ -1,0 +1,55 @@
+WITH t1 AS (
+  SELECT t1.org_id,t1.id user_id,
+  count(DISTINCT IF (t3.job_id IS NOT NULL,t3.job_id,null)) hr_manage_job_num 
+  FROM dwd_users t1 
+  LEFT JOIN dwd_job_managers t2 ON t1.id=t2.manager_id 
+  LEFT JOIN dwd_applications t3 ON t2.job_id=t3.job_id 
+  AND t3.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id 
+),t2 AS (
+  SELECT t1.org_id,t1.id user_id,
+  count(DISTINCT t2.id) hr_assign_application_num 
+  FROM dwd_users t1 
+  LEFT JOIN dwd_assignments t2 ON t1.id=t2.assigner_id 
+  AND t2.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id
+),t3 AS (
+  SELECT t1.org_id,t1.id user_id,
+  count(DISTINCT t2.id) hr_arrange_interview_num 
+  FROM dwd_users t1 
+  LEFT JOIN dwd_interviews t2 ON t1.id=t2.interview_arranger_id 
+  AND t2.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id
+),t4 AS (
+  SELECT t1.org_id,t1.id user_id,
+  count(DISTINCT t2.id) hr_send_offer_num 
+  FROM dwd_users t1 
+  LEFT JOIN dwd_offers t2 ON t1.id=t2.offered_by 
+  AND t2.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id
+),t5 AS (
+  SELECT t1.org_id,t1.id user_id,
+  round(sum(IF (t3.offered_by IS NOT NULL,1,0))/sum(1)*100,3) hr_application_to_offer_rate 
+  FROM dwd_users t1 
+  LEFT JOIN dwd_job_managers t2 ON t1.id=t2.manager_id 
+  LEFT JOIN dwd_applications t3 ON t2.job_id=t3.job_id 
+  AND t3.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id
+) 
+  SELECT t1.org_id,t1.user_id,
+  hr_manage_job_num,
+  hr_assign_application_num, 
+  hr_arrange_interview_num,
+  hr_send_offer_num, 
+  hr_application_to_offer_rate 
+  FROM t1 LEFT JOIN t2 ON t1.org_id=t2.org_id AND t1.user_id=t2.user_id 
+  LEFT JOIN t3 ON t1.org_id=t3.org_id AND t1.user_id=t3.user_id 
+  LEFT JOIN t4 ON t1.org_id=t4.org_id AND t1.user_id=t4.user_id 
+  LEFT JOIN t5 ON t1.org_id=t5.org_id AND t1.user_id=t5.user_id
+ 
+
+  hyd.hr_manage_job_num,
+  hyd.hr_assign_application_num,
+  hyd.hr_arrange_interview_num,
+  hyd.hr_send_offer_num,
+  hyd.hr_application_to_offer_rate  

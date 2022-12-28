@@ -1,0 +1,93 @@
+--负责N个职位的招聘
+select t1.org_id, t1.id user_id, count(distinct if(t3.job_id is not null,t3.job_id,0)) hr_manage_job_num
+from dwd_users t1
+left join dwd_job_managers t2 on t1.id = t2.manager_id
+left join dwd_applications t3 on t2.job_id = t3.job_id and (t3.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id;
+-------------------------------------------------------------------------
+--推荐了N份申请
+select t1.org_id, t1.id user_id, count(distinct t2.id) hr_assign_application_num
+from dwd_users t1 left join dwd_assignments t2
+on t1.id = t2.assigner_id and (t2.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id;
+-------------------------------------------------------------------------
+--安排了N场面试
+select t1.org_id, t1.id user_id, count(distinct t2.id) hr_arrange_interview_num
+from dwd_users t1 left join dwd_interviews t2
+on t1.id = t2.interview_arranger_id and (t2.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id;
+-------------------------------------------------------------------------
+--发出N个offer
+select t1.org_id, t1.id user_id, count(distinct t2.id) hr_send_offer_num
+from dwd_users t1 left join dwd_offers t2
+on t1.id = t2.offered_by and (t2.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id;
+-------------------------------------------------------------------------
+--入职转化率
+select t1.org_id, t1.id user_id, round(sum(if(t3.offered_by is not null,1,0))/sum(1) * 100,3) hr_application_to_offer_rate
+from dwd_users t1
+left join dwd_job_managers t2 on t1.id = t2.manager_id
+left join dwd_applications t3 on t2.job_id = t3.job_id and (t3.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id;
+------------------------------------
+select t1.org_id,t1.user_id,
+hr_manage_job_num,
+hr_assign_application_num,
+hr_arrange_interview_num,
+hr_send_offer_num,
+hr_application_to_offer_rate
+from t1
+left join t2 on t1.org_id = t2.org_id and t1.id = t2.id
+left join t3 on t1.org_id = t3.org_id and t1.id = t3.id
+left join t4 on t1.org_id = t4.org_id and t1.id = t4.id
+left join t5 on t1.org_id = t5.org_id and t1.id = t5.id
+
+
+
+alter table year_end_summary_2023 add column hr_manage_job_num bigint;
+alter table year_end_summary_2023 add column hr_assign_application_num bigint;
+alter table year_end_summary_2023 add column hr_arrange_interview_num bigint;
+alter table year_end_summary_2023 add column hr_send_offer_num bigint;
+alter table year_end_summary_2023 add column hr_application_to_offer_rate decimal(27,9);
+
+with t1 as(
+select t1.org_id, t1.id user_id, count(distinct if(t3.job_id is not null,t3.job_id,null)) hr_manage_job_num
+from dwd_users t1
+left join dwd_job_managers t2 on t1.id = t2.manager_id
+left join dwd_applications t3 on t2.job_id = t3.job_id and (t3.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id
+),t2 as (
+select t1.org_id, t1.id user_id, count(distinct t2.id) hr_assign_application_num
+from dwd_users t1 left join dwd_assignments t2
+on t1.id = t2.assigner_id and (t2.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id
+), t3 as (
+select t1.org_id, t1.id user_id, count(distinct t2.id) hr_arrange_interview_num
+from dwd_users t1 left join dwd_interviews t2
+on t1.id = t2.interview_arranger_id and (t2.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id
+), t4 as (
+select t1.org_id, t1.id user_id, count(distinct t2.id) hr_send_offer_num
+from dwd_users t1 left join dwd_offers t2
+on t1.id = t2.offered_by and t2.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00'
+group by t1.org_id, t1.id
+), t5 as(
+select t1.org_id, t1.id user_id, round(sum(if(t3.offered_by is not null,1,0))/sum(1) * 100,3) hr_application_to_offer_rate
+from dwd_users t1
+left join dwd_job_managers t2 on t1.id = t2.manager_id
+left join dwd_applications t3 on t2.job_id = t3.job_id and (t3.created_at between '2022-01-01 00:00:00' and '2023-01-01 00:00:00')
+group by t1.org_id, t1.id
+)
+select t1.org_id,t1.user_id,
+hr_manage_job_num,
+hr_assign_application_num,
+hr_arrange_interview_num,
+hr_send_offer_num,
+hr_application_to_offer_rate
+from t1
+left join t2 on t1.org_id = t2.org_id and t1.id = t2.id
+left join t3 on t1.org_id = t3.org_id and t1.id = t3.id
+left join t4 on t1.org_id = t4.org_id and t1.id = t4.id
+left join t5 on t1.org_id = t5.org_id and t1.id = t5.id
+limit 11
+;
