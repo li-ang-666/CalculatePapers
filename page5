@@ -2,3 +2,23 @@
 4:00 skate
 6:00 over and eat
 7:30 over and movie
+
+alter table dwd_appointment_interview add column business_table varchar(200);
+alter table dwd_appointment_interview add column business_table_index varchar(200);
+alter table dwd_appointment_interview add column business_id bigint;
+alter table dwd_appointment_interview add column join_key varchar(300);
+alter table dwd_appointment_interview add column interview_status bigint;
+
+
+alter table dwd_appointment_interview_applications add column business_table varchar(200);
+alter table dwd_appointment_interview_applications add column business_table_index varchar(200);
+alter table dwd_appointment_interview_applications add column business_id bigint;
+alter table dwd_appointment_interview_applications add column join_key varchar(300);
+alter table dwd_appointment_interview_applications add column application_status bigint;
+
+
+
+
+delete from dwd_appointment_interview_applications where org_id  = 'qiaotest';
+delete from dwd_appointment_interview where org_id = 'qiaotest';
+

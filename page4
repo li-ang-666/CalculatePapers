@@ -1,55 +1,79 @@
-WITH t1 AS (
-  SELECT t1.org_id,t1.id user_id,
-  count(DISTINCT IF (t3.job_id IS NOT NULL,t3.job_id,null)) hr_manage_job_num 
-  FROM dwd_users t1 
-  LEFT JOIN dwd_job_managers t2 ON t1.id=t2.manager_id 
-  LEFT JOIN dwd_applications t3 ON t2.job_id=t3.job_id 
-  AND t3.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
-  GROUP BY t1.org_id,t1.id 
-),t2 AS (
-  SELECT t1.org_id,t1.id user_id,
-  count(DISTINCT t2.id) hr_assign_application_num 
-  FROM dwd_users t1 
-  LEFT JOIN dwd_assignments t2 ON t1.id=t2.assigner_id 
-  AND t2.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
-  GROUP BY t1.org_id,t1.id
-),t3 AS (
-  SELECT t1.org_id,t1.id user_id,
-  count(DISTINCT t2.id) hr_arrange_interview_num 
-  FROM dwd_users t1 
-  LEFT JOIN dwd_interviews t2 ON t1.id=t2.interview_arranger_id 
-  AND t2.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
-  GROUP BY t1.org_id,t1.id
-),t4 AS (
-  SELECT t1.org_id,t1.id user_id,
-  count(DISTINCT t2.id) hr_send_offer_num 
-  FROM dwd_users t1 
-  LEFT JOIN dwd_offers t2 ON t1.id=t2.offered_by 
-  AND t2.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
-  GROUP BY t1.org_id,t1.id
-),t5 AS (
-  SELECT t1.org_id,t1.id user_id,
-  round(sum(IF (t3.offered_by IS NOT NULL,1,0))/sum(1)*100,3) hr_application_to_offer_rate 
-  FROM dwd_users t1 
-  LEFT JOIN dwd_job_managers t2 ON t1.id=t2.manager_id 
-  LEFT JOIN dwd_applications t3 ON t2.job_id=t3.job_id 
-  AND t3.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
-  GROUP BY t1.org_id,t1.id
-) 
-  SELECT t1.org_id,t1.user_id,
-  hr_manage_job_num,
-  hr_assign_application_num, 
-  hr_arrange_interview_num,
-  hr_send_offer_num, 
-  hr_application_to_offer_rate 
-  FROM t1 LEFT JOIN t2 ON t1.org_id=t2.org_id AND t1.user_id=t2.user_id 
-  LEFT JOIN t3 ON t1.org_id=t3.org_id AND t1.user_id=t3.user_id 
-  LEFT JOIN t4 ON t1.org_id=t4.org_id AND t1.user_id=t4.user_id 
-  LEFT JOIN t5 ON t1.org_id=t5.org_id AND t1.user_id=t5.user_id
- 
+CREATE TABLE `dwd_appointment_interview_applications` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `org_id` varchar(255) NOT NULL DEFAULT '',
+  `grid_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '候选人格子id',
+  `appointment_interview_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '预约面试id',
+  `application_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `group_interview_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '安排后的面试ID',
+  `interviewee_video_url` varchar(255) DEFAULT NULL COMMENT '视频面试URL',
+  `modify_times` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '候选人修改次数',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:未预约 1:已预约 2:时间不合适, 3:已安排 4:安排中 5:安排失败',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最近更新时间',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `error` tinyint(4) DEFAULT NULL COMMENT '安排面试失败详情 参见 BULK_VALIDATION_ERROR',
+  `error_message` varchar(255) DEFAULT '' COMMENT '创建面试失败原因',
+  `interview_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '该场面试对application来说的状态',
+  `deleted` tinyint(1) DEFAULT '0',
+  `campus_site_id` int(10) unsigned DEFAULT '0',
+  `job_id` varchar(255) DEFAULT NULL,
+  `job_num_id` int(10) unsigned DEFAULT '0',
+  `hire_mode` int(11) DEFAULT NULL,
+  `business_table` varchar(200) DEFAULT NULL,
+  `business_table_index` varchar(200) DEFAULT NULL,
+  `business_id` bigint(20) DEFAULT NULL,
+  `join_key` varchar(300) DEFAULT NULL,
+  `application_status` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,
+  KEY `dwd_appointment_interview_applications_org_id_index` (`org_id`),
+  KEY `dwd_appointment_interview_applications_grid_id_index` (`grid_id`),
+  KEY `dwd_appointment_interview_applications_application_id_index` (`application_id`),
+  KEY `dwd_appointment_interview_id` (`appointment_interview_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1000012037 COMMENT='预约面试候选人';
 
-  hyd.hr_manage_job_num,
-  hyd.hr_assign_application_num,
-  hyd.hr_arrange_interview_num,
-  hyd.hr_send_offer_num,
-  hyd.hr_application_to_offer_rate  
+
+
+
+CREATE TABLE `dwd_appointment_interview` (
+  `id` bigint  NOT NULL AUTO_INCREMENT,
+  `org_id` varchar(255) NOT NULL DEFAULT '',
+  `title` varchar(255) DEFAULT NULL COMMENT '项目名称',
+  `start_date` datetime DEFAULT NULL COMMENT '面试开始日期',
+  `end_date` datetime DEFAULT NULL COMMENT '面试开始日期',
+  `type_code` tinyint(4) NOT NULL DEFAULT '0' COMMENT '面试方式：参见INTERVIEW_TYPE',
+  `modality` tinyint(4) NOT NULL DEFAULT '0' COMMENT '面试形式: 1.批量添加面试, 2.分组面试, 3.叫号面试',
+  `round_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '面试阶段初试/复试..',
+  `stage_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '面试阶段id',
+  `category` tinyint(4) NOT NULL DEFAULT '0' COMMENT '面试类型1:技术类，2:非技术类',
+  `resume_type` varchar(255) DEFAULT NULL COMMENT '简历类型, 原始简历: original, 标准简历: standard',
+  `video_source` varchar(255) DEFAULT NULL COMMENT '视频面试来源 目前 niuke/others',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0=> 已取消, 1=>预约中，2=>预约截止, 3=>安排中，4=> 已安排',
+  `cancel_reason` text DEFAULT NULL COMMENT '预约面试取消原因',
+  `location_id` int(11) DEFAULT NULL COMMENT '面试场地id',
+  `location_type` varchar(255) DEFAULT NULL COMMENT 'campus: 校招, society: 社招, store: 门店',
+  `arrangement_setting` text DEFAULT NULL COMMENT '安排设置项json, {groupNum: 面试分组数量, duration: 面试持续时间/min, interval: 面试间隔时间/min, gridLimit: 每场人数, validTime: [[开始时间, 结束时间], [开始时间, 结束时间], ..]}',
+  `deadline_time` datetime DEFAULT NULL COMMENT '预约截止时间',
+  `deadline_notify` tinyint(4) NOT NULL DEFAULT '0' COMMENT '预约截止提醒: 1. 需要提醒, 2. 已提醒',
+  `candidate_rate` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '候选人比例达到多少会进行提醒',
+  `rate_notify` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '候选人达到比例后提醒: 1. 需要提醒, 2. 已提醒',
+  `handle_no_book_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '未预约候选人处理类型0:处理,1:淘汰,2:放入人才库',
+  `handle_no_book_type_option` text DEFAULT NULL COMMENT '{reasonId:归档原因ID, detail: 详细归档原因, talentPoolId: 人才库ID }',
+  `handle_no_time_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '时间不合适候选人处理类型0:处理,1:淘汰,2:放入人才库',
+  `handle_no_time_type_option` text DEFAULT NULL COMMENT '{reasonId:归档原因ID, detail: 详细归档原因, talentPoolId: 人才库ID }',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建预约面试的用户id',
+  `arranger_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '预约面试负责人id',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最近更新时间',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `queue_interview_follow_rounds` text DEFAULT NULL COMMENT '预约叫号面试后续面试配置',
+  `queue_interview_room_ids` text DEFAULT NULL COMMENT '叫号面试房间id',
+  `open_platform_job_type` varchar(255) NOT NULL DEFAULT '' COMMENT '开放平台职位类型（套餐类型）',
+  `business_table` varchar(200) DEFAULT NULL,
+  `business_table_index` varchar(200) DEFAULT NULL,
+  `business_id` bigint(20) DEFAULT NULL,
+  `interview_status` bigint(20) DEFAULT NULL,
+  `join_key` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,
+  KEY `dwd_appointment_interview_org_id_index` (`org_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=200000041 COMMENT='预约面试';
+
+
+
