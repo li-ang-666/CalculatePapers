@@ -26,3 +26,4 @@ alter table hcm_auth_function add index idx_function_status(function_id,status);
 alter table hcm_auth_foreign_function add index idx_function_status(function_id,status);
 alter table hcm_auth_role_function add index idx_function(function_id);
 alter table hcm_auth_function drop index idx_function_id;
+
