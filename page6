@@ -1,0 +1,56 @@
+
+WITH t1 AS (
+  --今年，你一共负责了_个职位的招聘 hr_manage_job_num
+  SELECT t1.org_id,t1.id user_id,t1.created_at,
+  count(DISTINCT IF (t3.job_id IS NOT NULL,t3.job_id,NULL)) hr_manage_job_num
+  FROM dwd_users t1
+  LEFT JOIN dwd_job_managers t2 ON t1.id=t2.manager_id AND t2.`role` in (25,30)
+  LEFT JOIN dwd_applications t3 ON t2.job_id=t3.job_id
+  AND t3.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id,t1.created_at
+),t2 AS (
+  --推荐了_份简历 hr_assign_application_num
+  SELECT t1.org_id,t1.id user_id,
+  count(DISTINCT t2.application_id) hr_assign_application_num
+  FROM dwd_users t1
+  LEFT JOIN dwd_assignments t2 ON t1.id=t2.assigner_id
+  AND t2.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id
+),t3 AS (
+  --安排了_场面试 hr_arrange_interview_num
+  SELECT t1.org_id,t1.id user_id,
+  count(DISTINCT t2.group_interview_id) hr_arrange_interview_num
+  FROM dwd_users t1
+  LEFT JOIN dwd_interviews t2 ON t1.id=t2.interview_arranger_id
+  AND t2.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id
+),t4 AS (
+  --发出_份offer hr_send_offer_num
+  SELECT t1.org_id,t1.id user_id,
+  count(distinct IF (t3.offered_by IS NOT NULL,t3.id,NULL)) hr_send_offer_num
+  FROM dwd_users t1
+  LEFT JOIN dwd_job_managers t2 ON t1.id=t2.manager_id AND t2.`role` in (25,30)
+  LEFT JOIN dwd_applications t3 ON t2.job_id=t3.job_id
+  AND t3.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id
+),t5 AS (
+  --实现了_%入职转化率 hr_application_to_offer_rate
+  SELECT t1.org_id,t1.id user_id,
+  round(count(distinct IF (t3.offered_by IS NOT NULL,t3.id,NULL))/count(distinct t3.id) * 100,3) hr_application_to_offer_rate
+  FROM dwd_users t1
+  LEFT JOIN dwd_job_managers t2 ON t1.id=t2.manager_id AND t2.`role` in (25,30)
+  LEFT JOIN dwd_applications t3 ON t2.job_id=t3.job_id
+  AND t3.created_at BETWEEN '2022-01-01 00:00:00' AND '2023-01-01 00:00:00'
+  GROUP BY t1.org_id,t1.id
+)
+  SELECT t1.org_id,t1.user_id,t1.created_at,
+  ifnull(hr_manage_job_num,0) hr_manage_job_num,
+  ifnull(hr_assign_application_num,0) hr_assign_application_num,
+  ifnull(hr_arrange_interview_num,0) hr_arrange_interview_num,
+  ifnull(hr_send_offer_num,0) hr_send_offer_num,
+  ifnull(hr_application_to_offer_rate,0) hr_application_to_offer_rate
+  FROM t1 LEFT JOIN t2 ON t1.org_id=t2.org_id AND t1.user_id=t2.user_id
+  LEFT JOIN t3 ON t1.org_id=t3.org_id AND t1.user_id=t3.user_id
+  LEFT JOIN t4 ON t1.org_id=t4.org_id AND t1.user_id=t4.user_id
+  LEFT JOIN t5 ON t1.org_id=t5.org_id AND t1.user_id=t5.user_id
+  where t1.org_id = 'qiaotest';
