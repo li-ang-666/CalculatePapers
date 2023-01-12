@@ -1,3 +1,9 @@
+
+drop table dwd_appointment_interview_applications;
+drop table dwd_appointment_interview;
+
+
+
 CREATE TABLE `dwd_appointment_interview_applications` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `org_id` varchar(255) NOT NULL DEFAULT '',
@@ -23,12 +29,11 @@ CREATE TABLE `dwd_appointment_interview_applications` (
   `business_id` bigint(20) DEFAULT NULL,
   `join_key` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,
-  KEY `business_table_id` (`business_table`,`business_table`),
+  KEY `business_table_id` (`business_table`,`business_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1000012037 COMMENT='预约面试候选人';
 
 
-
-
+drop table dwd_appointment_interview;
 CREATE TABLE `dwd_appointment_interview` (
   `id` bigint  NOT NULL AUTO_INCREMENT,
   `org_id` varchar(255) NOT NULL DEFAULT '',
@@ -65,11 +70,13 @@ CREATE TABLE `dwd_appointment_interview` (
   `business_table` varchar(200) DEFAULT NULL,
   `business_table_index` varchar(200) DEFAULT NULL,
   `business_id` bigint(20) DEFAULT NULL,
-  `interview_status` bigint(20) DEFAULT NULL,
   `join_key` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`) /*T![clustered_index] CLUSTERED */,
-  KEY `business_table_id` (`business_table`,`business_table`),
+  KEY `business_table_id` (`business_table`,`business_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=200000041 COMMENT='预约面试';
+
+./exec readd dwd_appointment_interview_applications;
+./exec readd dwd_appointment_interview;
 
 
 
