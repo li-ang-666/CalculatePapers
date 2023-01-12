@@ -1,9 +1,10 @@
 
+--tidb doris 都执行
 drop table dwd_appointment_interview_applications;
 drop table dwd_appointment_interview;
 
 
-
+--tidb 执行
 CREATE TABLE `dwd_appointment_interview_applications` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `org_id` varchar(255) NOT NULL DEFAULT '',
@@ -32,7 +33,7 @@ CREATE TABLE `dwd_appointment_interview_applications` (
   KEY `business_table_id` (`business_table`,`business_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1000012037 COMMENT='预约面试候选人';
 
-
+--tidb 执行
 drop table dwd_appointment_interview;
 CREATE TABLE `dwd_appointment_interview` (
   `id` bigint  NOT NULL AUTO_INCREMENT,
@@ -75,8 +76,17 @@ CREATE TABLE `dwd_appointment_interview` (
   KEY `business_table_id` (`business_table`,`business_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=200000041 COMMENT='预约面试';
 
+
+# dosi-tool(-vip) 执行
 ./exec readd dwd_appointment_interview_applications;
 ./exec readd dwd_appointment_interview;
+
+
+:g/dwd_appointment_interview,/d
+:g/dwd_appointment_interview_applications,/d
+:g/dwd_society_appointment_interview,/d
+
+
 
 
 
