@@ -1,0 +1,5 @@
+WITH m_1_0 AS(
+SELECT x8 AS x8,sum(c0_0_a0_e2) AS c0_0_a0_e2,sum(m2) AS m2 FROM ((
+SELECT t_2_0.`added_by` AS x8,count(1) AS c0_0_a0_e2,0 AS m2 FROM dwd_applications AS t_2_0 LEFT JOIN dwd_candidates AS t_6_0 ON (t_2_0.`candidate_id`=t_6_0.`id`) AND (t_6_0.`deleted`='0' AND t_6_0.`org_id`='officialqa') WHERE t_2_0.`added_by` IN ('410079097','410096233') AND t_2_0.`org_id`='officialqa' GROUP BY x8) UNION ALL (
+SELECT t_2_0.`added_by` AS x8,0 AS c0_0_a0_e2,count(1) AS m2 FROM dwd_applications AS t_2_0 WHERE t_2_0.`added_by` IN ('410079097','410096233') AND t_2_0.`org_id`='officialqa' GROUP BY x8)) AS union_table GROUP BY x8
+)select * from m_1_0 where m_1_0.`x8` IN ('410079097','410096233');

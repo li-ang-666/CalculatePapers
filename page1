@@ -89,4 +89,9 @@ CREATE TABLE `dwd_appointment_interview` (
 
 
 
+:g/dwd_appointment_interview,test$/d
+:g/dwd_appointment_interview_applications,test$/d
+:g/dwd_society_appointment_interview,test$/d
 
+
+["273d0f89-594a-4958-9416-1bddcc290692"]
