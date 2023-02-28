@@ -1,16 +1,27 @@
-排序方法       平均时间复杂度      最佳时间复杂度       最差时间复杂度          空间复杂度         稳定性
-    2 ---------------------------------------------------------------------------------------------------
-    3 SelectSort       o(N²)            o(N²)                -                 o(1)
-    4 BubbleSort       o(N²)            o(N)                 -                 o(1)              √
-    5 InsertSort       o(N²)            o(N)                 -                 o(1)              √
-    6 ---------------------------------------------------------------------------------------------------
-    7 ShellSort        o(Nᴷ)            o(N)               o(N²)               o(1)
-    8 QuickSort        o(NlogN)           -                o(N²)               o(logN)
-    9 MergeSort        o(NlogN)           -                  -                 o(N)              √
-   10 HeapSort         o(NlogN)           -                  -                 o(1)
-   11 
-   12 
-   13 
-   14 三种 简单排序 时间复杂度都是 o(N²)
-   15 其中 冒泡排序 插入排序 有跳出逻辑, 所以最好的情况能到 o(N)
-   16 希尔排序
+JobManager构建ExecutionGraph的过程中, 会创建CheckpointCoordinator
+这是负责checkpoint的类, 同时会添加一个JobStateListener:CheckpointCoordinatorDeActivator
+JobManager调整任务状态从CREATED到RRUNNING后, 监听器会触发CheckpointCoordinator的startCheckpointScheduler()方法
+
+CheckpointCoordinator会部署SchedulerTrigger在后台定时的根据用户设置的最大checkpoint并行数和interval检查是否需要触发checkpoint
+所有条件满足, 检查没有问题后, 会远程调用TaskManager的triggerCheckpoint()方法, 通知所有的source task触发checkpoint
+JobManager端也会生成PendingCheckpoint, 包含checkpointID和timestamp, 等待下游TASK的ack
+
+上述triggerCheckpoint()方法会先获取到SourceStreamTask, 调用Task的triggerCheckpointBarrier()方法
+该方法在后台异步的执行StreamTask的performCheckpoint()方法:
+向下游广播CheckpointBarrier, 进行Source的snapshot
+
+下游的task调用StreamTask中, CheckpointBarrierHandler的getNextNonBlocked()方法
+根据CheckpointingMode不同, CheckpointBarrierHandler会返回不同的Handler:BarrierBuffer和BarrierTracker
+如果是EXACTLY_ONCE, 就是BarrierBuffer, 会等待其他Barrier, 进行对齐, 缓存提前到来的数据
+如果是AT_LEAST_ONCE, 就是BarrierTracker, 不会进行Barrier对齐, 继续处理数据,进而会处理checkpoint(n+1)的数据
+
+Task执行完Checkpoint后会向JobMnager上报checkpoint的元数据信息
+JobManager端的CheckpointCoordinator通过调用PendingCheckpoint的acknowledgeTask()方法,缓存到PendingCheckpoint
+
+JobMnager的CheckpointCoordinator收到所有Sink Task的ack消息后, 就执行completePendingCheckpoint()
+将checkpoint的数据存储到状态后端, 然后通知所有Task进行commit操作
+这里主要涉及了二阶段提交, 当收到checkpoint后, 停止本轮事务但不commit, 确认记录到checkpoint后, 再commit
+
+所有Task执行完commit, 调用notifyCheckpointComplete()方法回馈JobMnager, 一轮checkpoint结束
+
+
