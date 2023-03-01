@@ -1,0 +1,11 @@
+
+
+
+负责CK的关键类 CKCoordinator在JobMnager生成ExecutionGraph的过程中被创建
+如果用户开启了CK,同时被创建的还有实现了JobStatusListiner接口的CKCoordinatorDeActivator
+顾名思义 当JM将程序状态从CREATED调整为RUNNING, CKCoordinatorDeActivator会执行CKCoordinator的startCheckpointScheduler()方法
+Coordinator创建ScheduledTrigger, Trigger负责周期性的检查用户配置的CK并行度与interval, 判断是否需要触发新一轮的CK,如果需要新一轮的CK
+Trigger创建PendingCK,包含ID与时间戳, 并且远程调用TM的triggerCK()
+TM的triggerCK会首先获取所有的SourceStreamTask, 执行他们的trigggerCKBarrier, 并在后台线程执行StreamTask的performCK:1、向下游发送CKBarrier
+2、向JM汇报ack
+Barrier汲
