@@ -1,50 +1,14 @@
-MySQL [bi_production]> select count(1) from ads_dml_trace where kafka_time between '2022-02-25 00:00:00' and '2022-02-26 00:00:00';
-select count(1) from ads_dml_trace where kafka_time between '2022-02-27 00:00:00' and '2022-02-28 00:00:00';
-select count(1) from ads_dml_trace where kafka_time between '2022-02-28 00:00:00' and '2022-03-01 00:00:00';
-select count(1) from ads_dml_trace where kafka_time between '2022-03-01 00:00:00' and '2022-03-02 00:00:00';
-select count(1) from ads_dml_trace where kafka_time between '2022-03-02 00:00:00' and '2022-03-03 00:00:00';
-select count(1) from ads_dml_trace where kafka_time between '2022-03-03 00:00:00' and '2022-03-04 00:00:00';+----------+
-| count(1) |
-+----------+
-|        0 |
-+----------+
-1 row in set (0.09 sec)
+[
+["1","1","1","0","0"]
+["1","1","1","0","0"]
+["1","1","1","1","1"]
+["0","1","1","1","1"]
+["0","1","1","1","1"]
+["0","1","1","1","1"]
+]
 
-MySQL [bi_production]> select count(1) from ads_dml_trace where kafka_time between '2022-02-26 00:00:00' and '2022-02-27 00:00:00';
+3[z]
+2[
+    2[y] pq 4[2[jk]e1[f]]
+]ef
 
-select count(1) from ads_dml_trace where kafka_time between '2022-03-04 00:00:00' and '2022-03-05 00:00:00';
-select count(1) from ads_dml_trace where kafka_time between '2022-03-05 00:00:00' and '2022-03-06 00:00:00';
-+----------+
-| count(1) |
-+----------+
-|        0 |
-+----------+
-1 row in set (0.13 sec)
-
-MySQL [bi_production]> select count(1) from ads_dml_trace where kafka_time between '2022-02-27 00:00:00' and '2022-02-28 00:00:00';
-
-
-+----------+
-| count(1) |
-+----------+
-|        0 |
-+----------+
-1 row in set (0.05 sec)
-
-MySQL [bi_production]> select count(1) from ads_dml_trace where kafka_time between '2022-02-28 00:00:00' and '2022-03-01 00:00:00';
-+----------+
-| count(1) |
-+----------+
-|        0 |
-+----------+
-1 row in set (0.00 sec)
-
-MySQL [bi_production]> select count(1) from ads_dml_trace where kafka_time between '2022-03-01 00:00:00' and '2022-03-02 00:00:00';
-+----------+
-| count(1) |
-+----------+
-|        0 |
-+----------+
-1 row in set (0.01 sec)
-
-MySQL [bi_production]> select count(1) from ads_dml_trace where kafka_time between '2022-03-02 00:00:00' and '2022-03-03 00:
