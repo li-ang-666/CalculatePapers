@@ -1,0 +1,76 @@
+~/Desktop » ll                                                                                                             liang@mbp [10:59:52 05/16]
+total 5504
+drwxr-xr-x@ 12 liang  staff      384  5 14 21:40 CalculatePapers
+-rw-r--r--@  1 liang  staff     4335  5  6 13:00 Flink面试.md
+-rw-r--r--@  1 liang  staff      885  5  5 21:46 Hadoop面试.md
+-rw-r--r--@  1 liang  staff    14077  5  9 10:36 Java面试.md
+-rw-r--r--@  1 liang  staff     2329  5  6 13:21 Kafka面试.md
+drwxr-xr-x   9 liang  staff      288  5 12 19:34 Moka离职
+drwxr-xr-x  12 liang  staff      384  5 14 20:34 WhenIWasAProgrammer
+drwxr-xr-x@  9 liang  staff      288  5 15 16:38 apache-maven-3.6.3
+drwxr-xr-x  15 liang  staff      480  5 15 14:57 darwin
+drwxr-xr-x   9 liang  staff      288  5 15 18:07 kuafu
+drwxr-xr-x  20 liang  staff      640  1  9 20:43 medusa
+-rw-r--r--@  1 liang  staff    15137  5  6 12:52 spark面试.md
+drwxr-xr-x   6 liang  staff      192  5 15 20:37 tyc
+drwxr-xr-x@ 10 liang  staff      320  1  5 00:51 笔记
+-rw-r--r--@  1 liang  staff  2762527  5  2 16:36 李昂_大数据开发工程师.docx
+-rw-r--r--@  1 liang  staff     3946  5  5 16:45 其他面试.md
+drwxr-xr-x  15 liang  staff      480  5 12 20:12 天眼查入职
+drwxr-xr-x   4 liang  staff      128  5 12 20:12 网易云音乐简历
+------------------------------------------------------------------------------------------------------------------------------------------------------
+~/Desktop » !vim                                                                                                           liang@mbp [10:59:54 05/16]
+------------------------------------------------------------------------------------------------------------------------------------------------------
+~/Desktop » vim ~/.oh-my-zsh/themes/af-magic.zsh-theme                                                                     liang@mbp [10:59:58 05/16]
+------------------------------------------------------------------------------------------------------------------------------------------------------
+~/Desktop » !vim                                                                                                           liang@mbp [11:00:24 05/16]
+------------------------------------------------------------------------------------------------------------------------------------------------------
+~/Desktop » vim ~/.oh-my-zsh/themes/af-magic.zsh-theme                                                                     liang@mbp [11:00:47 05/16]
+
+
+
+
+
+
+
+
+
+
+ 12   # if there is a python virtual environment and it is displayed in
+ 13   # the prompt, account for it when returning the number of dashes
+ 14   if [[ -n "$python_env" && "$PS1" = *\(${python_env}\)* ]]; then
+ 15     echo $(( COLUMNS - ${#python_env} - 3 ))
+ 16   else
+ 17     echo $COLUMNS
+ 18   fi
+ 19 }
+ 20 
+ 21 # primary prompt: dashed separator, directory and vcs info
+ 22 PS1="${FG[237]}\${(l.\$(afmagic_dashes)..-.)}%{$reset_color%}
+ 23 ${FG[032]}%~\$(git_prompt_info)\$(hg_prompt_info) ${FG[105]}%(!.#.»)%{$reset_color%} "
+ 24 PS2="%{$fg[red]%}\ %{$reset_color%}"
+ 25 
+ 26 # right prompt: return code, virtualenv and context (user@host)
+ 27 RPS1="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
+ 28 if (( $+functions[virtualenv_prompt_info] )); then
+ 29   RPS1+='$(virtualenv_prompt_info)'
+ 30 fi
+ 31 RPS1+=" ${FG[237]}%n@%m%{$reset_color%} ${FG[237]}[%* %D{%m/%d}]"
+ 32 
+ 33 # git settings
+ 34 ZSH_THEME_GIT_PROMPT_PREFIX=" ${FG[075]}(${FG[078]}"
+ 35 ZSH_THEME_GIT_PROMPT_CLEAN=""
+ 36 ZSH_THEME_GIT_PROMPT_DIRTY="${FG[214]}*%{$reset_color%}"
+ 37 ZSH_THEME_GIT_PROMPT_SUFFIX="${FG[075]})%{$reset_color%}"
+ 38 
+ 39 # hg settings
+ 40 ZSH_THEME_HG_PROMPT_PREFIX=" ${FG[075]}(${FG[078]}"
+ 41 ZSH_THEME_HG_PROMPT_CLEAN=""
+ 42 ZSH_THEME_HG_PROMPT_DIRTY="${FG[214]}*%{$reset_color%}"
+ 43 ZSH_THEME_HG_PROMPT_SUFFIX="${FG[075]})%{$reset_color%}"
+ 44 
+ 45 # virtualenv settings
+ 46 ZSH_THEME_VIRTUALENV_PREFIX=" ${FG[075]}["
+ 47 ZSH_THEME_VIRTUALENV_SUFFIX="]%{$reset_color%}"
+ 48 
+                                                                                                                                    48,0-1        Bot
