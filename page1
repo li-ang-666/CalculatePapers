@@ -1,49 +1,35 @@
-# Allows this configuration to be modified at runtime. The file will be checked every 30 seconds.
-monitorInterval=30
+2023-05-26 20:45:23 (DataConcatService.java:35) [INFO] - 表处理类加载:restrict_consumption_split_index -> RestrictConsumptionSplitIndex
+2023-05-26 20:45:23 (DataConcatService.java:35) [INFO] - 表处理类加载:judicial_assistance_index -> JudicialAssistanceIndex
+2023-05-26 20:45:23 (DataConcatService.java:35) [INFO] - 表处理类加载:restricted_outbound_index -> RestrictedOutboundIndex
+2023-05-26 20:45:23 (DataConcatService.java:35) [INFO] - 表处理类加载:equity_pledge_reinvest -> EquityPledgeReinvest
+2023-05-26 20:45:23 (DataConcatService.java:35) [INFO] - 表处理类加载:equity_pledge_detail -> EquityPledgeDetail
+2023-05-26 20:45:23 (DataConcatService.java:35) [INFO] - 表处理类加载:non_estate_pledge -> NonEstatePledge
+2023-05-26 20:45:23 (DataConcatService.java:35) [INFO] - 表处理类加载:land_mortgage_index -> LandMortgageIndex
 
-rootLogger.level = INFO
-rootLogger.appenderRef.file.ref = FileAppender
+file:/Users/liang/Desktop/flink-checkpoints/52608ce66a7dc73b5e611df5b8ad69b6/chk-1
 
-# Log all infos in the given file
-appender.file.name = FileAppender
-appender.file.type = FILE
-appender.file.append = false
-appender.file.fileName = ${sys:log.file}
-appender.file.layout.type = PatternLayout
-appender.file.layout.pattern = %d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %-60c %x - %m%n
+Moka20190520
+restrict_consumption_split_index
+judicial_assistance_index
+restricted_outbound_index
+equity_pledge_reinvest
+equity_pledge_detail
+non_estate_pledge
+land_mortgage_index
 
-# Log output from org.apache.flink.yarn to the console. This is used by the
-# CliFrontend class when using a per-job YARN cluster.
-logger.yarn.name = org.apache.flink.yarn
-logger.yarn.level = INFO
-logger.yarn.appenderRef.console.ref = ConsoleAppender
-logger.yarncli.name = org.apache.flink.yarn.cli.FlinkYarnSessionCli
-logger.yarncli.level = INFO
-logger.yarncli.appenderRef.console.ref = ConsoleAppender
-logger.hadoop.name = org.apache.hadoop
-logger.hadoop.level = INFO
-logger.hadoop.appenderRef.console.ref = ConsoleAppender
 
-# Make sure hive logs go to the file.
-logger.hive.name = org.apache.hadoop.hive
-logger.hive.level = INFO
-logger.hive.additivity = false
-logger.hive.appenderRef.file.ref = FileAppender
+[05.27 00:03:46] Checking KLoader version.
+KLoader: Verbose: work_main,239: function begin
+KLoader version: 2.26.2Exit_Code: 0
 
-# Log output from org.apache.flink.kubernetes to the console.
-logger.kubernetes.name = org.apache.flink.kubernetes
-logger.kubernetes.level = INFO
-logger.kubernetes.appenderRef.console.ref = ConsoleAppender
-
-appender.console.name = ConsoleAppender
-appender.console.type = CONSOLE
-appender.console.layout.type = PatternLayout
-appender.console.layout.pattern = %d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %-60c %x - %m%n
-
-# suppress the warning that hadoop native libraries are not loaded (irrelevant for the client)
-logger.hadoopnative.name = org.apache.hadoop.util.NativeCodeLoader
-logger.hadoopnative.level = OFF
-
-# Suppress the irrelevant (wrong) warnings from the Netty channel handler
-logger.netty.name = org.apache.flink.shaded.akka.org.jboss.netty.channel.DefaultChannelPipeline
-logger.netty.level = OFF
+Checking file permissions.
+Loading kext.
+<run cmd=/Applications/Proxifier.app/Contents/KLoader arg1=-load-kext arg2=/Applications/Proxifier.app exitCode=7 returnStatus=0>
+se: UnloadKext: function begin
+KLoader: Verbose: work_main,510: 
+KLoader: Verbose: work_main,518: 
+KLoader: Verbose: work_main,527: 
+KLoader: Request OS kernel API to load kext
+KLoader: kext /tmp/Proxifier-4EczeD/Proxifier.kext cannot be loaded with error -603947007
+RunCommand: child exit with error
+</run>
