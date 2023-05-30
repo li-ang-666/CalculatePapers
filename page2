@@ -1,3 +1,31 @@
-qqq
-qqq
-qqq
+select if(applicant_inlink is not null and applicant_inlink <> '', applicant_inlink, applicant) fi, count(1)
+from restrict_consumption_split_index
+where applicant <> ''
+  and company_id = ${companyId}
+  and is_history = 0
+group by if(applicant_inlink is not null and applicant_inlink <> '', applicant_inlink, applicant
+order by count(1) desc
+
+
+with t as(
+    select company_id,if(applicant_inlink is not null and applicant_inlink <> '', applicant_inlink, applicant) fi, count(1) cnt
+from ods_judicial_risk_restrict_consumption_split_index_df
+where applicant <> ''
+  and is_history = 0
+   -- and company_id = 14427175
+group by company_id,if(applicant_inlink is not null and applicant_inlink <> '', applicant_inlink, applicant)
+order by cnt desc
+),tt as(
+    select company_id,fi,row_number() over(partition by company_id order by cnt desc) rn from t
+    )
+select * from tt where rn = 1
+limit 10000;
+
+
+--conf spark.driver.extraJavaOptions="-Dlog4j.configuration=log4j-ud.properties" \
+--conf spark.executor.extraJavaOptions="-Dlog4j.configuration=log4j-ud.properties" \
+--conf spark.yarn.am.extraJavaOptions="-Dlog4j.configuration=log4j-ud.properties" \
+--conf spark.yarn.cluster.driver.extraJavaOptions="-Dlog4j.configuration=log4j-ud.properties" \
+
+
+%date{yyyy-MM-dd HH:mm:ss.SSS} [%level] [%threadName] (%class{1}.%method:%line) - %msg%n
