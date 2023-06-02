@@ -1,0 +1,74 @@
+2209,2210,2211,2212,2213,2229,2236,2237,2244,2245,2671,2681,2682,2693,2707,2720,2722,2723,2393
+
+-----------------------------------------------------
+
+dwa_company_mortgage_info_df,dwa_company_equity_info_df,dwa_company_punishment_info_df,dwa_company_illegal_info_df,dwa_company_ipr_pledge_info_df,dwd_tuoke_exchange_rate_df,dwd_expand_customer_company_income_information_df,dwd_expand_customer_annual_report_information_df,dwd_expand_customer_licence_df,dwd_expand_customer_legal_person_number_df,dwa_company_main_business_df,dwa_copyright_reg_df,dwa_copyright_work_df,dwa_company_invest_df,dwd_tuoke_company_org_type_df,dwa_court_announcement_df,dwa_company_judicial_assistance_info_df,dwa_finalcase_df,dwa_yuqing_ins_news_gid_tags_df
+
+
+with t as(
+    select
+        case
+            when sso_name = 'gaoyiqi1' then 'zhaohailiang'
+            when sso_name = 'liguangwei' then 'lanxiaoqin'
+            when sso_name = 'supengcheng' then 'shaojinghu'
+            else sso_name
+        end sso_name,
+        case
+            when run_type is null
+            or run_type <> 'hive' then 'shell'
+            else 'hive'
+        end run_type,
+        id
+    from
+        ods_kunpeng_hera_job_df
+    where
+        pt = '20230601'
+        and id in (2209,2210,2211,2212,2213,2229,2236,2237,2244,2245,2671,2681,2682,2693,2707,2720,2722,2723,2393)
+)
+select
+    concat(
+        "java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType ",
+        run_type,
+        " -projectName ${projectName} -createName ",sso_name,"  -userName ",
+        sso_name,
+        " -taskId ",
+        id
+    ) shell
+from
+    t
+
+
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName zhangwenqiang  -userName zhangwenqiang -taskId 2209 
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName zhangwenqiang  -userName zhangwenqiang -taskId 2210 
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName zhangwenqiang  -userName zhangwenqiang -taskId 2211 
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName zhangwenqiang  -userName zhangwenqiang -taskId 2212 
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName zhangwenqiang  -userName zhangwenqiang -taskId 2213 
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName liyigang  -userName liyigang -taskId 2229           
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName liyigang  -userName liyigang -taskId 2236           
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName liyigang  -userName liyigang -taskId 2237           
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName liyigang  -userName liyigang -taskId 2244           
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName liyigang  -userName liyigang -taskId 2245           
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName qiaozhiwei  -userName qiaozhiwei -taskId 2393       
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName lanxiaoqin  -userName lanxiaoqin -taskId 2671       
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName haoguowang  -userName haoguowang -taskId 2681       
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName haoguowang  -userName haoguowang -taskId 2682       
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName lanxiaoqin  -userName lanxiaoqin -taskId 2693       
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName'天眼商机项目' -createName liyigang  -userName liyigang -taskId 2707          
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName zhangwenqiang  -userName zhangwenqiang -taskId 2720 
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName zhangwenqiang  -userName zhangwenqiang -taskId 2722 
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName '天眼商机项目' -createName zhangwenqiang  -userName zhangwenqiang -taskId 2723 
+
+curl --request POST '10.99.205.232:8090/kunpeng/scheduleCenter/batch/job/date/manual' \
+ --header 'Content-Type: application/json' \
+ --header 'Cookie: HERA_Token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzc29JZCI6Ijk1Iiwic3NvX25hbWUiOiJsaWFuZyIsImF1ZCI6IjJkZmlyZSIsImlzcyI6ImhlcmEiLCJleHAiOjE2ODU3MDkwNTMsInVzZXJJZCI6IjIiLCJpYXQiOjE2ODU0NDk4NTMsInVzZXJuYW1lIjoiYmlnZGF0YSJ9.WZ5CkEN1b6ChU1eB7REZpHH3wKM-_I2JQ2sDAOZCEGU' \
+ --data '{
+    "postClose":0,
+    "startTime":"2023-06-02 00:00:00",
+    "endTime":"2023-06-02 23:59:59",
+    "triggerType":2,
+    "repeat":1,
+    "jobIds": []
+}'
+
+java -cp /home/hive/lfh/executeProcesss.jar com.tyc.migration.executeProcesss "天眼商机项目" liang ""
+
