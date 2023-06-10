@@ -1,0 +1,136 @@
+10150	dws_app_homepage_feeds_di
+9763	dws_databank_board_visit_analysis_di_export_mysql
+9795	dws pbetter
+9818	dws_qa_monitor_df_export
+9986	dws_channel_new_user_di
+9861	dws_search_event_details_di
+9870	dws_channel_recall_user_di
+9872	dws_push_details_analysis_di
+9884	dws_sensor_user_event_log_df_export
+9886	dws_sensor_codeless_app_page_visit_di_export
+9888	dws_sensor_codeless_pc_page_visit_di_export
+9909	dws_active_monitor_analysis_di_export_mysql
+9946	dws_search_event_seep_rate_di
+9963	dws_order_info_df
+11589	dws_preload_data_statistics_di_sync
+10003	dws_qimo_workorder_analyse_df_export
+10016	dws_sensor_app_error_log_di_only_one
+10070	dws_exchange_code_apply_and_used_record_details_df
+10080	dws_qimo_cs_call_analysis_df_export_mysql
+10098	dws_search_event_keywords_di
+10099	dws_search_event_ner_di
+10106	dws_qimo_webchat_analysis_df_export_mysql
+10117	dws_sensor_pay_point_view_click_di_sync
+10158	dws_sale_clue_seep_conversion_df_syc
+10160	dws_bd_offline_order_info_df_export
+10373	dws_content_detail_di_only_one
+10418	dws_search_event_retention_rate_di
+10422	dws_sensor_business_page_di_only_one
+10504	dws_invoice_apply_detail_df_only_one
+10587	dws_advertisement_amt_df_only_one
+10678	dws_user_feedback_stat_detail_df_export
+10707	dws_monitor_core_indicator_di_only_one
+11438	dws_search_event_no_result_rate_di
+11453	dws_push_send_count_analysis_di_export_mysql
+11479	dws_search_result_page_first_display_di
+11502	dws_search_middle_page_first_display_di_syc
+11504	dws_clue_transform_analysis_df_export
+11755	dws_order_bimonthly_revenue_metrics_df
+
+10150,8783,8784,8785,8825,8826,8827,8831,8837,8838,8860,8867,8868,9763,9795,9818,9986,9861,9870,9872,9884,9886,9888,9909,9946,9963,11589,10003,10016,10070,10080,10098,10099,10106,10117,10158,10160,10373,10418,10422,10504,10587,10678,10707,11438,11453,11479,11502,11504,11755
+
+dws_app_homepage_feeds_di,dws_m_user_order_analysis_hi,dws_w_user_order_analysis_hi,dws_d_user_order_analysis_hi,dws_d_user_order_platform_analysis_hi,dws_m_user_order_platform_analysis_hi,dws_w_user_order_platform_analysis_hi,dws_d_user_order_spu_analysis_hi,dws_m_user_order_spu_analysis_hi,dws_w_user_order_spu_analysis_hi,dws_d_user_order_platform_spu_analysis_hi,dws_m_user_order_platform_spu_analysis_hi,dws_w_user_order_platform_spu_analysis_hi,dws_databank_board_visit_analysis_di_export_mysql,dws pbetter,dws_qa_monitor_df_export,dws_channel_new_user_di,dws_search_event_details_di,dws_channel_recall_user_di,dws_push_details_analysis_di,dws_sensor_user_event_log_df_export,dws_sensor_codeless_app_page_visit_di_export,dws_sensor_codeless_pc_page_visit_di_export,dws_active_monitor_analysis_di_export_mysql,dws_search_event_seep_rate_di,dws_order_info_df,dws_preload_data_statistics_di_sync,dws_qimo_workorder_analyse_df_export,dws_sensor_app_error_log_di_only_one,dws_exchange_code_apply_and_used_record_details_df,dws_qimo_cs_call_analysis_df_export_mysql,dws_search_event_keywords_di,dws_search_event_ner_di,dws_qimo_webchat_analysis_df_export_mysql,dws_sensor_pay_point_view_click_di_sync,dws_sale_clue_seep_conversion_df_syc,dws_bd_offline_order_info_df_export,dws_content_detail_di_only_one,dws_search_event_retention_rate_di,dws_sensor_business_page_di_only_one,dws_invoice_apply_detail_df_only_one,dws_advertisement_amt_df_only_one,dws_user_feedback_stat_detail_df_export,dws_monitor_core_indicator_di_only_one,dws_search_event_no_result_rate_di,dws_push_send_count_analysis_di_export_mysql,dws_search_result_page_first_display_di,dws_search_middle_page_first_display_di_syc,dws_clue_transform_analysis_df_export,dws_order_bimonthly_revenue_metrics_df
+
+
+with t as(
+select 
+case when sso_name = 'gaoyiqi1' then 'zhaohailiang'
+     when sso_name = 'liguangwei' then 'lanxiaoqin'
+     when sso_name = 'supengcheng' then 'shaojinghu'
+     else sso_name end sso_name,
+case when run_type is not null and run_type = 'hive' then 'hive'
+     when run_type is not null and run_type = 'spark' then 'spark'
+     else 'shell' end run_type,id
+from ods_kunpeng_hera_job_df where
+pt = '20230602'
+and id in (10150,9763,9795,9818,9986,9861,9870,9872,9884,9886,9888,9909,9946,9963,11589,10003,10016,10070,10080,10098,10099,10106,10117,10158,10160,10373,10418,10422,10504,10587,10678,10707,11438,11453,11479,11502,11504,11755)
+)select
+concat("java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType ",run_type," -projectName  DataBank  -createName ",sso_name,"  -userName ",sso_name," -taskId ",id) shell
+from t
+
+
+
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8783              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8784              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8785              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8825              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8826              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8827              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8831              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8837              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8838              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8860              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8867              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8868              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 9763             
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhaohailiang  -userName zhaohailiang -taskId 9795     
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName haoguowang  -userName haoguowang -taskId 9818         
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 9861    
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName qiaozhiwei  -userName qiaozhiwei -taskId 9870          
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 9872              
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName haoguowang  -userName haoguowang -taskId 9884         
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 9886             
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 9888             
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 9909             
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 9946    
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName haoguowang  -userName haoguowang -taskId 9963          
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName qiaozhiwei  -userName qiaozhiwei -taskId 9986         
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 10003            
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10016        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhaohailiang  -userName zhaohailiang -taskId 10070    
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 10080            
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 10098   
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 10099   
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 10106            
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName qiaozhiwei  -userName qiaozhiwei -taskId 10117        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName qiaozhiwei  -userName qiaozhiwei -taskId 10150         
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 10158  
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName haoguowang  -userName haoguowang -taskId 10160        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10373        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 10418   
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10422        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10504        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10587        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName haoguowang  -userName haoguowang -taskId 10678        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10707        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 11438   
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 11453            
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 11479   
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 11502  
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 11504            
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName qiaozhiwei  -userName qiaozhiwei -taskId 11589        
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName haoguowang  -userName haoguowang -taskId 11755         
+
+curl --request POST '10.99.205.232:8090/kunpeng/scheduleCenter/batch/job/date/manual' \
+ --header 'Content-Type: application/json' \
+ --header 'Cookie: HERA_Token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzc29JZCI6Ijk1Iiwic3NvX25hbWUiOiJsaWFuZyIsImF1ZCI6IjJkZmlyZSIsImlzcyI6ImhlcmEiLCJleHAiOjE2ODU5Njg5ODEsInVzZXJJZCI6IjIiLCJpYXQiOjE2ODU3MDk3ODEsInVzZXJuYW1lIjoiYmlnZGF0YSJ9.HgORWIu9NrXY110th7Uy8WIBzyI89NzErS9niShD-fg' \
+ --data '{
+    "postClose":0,
+    "startTime":"2023-06-03 00:00:00",
+    "endTime":"2023-06-03 23:59:59",
+    "triggerType":2,
+    "repeat":1,
+    "jobIds": [10150,9763,9795,9818,9986,9861,9870,9872,9884,9886,9888,9909,9946,9963,11589,10003,10016,10070,10080,10098,10099,10106,10117,10158,10160,10373,10418,10422,10504,10587,10678,10707,11438,11453,11479,11502,11504,11755]
+}'
+
+
+10150,9763,9795,9818,9986,9861,9870,9872,9884,9886,9888,9909,9946,9963,11589,10003,10016,10070,10080,10098,10099,10106,10117,10158,10160,10373,10418,10422,10504,10587,10678,10707,11438,11453,11479,11502,11504,11755
+
+
+
+java -cp /home/hive/lfh/executeProcesss.jar com.tyc.migration.executeProcesss "DataBank" liang "dws_app_homepage_feeds_di,dws_databank_board_visit_analysis_di_export_mysql,dws pbetter,dws_qa_monitor_df_export,dws_channel_new_user_di,dws_search_event_details_di,dws_channel_recall_user_di,dws_push_details_analysis_di,dws_sensor_user_event_log_df_export,dws_sensor_codeless_app_page_visit_di_export,dws_sensor_codeless_pc_page_visit_di_export,dws_active_monitor_analysis_di_export_mysql,dws_search_event_seep_rate_di,dws_order_info_df,dws_preload_data_statistics_di_sync,dws_qimo_workorder_analyse_df_export,dws_sensor_app_error_log_di_only_one,dws_exchange_code_apply_and_used_record_details_df,dws_qimo_cs_call_analysis_df_export_mysql,dws_search_event_keywords_di,dws_search_event_ner_di,dws_qimo_webchat_analysis_df_export_mysql,dws_sensor_pay_point_view_click_di_sync,dws_sale_clue_seep_conversion_df_syc,dws_bd_offline_order_info_df_export,dws_content_detail_di_only_one,dws_search_event_retention_rate_di,dws_sensor_business_page_di_only_one,dws_invoice_apply_detail_df_only_one,dws_advertisement_amt_df_only_one,dws_user_feedback_stat_detail_df_export,dws_monitor_core_indicator_di_only_one,dws_search_event_no_result_rate_di,dws_push_send_count_analysis_di_export_mysql,dws_search_result_page_first_display_di,dws_search_middle_page_first_display_di_syc,dws_clue_transform_analysis_df_export,dws_order_bimonthly_revenue_metrics_df"
+
+
+
+
+,dws_app_homepage_feeds_di,dws_databank_board_visit_analysis_di_export_mysql,dws pbetter,dws_qa_monitor_df_export,dws_channel_new_user_di,dws_search_event_details_di,dws_channel_recall_user_di,dws_push_details_analysis_di,dws_sensor_user_event_log_df_export,dws_sensor_codeless_app_page_visit_di_export,dws_sensor_codeless_pc_page_visit_di_export,dws_active_monitor_analysis_di_export_mysql,dws_search_event_seep_rate_di,dws_order_info_df,dws_preload_data_statistics_di_sync,dws_qimo_workorder_analyse_df_export,dws_sensor_app_error_log_di_only_one,dws_exchange_code_apply_and_used_record_details_df,dws_qimo_cs_call_analysis_df_export_mysql,dws_search_event_keywords_di,dws_search_event_ner_di,dws_qimo_webchat_analysis_df_export_mysql,dws_sensor_pay_point_view_click_di_sync,dws_sale_clue_seep_conversion_df_syc,dws_bd_offline_order_info_df_export,dws_content_detail_di_only_one,dws_search_event_retention_rate_di,dws_sensor_business_page_di_only_one,dws_invoice_apply_detail_df_only_one,dws_advertisement_amt_df_only_one,dws_user_feedback_stat_detail_df_export,dws_monitor_core_indicator_di_only_one,dws_search_event_no_result_rate_di,dws_push_send_count_analysis_di_export_mysql,dws_search_result_page_first_display_di,dws_search_middle_page_first_display_di_syc,dws_clue_transform_analysis_df_export,dws_order_bimonthly_revenue_metrics_df

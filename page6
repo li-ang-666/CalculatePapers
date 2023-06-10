@@ -1,0 +1,27 @@
+flink_taskmanager_job_task_operator_pendingRecords{
+    exported_job="111",
+     instance="localhost:9091",
+      job="FlinkMetricReportListener",
+       job_id="c441aa74801bbe4ded2d81c4d85f84df",
+        job_name="handoverJob",
+         operator_id="00a8eeed525f736cd9a341b3781d419f",
+          operator_name="Source:_kafkaSource",
+           subtask_index="4",
+            task_attempt_id="3ef50c1114ab2705897018e979f1c612_00a8eeed525f736cd9a341b3781d419f_4_0",
+             task_attempt_num="0",
+              task_id="00a8eeed525f736cd9a341b3781d419f",
+               task_name="Source:_kafkaSource____Flat_Map____Sink:_mysqlSink",
+                tm_id="d6e97483_b966_4ecb_88bd_81fde77c8212"
+                }
+
+{{task_name}} / {{operator_name}} / {{subtask_index}}
+
+
+curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
+--header 'Content-Type: application/json' \
+--data '{
+    "sshUserName": "liang",
+    "sshPassWord": "Moka20190520",
+    "yarnName": "DataConcatRepair",
+    "isMonitored": 0
+}'

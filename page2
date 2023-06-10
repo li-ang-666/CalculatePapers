@@ -1,0 +1,57 @@
+11530	dwt_custom_made_company_df
+12084	robot_outbound_call_middle
+10017	dws_sensor_codeless_user_scale_di_only_one
+10055	dws_app_equipartition_model_di
+10084	dws_channel_recall_user_by_equipartition_model_di
+10543	dws_retention_device_detail_di_only_one
+10765	dws_vip_rebuy_detail_di_only_one
+10766	dws_app_user_retention_model_di_only_one
+10130	dwd_operation_dau_equipartition_detail_di
+10137	dwd_operation_mau_equipartition_detail_di
+10141	dwd_operation_wau_equipartition_detail_di
+11274	dwd_b_macroanalysis_operating_info_df
+11810	dwd_tab3_entity_id_hot_1news_30days_hi_sync
+10108	dws_company_dim_count_diff_check_df
+10327	dws_human_dim_count_diff_di_export
+10919	app_user_tag_commercial_df
+11224	ads_user_tag_recall_df
+11429	app_tag_seleted_coupon_new_df
+11788	ads_user_tag_preference_df_status
+11790	ads_user_tag_retention_df_status
+11791	ads_user_tag_commercial_df_status
+11793	ads_user_tag_working_company_detail_df_status
+11046	dwd_b_large_screen_company_base_df
+11048	dwd_b_large_screen_company_base_lable_df
+
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 
+
+
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'C4定制交付表' -createName liyigang -userName liyigang -taskId 11530
+
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'CRM需求' -createName luofuhan -userName luofuhan -taskId 12084
+
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'DataBank' -createName lanxiaoqin -userName lanxiaoqin -taskId 10017
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'DataBank' -createName liyigang -userName liyigang -taskId 10055
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'DataBank' -createName liyigang -userName liyigang -taskId 10084
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'DataBank' -createName lanxiaoqin -userName lanxiaoqin -taskId 10543
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'DataBank' -createName lanxiaoqin -userName lanxiaoqin -taskId 10765
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'DataBank' -createName lanxiaoqin -userName lanxiaoqin -taskId 10766
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'dwd' -createName liyigang -userName liyigang -taskId 10130
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'dwd' -createName liyigang -userName liyigang -taskId 10137
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'dwd' -createName liyigang -userName liyigang -taskId 10141
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'dwd' -createName lanxiaoqin -userName lanxiaoqin -taskId 11274
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName 'dwd' -createName qiaozhiwei -userName qiaozhiwei -taskId 11810
+
+
+
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '商查痒点需求' -createName haoguowang -userName haoguowang -taskId 10108
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '商查痒点需求' -createName haoguowang -userName haoguowang -taskId 10327
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '用户画像' -createName haoguowang -userName haoguowang -taskId 10919
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '用户画像' -createName liyigang -userName liyigang -taskId 11224
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '用户画像' -createName zhangwenqiang -userName zhangwenqiang -taskId 11429
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '用户画像' -createName liyigang -userName liyigang -taskId 11788
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '用户画像' -createName liyigang -userName liyigang -taskId 11790
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '用户画像' -createName liyigang -userName liyigang -taskId 11791
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '用户画像' -createName liyigang -userName liyigang -taskId 11793
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '专业版大屏' -createName qiaozhiwei -userName qiaozhiwei -taskId 11046
+java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName '专业版大屏' -createName qiaozhiwei -userName qiaozhiwei -taskId 11048
