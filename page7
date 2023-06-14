@@ -1,35 +1,154 @@
-司法风险:
-限制消费令(历史)
-股权冻结(历史)
-限制出境
+with t_equity as (
+    select
+        company_id_invested,
+        company_id_investor,
+        tyc_unique_entity_name_investor,
+  		tyc_unique_entity_name_invested,
+  		tyc_unique_entity_id_investor,
+        case when investor_identity_type=1 then 2
+  			when investor_identity_type=2 then 1
+  			else investor_identity_type end as investor_identity_type,
+        equity_ratio
+    from ods.ods_graph_data_company_equity_relation_details_df
+    where pt='${pt}' and dw_is_del=0 and reference_pt_year=substring('${pt}',1,4)
+),
+t_actual_controller as (
+    select 
+        company_id,
+        concat_ws(',',collect_set(
+            case when controller_type=0 then concat(controller_name,":",controller_gid,'-',company_id,":",controller_pid,":human")
+               when controller_type=1 then concat(controller_name,":",if(controller_gid=0,'',controller_gid),":company")
+               else concat(controller_name,":",if(controller_gid=0,'',controller_gid),":other") end
+        )) as listed_company_actual_controller
+    from(
+        select
+            company_name,
+            graph_id as company_id,
+            controller_name,
+            controller_gid,
+            controller_pid,
+            controller_type
+        from ods.ods_data_listed_company_stock_actual_controller_df
+        where pt='${pt}' and dw_is_del=0 and is_deleted=0
+    )t_ac
+    group by company_id
+),
+t_listed_status as (
+    select
+        t2.graph_id as company_id
+    from(
+        select
+            distinct company_id
+        from ods.ods_prism1_company_bond_plates_df
+        where pt='${pt}' and dw_is_del=0 and deleted=0 and listing_status not in('暂停上市','IPO终止','退市整理','终止上市')
+    )t1
+    join(
+        select company_id,graph_id from ods.ods_prism1_company_graph_df
+        where pt='${pt}' and dw_is_del=0 and deleted=0
+    )t2
+    on t1.company_id=t2.company_id
+),
+t_legal as(
+    select
+        company_id,
+        concat_ws(',',collect_set(
+          case when legal_rep_type=2 then concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,concat(legal_rep_name_id,'-',company_id),''),':',nvl(legal_rep_human_id,''),':human')
+          	when legal_rep_type=1 then concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,legal_rep_name_id,''),':company')
+          	else concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,legal_rep_name_id,''),':other') end
+        )) as legal_rep_inlinks
+    from ods.ods_company_base_company_legal_person_df
+    where pt='${pt}' and dw_is_del=0
+    group by company_id
+),
+t_company_info as(
+    select
+        t_index.id,
+        t_index.company_name,
+        t_index.company_id,
+        t_index.org_type as company_type,
+        if(t_listed_status.company_id is not null,1,0) is_listed_company,
+        t_index.is_foreign_branches,
+        if(t_listed_status.company_id is not null,t_actual_controller.listed_company_actual_controller,null) as listed_company_actual_controller,
+        if(t_index.company_type=11,1,0) is_partnership_company,
+        t_legal.legal_rep_inlinks,
+        t_index.company_uscc_prefix_code_two
+    from(
+        select 
+            id,
+            org_type,
+            company_id,
+            company_name,
+            company_type,
+            substring(unified_social_credit_code,1,2) as company_uscc_prefix_code_two,
+            case when (org_type like '%外国%分%' or org_type like '%外国%驻%' or org_type like '%外国%境内%') 
+                and org_type not like '%外国法人独资%' and org_type not like '%外国自然人独资%' 
+                and org_type not like '%台湾澳与外国投资者合资%' and org_type not like '%新闻%' 
+                and org_type not like '%旅游%' and org_type not like '%外国非法人%' then 1 else 0 end as is_foreign_branches
+        from ods.ods_company_base_company_index_df 
+        where pt='${pt}' and dw_is_del=0
+    )t_index
+    left join t_listed_status
+    on t_index.company_id=t_listed_status.company_id
+    left join t_actual_controller
+    on t_index.company_id=t_actual_controller.company_id
+    left join t_legal
+    on t_index.company_id=t_legal.company_id
+)
 
-经营风险:
-股权出质(历史)
-股权质押
+-----------------------------------------------------------------------------------------------------------------------------------
 
-基本信息:
-分支机构
+select 
+    tc.company_id as company_id_invested,                    -- index表的company_id
+    company_name as company_name_invested,                   -- index表的company_name
+    nvl(tc.company_type,'') as company_type_invested,        -- index表的org_type
+    nvl(tc.is_listed_company,0) as is_listed_company_invested,  -- select 1 from  company_graph  t1 join company_bond_plates t2 on t1.company_id = t2.company_id where t1.deleted=0 and t2.deleted=0 and t1.graph_id = ?                                                                                                                                                                      
+    nvl(tc.is_foreign_branches,0) as is_foreign_branches_invested,   
+    
+  --  select case when (org_type like '%外国%分%' or org_type like '%外国%驻%' or org_type like '%外国%境内%') 
+  --              and org_type not like '%外国法人独资%' and org_type not like '%外国自然人独资%' 
+  --              and org_type not like '%台湾澳与外国投资者合资%' and org_type not like '%新闻%' 
+  --              and org_type not like '%旅游%' and org_type not like '%外国非法人%' then 1 else 0 end as is_foreign_branches
+  --              
+    nvl(tc.listed_company_actual_controller,'') as listed_company_actual_controller_invested,
+  --         --select 
+  --      company_id,
+  --      concat_ws(',',collect_set(
+  --          case when controller_type=0 then concat(controller_name,":",controller_gid,'-',company_id,":",controller_pid,":human")
+  --             when controller_type=1 then concat(controller_name,":",if(controller_gid=0,'',controller_gid),":company")
+  --             else concat(controller_name,":",if(controller_gid=0,'',controller_gid),":other") end
+  --      )) as listed_company_actual_controller
+  --  from(
+  --      select
+  --          company_name,
+  --          graph_id as company_id,
+  --          controller_name,
+  --          controller_gid,
+  --          controller_pid,
+  --          controller_type
+  --      from stock_actual_controller
+  --      where pt='${pt}' and dw_is_del=0 and is_deleted=0
+  --  )t_ac
+  --  group by company_id
+
+    nvl(tc.is_partnership_company,0) as is_partnership_company_invested, -- if(t_index.company_type=11,1,0) is_partnership_company,
+    nvl(tc.legal_rep_inlinks,'') as legal_rep_inlinks_invested,     
+    --    select
+    --    company_id,
+    --    concat_ws(',',collect_set(
+    --      case when legal_rep_type=2 then concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,concat(legal_rep_name_id,'-',company_id),''),':',nvl(legal_rep_human_id,''),':human')
+    --      	when legal_rep_type=1 then concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,legal_rep_name_id,''),':company')
+    --      	else concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,legal_rep_name_id,''),':other') end
+    --    )) as legal_rep_inlinks
+    --  from ods.ods_company_base_company_legal_person_df
+    --  where pt='${pt}' and dw_is_del=0
+    --  group by company_id
+    nvl(tc.company_uscc_prefix_code_two,'') as company_uscc_prefix_code_two_invested -- substring(unified_social_credit_code,1,2) as company_uscc_prefix_code_two,
+from t_company_info tc
+left join t_equity te
+on tc.company_id=te.company_id_invested
+where te.company_id_invested is null;
 
 
-select equity_pledge_value
-from equity_pledge_reinvest
-where (
-        (pledgor_entity_id = 22 and pledgor_type = 1)
-        or
-        company_id = 22
-    )
-  and is_deleted = 0
-  and pledgor_type in (1, 2)
-  and pledgee_type in (1, 2)
-   -- and equity_pledge_state in ('正常', '有效')
-  -- and equity_pledge_value != ''
-  and (equity_pledge_value like '%万元%' or equity_pledge_value like '%万%人民币%' or equity_pledge_value like '%人民币%万%')
-
-
-
-
-
-
-
- 
-
+-D execution.checkpointing.unaligned=true
+-D execution.checkpointing.max-concurrent-checkpoints=1
+-D execution.checkpointing.mode=EXACTLY_ONCE

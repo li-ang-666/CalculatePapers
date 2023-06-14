@@ -1,115 +1,110 @@
-8824	dws_m_user_order_analysis_hi_export
-8828	dws_user_action_month_count_hi
-8829	dws_user_action_week_count_hi
-8830	dws_user_action_day_count_hi
-8839	dws_d_user_order_analysis_hi_export
-8840	dws_w_user_order_analysis_hi_export
-8841	dws_d_user_order_platform_analysis_hi_export
-8842	dws_d_user_order_platform_spu_analysis_hi_export
-8863	dws_d_user_order_spu_analysis_hi_export
-8869	dws_m_user_order_platform_analysis_hi_export
-8870	dws_m_user_order_platform_spu_analysis_hi_export
-8871	dws_m_user_order_spu_analysis_hi_export
-8872	dws_w_user_order_platform_analysis_hi_export
-8873	dws_w_user_order_platform_spu_analysis_hi_export
-8874	dws_w_user_order_spu_analysis_hi_export
-8948	dws_user_action_day_count_hi_day
-8950	dws_user_action_month_count_hi_day
-8951	dws_user_action_week_count_hi_day
-9984	dws_channel_recall_user_di
-9904	dws_search_event_details_di_syc
-9908	dws_push_details_analysis_di_export_mysql
-9974	dws_search_event_seep_rate_di_syc
-9999	dws_order_info_df_export
-10100	dws_search_event_keywords_di
-10101	dws_search_event_ner_di
-10411	dws_retention_device_detail_di
-10544	dws_sensor_codeless_user_scale_di
-10687	dws_search_event_retention_rate_di_syc
-10748	dws_app_user_retention_model_di
-10764	dws_vip_rebuy_detail_di
-10777	dws_order_info_version2_df
-11501	dws_search_event_no_result_rate_di_syc
-11503	dws_search_result_page_first_display_di_syc
-
-
-8824,8828,8829,8830,8839,8840,8841,8842,8863,8869,8870,8871,8872,8873,8874,8948,8950,8951,9984,9904,9908,9974,9999,10100,10101,10411,10544,10687,10748,10764,10777,11501,11503
-
-with t as(
+with t_equity as (
+    select
+        company_id_invested,
+        company_id_investor,
+        tyc_unique_entity_name_investor,
+  		tyc_unique_entity_name_invested,
+  		tyc_unique_entity_id_investor,
+        case when investor_identity_type=1 then 2
+  			when investor_identity_type=2 then 1
+  			else investor_identity_type end as investor_identity_type,
+        equity_ratio
+    from ods.ods_graph_data_company_equity_relation_details_df
+    where pt='${pt}' and dw_is_del=0 and reference_pt_year=substring('${pt}',1,4)
+),
+t_actual_controller as (
+    select 
+        company_id,
+        concat_ws(',',collect_set(
+            case when controller_type=0 then concat(controller_name,":",controller_gid,'-',company_id,":",controller_pid,":human")
+               when controller_type=1 then concat(controller_name,":",if(controller_gid=0,'',controller_gid),":company")
+               else concat(controller_name,":",if(controller_gid=0,'',controller_gid),":other") end
+        )) as listed_company_actual_controller
+    from(
+        select
+            company_name,
+            graph_id as company_id,
+            controller_name,
+            controller_gid,
+            controller_pid,
+            controller_type
+        from ods.ods_data_listed_company_stock_actual_controller_df
+        where pt='${pt}' and dw_is_del=0 and is_deleted=0
+    )t_ac
+    group by company_id
+),
+t_listed_status as (
+    select
+        t2.graph_id as company_id
+    from(
+        select
+            distinct company_id
+        from ods.ods_prism1_company_bond_plates_df
+        where pt='${pt}' and dw_is_del=0 and deleted=0 and listing_status not in('暂停上市','IPO终止','退市整理','终止上市')
+    )t1
+    join(
+        select company_id,graph_id from ods.ods_prism1_company_graph_df
+        where pt='${pt}' and dw_is_del=0 and deleted=0
+    )t2
+    on t1.company_id=t2.company_id
+),
+t_legal as(
+    select
+        company_id,
+        concat_ws(',',collect_set(
+          case when legal_rep_type=2 then concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,concat(legal_rep_name_id,'-',company_id),''),':',nvl(legal_rep_human_id,''),':human')
+          	when legal_rep_type=1 then concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,legal_rep_name_id,''),':company')
+          	else concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,legal_rep_name_id,''),':other') end
+        )) as legal_rep_inlinks
+    from ods.ods_company_base_company_legal_person_df
+    where pt='${pt}' and dw_is_del=0
+    group by company_id
+),
+t_company_info as(
+    select
+        t_index.id,
+        t_index.company_name,
+        t_index.company_id,
+        t_index.org_type as company_type,
+        if(t_listed_status.company_id is not null,1,0) is_listed_company,
+        t_index.is_foreign_branches,
+        if(t_listed_status.company_id is not null,t_actual_controller.listed_company_actual_controller,null) as listed_company_actual_controller,
+        if(t_index.company_type=11,1,0) is_partnership_company,
+        t_legal.legal_rep_inlinks,
+        t_index.company_uscc_prefix_code_two
+    from(
+        select 
+            id,
+            org_type,
+            company_id,
+            company_name,
+            company_type,
+            substring(unified_social_credit_code,1,2) as company_uscc_prefix_code_two,
+            case when (org_type like '%外国%分%' or org_type like '%外国%驻%' or org_type like '%外国%境内%') 
+                and org_type not like '%外国法人独资%' and org_type not like '%外国自然人独资%' 
+                and org_type not like '%台湾澳与外国投资者合资%' and org_type not like '%新闻%' 
+                and org_type not like '%旅游%' and org_type not like '%外国非法人%' then 1 else 0 end as is_foreign_branches
+        from ods.ods_company_base_company_index_df 
+        where pt='${pt}' and dw_is_del=0
+    )t_index
+    left join t_listed_status
+    on t_index.company_id=t_listed_status.company_id
+    left join t_actual_controller
+    on t_index.company_id=t_actual_controller.company_id
+    left join t_legal
+    on t_index.company_id=t_legal.company_id
+)
 select 
-case when sso_name = 'gaoyiqi1' then 'zhaohailiang'
-     when sso_name = 'liguangwei' then 'lanxiaoqin'
-     when sso_name = 'supengcheng' then 'shaojinghu'
-     else sso_name end sso_name,
-case when run_type is not null and run_type = 'hive' then 'hive'
-     when run_type is not null and run_type = 'spark' then 'spark'
-     else 'shell' end run_type,id
-from ods_kunpeng_hera_job_df where
-pt = '20230602'
-and id in (8824,8828,8829,8830,8839,8840,8841,8842,8863,8869,8870,8871,8872,8873,8874,8948,8950,8951,9984,9904,9908,9974,9999,10100,10101,10411,10544,10687,10748,10764,10777,11501,11503)
-)select
-concat("java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType ",run_type," -projectName  DataBank  -createName ",sso_name,"  -userName ",sso_name," -taskId ",id) shell
-from t
-
-
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8824             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 8828              
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 8829              
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 8830              
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8839             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8840             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8841             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8842             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8863             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8869             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8870             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8871             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8872             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8873             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName liyigang  -userName liyigang -taskId 8874             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 8948              
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 8950              
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 8951              
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 9904   
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName luofuhan  -userName luofuhan -taskId 9908             
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 9974   
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName qiaozhiwei  -userName qiaozhiwei -taskId 9984         
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName haoguowang  -userName haoguowang -taskId 9999         
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 10100  
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 10101  
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10411         
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10544         
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 10687  
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10748         
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName lanxiaoqin  -userName lanxiaoqin -taskId 10764         
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType hive -projectName  DataBank  -createName haoguowang  -userName haoguowang -taskId 10777         
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 11501  
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType shell -projectName  DataBank  -createName zhangwenqiang  -userName zhangwenqiang -taskId 11503  
-
-,dws_channel_recall_user_di,dws_search_event_details_di_syc,dws_push_details_analysis_di_export_mysql,dws_search_event_seep_rate_di_syc,dws_order_info_df_export,dws_search_event_keywords_di,dws_search_event_ner_di,dws_retention_device_detail_di,dws_sensor_codeless_user_scale_di,dws_channel_recall_user_di,dws_app_user_retention_model_di,dws_vip_rebuy_detail_di,dws_order_info_version2_df,dws_search_event_no_result_rate_di_syc,dws_search_result_page_first_display_di_syc
-
-
-
-
-
-
-
-java -cp /home/hive/lfh/executeProcesss.jar com.tyc.migration.executeProcesss "DataBank" liang "dws_channel_recall_user_di,dws_search_event_details_di_syc,dws_push_details_analysis_di_export_mysql,dws_search_event_seep_rate_di_syc,dws_order_info_df_export,dws_search_event_keywords_di,dws_search_event_ner_di,dws_retention_device_detail_di,dws_sensor_codeless_user_scale_di,dws_channel_recall_user_di,dws_app_user_retention_model_di,dws_vip_rebuy_detail_di,dws_order_info_version2_df,dws_search_event_no_result_rate_di_syc,dws_search_result_page_first_display_di_syc"
-
-
-
-export HADOOP_CLASSPATH=/data/hadoopclient/HDFS/hadoop/etc/hadoop:/data/hadoopclient/HDFS/hadoop/share/hadoop/common/lib/*:/data/hadoopclient/HDFS/hadoop/share/hadoop/common/*:/data/hadoopclient/HDFS/hadoop/share/hadoop/hdfs:/data/hadoopclient/HDFS/hadoop/share/hadoop/hdfs/lib/*:/data/hadoopclient/HDFS/hadoop/share/hadoop/hdfs/*:/data/hadoopclient/HDFS/hadoop/share/hadoop/mapreduce/*:/data/hadoopclient/HDFS/hadoop/share/hadoop/yarn/lib/*:/data/hadoopclient/HDFS/hadoop/share/hadoop/yarn/*:/data/hadoopclient/HDFS/hadoop/share/hadoop/tools/lib/hadoop-huaweicloud-3.1.1-hw-46.jar:/data/hadoopclient/HDFS/hadoop/share/hadoop/tools/lib/hadoop-huawei-obscommitter-3.1.1-hw-ei-312019.jar:/data/hadoopclient/HDFS/hadoop/share/hadoop/tools/lib/hadoop-trace-ping-3.1.1-hw-ei-312019.jar
-export HADOOP_CONF_DIR=/data/hadoopclient/HDFS/hadoop/etc/hadoop/
-export HADOOP_HOME=/data/hadoopclient/HDFS/hadoop/
-[liang@s136-prod-flinkclienthuawei demo]$ 
-
-
-
-
-
-
-
-
-
-
-
+    tc.company_id as company_id_invested,
+    company_name as company_name_invested,
+    nvl(tc.company_type,'') as company_type_invested,
+    nvl(tc.is_listed_company,0) as is_listed_company_invested,
+    nvl(tc.is_foreign_branches,0) as is_foreign_branches_invested,
+    nvl(tc.listed_company_actual_controller,'') as listed_company_actual_controller_invested,
+    nvl(tc.is_partnership_company,0) as is_partnership_company_invested,
+    nvl(tc.legal_rep_inlinks,'') as legal_rep_inlinks_invested,
+    nvl(tc.company_uscc_prefix_code_two,'') as company_uscc_prefix_code_two_invested
+from t_company_info tc
+left join t_equity te
+on tc.company_id=te.company_id_invested
+where te.company_id_invested is null;

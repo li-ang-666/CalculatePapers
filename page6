@@ -1,27 +1,38 @@
-flink_taskmanager_job_task_operator_pendingRecords{
-    exported_job="111",
-     instance="localhost:9091",
-      job="FlinkMetricReportListener",
-       job_id="c441aa74801bbe4ded2d81c4d85f84df",
-        job_name="handoverJob",
-         operator_id="00a8eeed525f736cd9a341b3781d419f",
-          operator_name="Source:_kafkaSource",
-           subtask_index="4",
-            task_attempt_id="3ef50c1114ab2705897018e979f1c612_00a8eeed525f736cd9a341b3781d419f_4_0",
-             task_attempt_num="0",
-              task_id="00a8eeed525f736cd9a341b3781d419f",
-               task_name="Source:_kafkaSource____Flat_Map____Sink:_mysqlSink",
-                tm_id="d6e97483_b966_4ecb_88bd_81fde77c8212"
-                }
+CREATE TABLE `investment_relation` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `shareholder_entity_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '股东类型，1代表公司，2代表人',
+    `company_entity_inlink` varchar(128) NOT NULL DEFAULT '' COMMENT '投资公司的实体内链',
+    `company_type` varchar(255) NOT NULL DEFAULT '' COMMENT '投资公司的企业类型：不清洗枚举值，保留原来的类似 家庭经营',
+    `is_listed_company` tinyint(4) NOT NULL DEFAULT '0' COMMENT '投资公司是否为上市公司 0-不是 1-是',
+    `is_foreign_branches` tinyint(4) NOT NULL DEFAULT '0' COMMENT '投资公司是否是外国分支机构 0-不是 1-是',
+    `listed_company_actual_controller` varchar(1000) NOT NULL DEFAULT '' COMMENT '投资公司如果是上市公司的话存储的是实际控制人，存为内链，逗号分割',
+    `is_partnership_company` tinyint(4) NOT NULL DEFAULT '0' COMMENT '投资公司是否为合伙企业 0-不是 1-是',
+    `legal_rep_inlinks` varchar(5000) NOT NULL DEFAULT '' COMMENT '投资公司法定代表人，存为内链，逗号分割，如果是合伙企业存执行事务合伙人，如果是外国分支机构存负责人',
+    `company_uscc_prefix_code_two` varchar(2) NOT NULL DEFAULT '' COMMENT '投资公司统一社会信用代码前两位',
+    `investment_ratio` decimal(24, 12) NOT NULL DEFAULT '0.000000000000' COMMENT '股东的出资比例',
+    `shareholder_name_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '股东id，人hgid，公司gid, 其他id',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
+    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录创建时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq_ed_company_id` (`company_id_invested`, `shareholder_name_id`),
+    KEY `idx_ed_company_id` (`company_id_invested`, `company_entity_inlink`),
+    KEY `idx_shareholder_name_id` (`shareholder_name_id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 164766836 DEFAULT CHARSET = utf8mb4 COMMENT = '投资信息表' ;
 
-{{task_name}} / {{operator_name}} / {{subtask_index}}
 
-
-curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
---header 'Content-Type: application/json' \
---data '{
-    "sshUserName": "liang",
-    "sshPassWord": "Moka20190520",
-    "yarnName": "DataConcatRepair",
-    "isMonitored": 0
-}'
+create table no_shareholder_company_info(
+    id bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `company_id_invested` bigint NOT NULL DEFAULT '0' COMMENT '被投资公司的gid',
+    `company_name_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资公司的name',
+    `company_type_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资公司的企业类型：不清洗枚举值，保留原来的类似 家庭经营',
+    `is_listed_company_invested` tinyint NOT NULL DEFAULT '0' COMMENT '被投资公司是否为上市公司 0-不是 1-是',
+    `is_foreign_branches_invested` tinyint NOT NULL DEFAULT '0' COMMENT '被投资公司是否是外国分支机构0-不是 1-是',
+    `listed_company_actual_controller_invested` text NOT NULL DEFAULT '' COMMENT '被投资公司如果是上市公司的话存储的是实际控制人，存为内链，逗号分割',
+    `is_partnership_company_invested` tinyint NOT NULL DEFAULT '0' COMMENT '被投资公司是否为合伙企业 0-不是 1-是',
+    `legal_rep_inlinks_invested` text NOT NULL DEFAULT '' COMMENT '被投资公司法定代表人，存为内链，逗号分割，如果是合伙企业存执行事务合伙人，如果是外国分支机构存负责人',
+    `company_uscc_prefix_code_two_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资公司统一社会信用代码前两位',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
+    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录创建时间',
+    primary key (id),
+    index idx_company_id(company_id_invested)
+)DEFAULT CHARSET = utf8mb4 COMMENT = '没有股东的投资信息表';

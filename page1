@@ -1,38 +1,8 @@
-with t as(
-select 
-case when sso_name = 'gaoyiqi1' then 'zhaohailiang'
-     when sso_name = 'liguangwei' then 'lanxiaoqin'
-     when sso_name = 'supengcheng' then 'shaojinghu'
-     else sso_name end sso_name,
-case when run_type is not null and run_type = 'hive' then 'hive'
-     when run_type is not null and run_type = 'spark' then 'spark'
-     else 'shell' end run_type,id
-from ods_kunpeng_hera_job_df where
-pt = '20230601'
-and id in ()
-)select
-concat("java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess -taskType ",run_type," -projectName  dwd  -createName ",sso_name,"  -userName ",sso_name," -taskId ",id) shell
-from t
-
-java -cp /home/hive/lfh/data-migration-1.0-SNAPSHOT-v3.jar com.tyc.migration.createDwdProcess \
--taskType shell ${jobType} \
--projectName ${projectName} \
--createName                    -userName
--taskId 2209 
-
-cat log | grep '依赖缺失' | wc -l
-cat log | grep '您需要将对应的hera任务' | wc -l
------------------------------------------------------------------
-curl --request POST '10.99.205.232:8090/kunpeng/scheduleCenter/batch/job/date/manual' \
- --header 'Content-Type: application/json' \
- --header 'Cookie: HERA_Token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzc29JZCI6Ijk1Iiwic3NvX25hbWUiOiJsaWFuZyIsImF1ZCI6IjJkZmlyZSIsImlzcyI6ImhlcmEiLCJleHAiOjE2ODU3MDkwNTMsInVzZXJJZCI6IjIiLCJpYXQiOjE2ODU0NDk4NTMsInVzZXJuYW1lIjoiYmlnZGF0YSJ9.WZ5CkEN1b6ChU1eB7REZpHH3wKM-_I2JQ2sDAOZCEGU' \
- --data '{
-    "postClose":0,
-    "startTime":"2023-06-02 00:00:00",
-    "endTime":"2023-06-02 23:59:59",
-    "triggerType":2,
-    "repeat":1,
-    "jobIds": []
+curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
+--header 'Content-Type: application/json' \
+--data '{
+    "sshUserName": "liang",
+    "sshPassWord": "Moka20190520",
+    "yarnName": "DataConcatRepair",
+    "isMonitored": 0
 }'
------------------------------------------------------------------
-java -cp /home/hive/lfh/executeProcesss.jar com.tyc.migration.executeProcesss ${projectName} liang ""
