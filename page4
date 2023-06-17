@@ -1,0 +1,14 @@
+drop table if exists agg_test;
+create table if not exists agg_test(
+     id int,
+     name text REPLACE_IF_NOT_NULL
+)
+aggregate KEY(`id`)
+DISTRIBUTED BY HASH(`id`) BUCKETS 1
+PROPERTIES (
+     -- "function_column.sequence_type" = 'largeint',
+     "replication_num" = "1",
+     "in_memory" = "false"
+);
+SET show_hidden_columns=true;
+
