@@ -1,0 +1,66 @@
+package com.liang.flink.job;
+
+import com.liang.flink.basic.StreamEnvironmentFactory;
+import com.liang.flink.dto.SingleCanalBinlog;
+import com.liang.flink.high.level.api.StreamFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.UUID;
+
+@Slf4j
+public class ObsJob {
+    public static void main(String[] args) throws Exception {
+        if (args.length == 0) {
+            args = new String[]{"abs.yml"};
+        }
+        StreamExecutionEnvironment env = StreamEnvironmentFactory.create(args);
+        StreamFactory.create(env)
+                .addSink(new Tw)
+        /*env
+        String endPoint = "obs.cn-north-4.myhuaweicloud.com";
+        String ak = "NT5EWZ4FRH54R2R2CB8G";
+        String sk = "BJok3jQFTmFYUS68lFWegazYggw5anKsOFUb65bS";
+
+        log.info("---");
+        try (ObsClient client = new ObsClient(ak, sk, endPoint)) {
+            AppendObjectRequest request = new AppendObjectRequest();
+            request.setBucketName("hadoop-obs");
+            request.setObjectKey("hive/warehouse/stream_test/11111");
+            request.setFile(new File("/Users/liang/Desktop/aaa"));
+            request.setPosition(-1);
+
+            client.appendObject(request);
+
+
+            *//*ObsObject get = obsClient.getObject("hadoop-obs", "hive/warehouse/stream_test/000000_2");
+            InputStream inputStream = get.getObjectContent();
+            System.out.println(IOUtils.toString(inputStream, StandardCharsets.UTF_8));
+
+
+            Reader reader = OrcFile.createReader(path, OrcFile.readerOptions(conf));
+            TypeDescription schema = reader.getSchema();
+
+            RecordReader recordReader = reader.rows();
+            recordReader.
+                    recordReader.close();*//*
+        }
+
+        log.info("---");*/
+    }
+
+    @Test
+    public void test() throws Exception {
+        new File("/Users/liang/Desktop/aaa").delete();
+        PrintWriter writer = new PrintWriter(new FileWriter("/Users/liang/Desktop/aaa", true));
+        writer.println(String.format("%s%s%s", 1, '\001', UUID.randomUUID()));
+        writer.println(String.format("%s%s%s", 2, '\001', "\"" + UUID.randomUUID() + "{}]'"));
+        writer.println(String.format("%s%s%s", 3, '\001', "\\N"));
+        writer.flush();
+    }
+}
