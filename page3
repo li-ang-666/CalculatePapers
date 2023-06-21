@@ -1,0 +1,115 @@
+create table no_shareholder_company_info
+(
+    id                                        bigint unsigned auto_increment comment '主键'
+        primary key,
+    company_id_invested                       bigint       default 0                 not null comment '被投资公司的gid',
+    company_name_invested                     varchar(255) default ''                not null comment '被投资公司的name',
+    company_type_invested                     varchar(255) default ''                not null comment '被投资公司的企业类型：不清洗枚举值，保留原来的类似 家庭经营',
+    is_listed_company_invested                tinyint      default 0                 not null comment '被投资公司是否为上市公司 0-不是 1-是',
+    is_foreign_branches_invested              tinyint      default 0                 not null comment '被投资公司是否是外国分支机构0-不是 1-是',
+    listed_company_actual_controller_invested text                                   not null comment '被投资公司如果是上市公司的话存储的是实际控制人，存为内链，逗号分割',
+    is_partnership_company_invested           tinyint      default 0                 not null comment '被投资公司是否为合伙企业 0-不是 1-是',
+    legal_rep_inlinks_invested                text                                   not null comment '被投资公司法定代表人，存为内链，逗号分割，如果是合伙企业存执行事务合伙人，如果是外国分支机构存负责人',
+    company_uscc_prefix_code_two_invested     varchar(255) default ''                not null comment '被投资公司统一社会信用代码前两位',
+    create_time                               datetime     default CURRENT_TIMESTAMP not null comment '记录创建时间',
+    update_time                               datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '记录创建时间'
+)
+    comment '没有股东的投资信息表' charset = utf8mb4;
+
+create table test.no_shareholder_company_info(
+    id                                        bigint,
+    company_id_invested                       bigint,
+    company_name_invested                     string,
+    company_type_invested                     string,
+    is_listed_company_invested                int,
+    is_foreign_branches_invested              int,
+    listed_company_actual_controller_invested string,
+    is_partnership_company_invested           int,
+    legal_rep_inlinks_invested                string,
+    company_uscc_prefix_code_two_invested     string,
+    create_time                               string,
+    update_time                               string
+)partitioned by (pt string) stored as orc;
+
+create table no_shareholder_company_info_incr(
+ id bigint,
+ name string
+)ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\001'
+LINES TERMINATED BY '\002'
+STORED AS TEXTFILE;
+
+data_bid_dataplus_bid_class_df            data_bid_dataplus_bid_class_df           data_bid_dataplus_bid_class_df
+data_bid_dataplus_bid_notice_df            data_bid_dataplus_bid_notice_df           data_bid_dataplus_bid_notice_df
+data_bid_dataplus_bid_notice_ent_df            data_bid_dataplus_bid_notice_ent_df           data_bid_dataplus_bid_notice_ent_df
+data_bid_dataplus_bid_object_df            data_bid_dataplus_bid_object_df           data_bid_dataplus_bid_object_df
+data_bid_dataplus_bid_sections_df            data_bid_dataplus_bid_sections_df           data_bid_dataplus_bid_sections_df
+data_bid_dataplus_bid_win_df            data_bid_dataplus_bid_win_df           data_bid_dataplus_bid_win_df
+data_bid_dataplus_bid_win_ent_df            data_bid_dataplus_bid_win_ent_df           data_bid_dataplus_bid_win_ent_df
+data_bid_dataplus_bid_notice_content_df            data_bid_dataplus_bid_notice_content_df           data_bid_dataplus_bid_notice_content_df
+data_bid_dataplus_bid_win_content_df            data_bid_dataplus_bid_win_content_df           data_bid_dataplus_bid_win_content_df
+
+
+
+select 'data_bid_dataplus_bid_class_df',mid from data_bid_dataplus_bid_class_df group by mid
+select 'data_bid_dataplus_bid_notice_df',mid from data_bid_dataplus_bid_notice_df group by mid
+select 'data_bid_dataplus_bid_notice_ent_df',mid from data_bid_dataplus_bid_notice_ent_df group by mid
+select 'data_bid_dataplus_bid_object_df',mid from data_bid_dataplus_bid_object_df group by mid
+select 'data_bid_dataplus_bid_sections_df',mid from data_bid_dataplus_bid_sections_df group by mid
+select 'data_bid_dataplus_bid_win_df',mid from data_bid_dataplus_bid_win_df group by mid
+select 'data_bid_dataplus_bid_win_ent_df',mid from data_bid_dataplus_bid_win_ent_df group by mid
+select 'data_bid_dataplus_bid_notice_content_df',mid from data_bid_dataplus_bid_notice_content_df group by mid
+select 'data_bid_dataplus_bid_win_content_df',mid from data_bid_dataplus_bid_win_content_df group by mid
+
+
+{"data_bid_dataplus_bid_class_df":[{"id":"c","mid":4,"name":3,"address":7,"info":3}],"data_bid_dataplus_bid_notice_df":[{"id":"c","mid":4,"name":3,"address":7,"info":3}],"data_bid_dataplus_bid_object_df":[{"id":"c","mid":4,"name":3,"address":7,"info":3}]}
+
+
+
+select count(1) from data_bid_dataplus_bid_class_df where pt='20230611'; -- 140759182
+select count(1) from data_bid_dataplus_bid_notice_df where pt='20230611'; -- 103520458
+select count(1) from data_bid_dataplus_bid_notice_ent_df where pt='20230611'; -- 105913972
+select count(1) from data_bid_dataplus_bid_object_df where pt='20230611'; -- 36570511
+select count(1) from data_bid_dataplus_bid_sections_df where pt='20230611'; -- 103674171
+select count(1) from data_bid_dataplus_bid_win_df where pt='20230611'; -- 92462648
+select count(1) from data_bid_dataplus_bid_win_ent_df where pt='20230611'; -- 194142427
+select count(1) from data_bid_dataplus_bid_notice_content_df where pt='20230611';
+select count(1) from data_bid_dataplus_bid_win_content_df where pt='20230611';
+
+
+
+
+
+
+
+    spark.read.option("header", "true")
+      .option("inferSchema", "true")
+      .csv("/Users/liang/Desktop/WhenIWasAProgrammer/spark/src/main/resources/tb.csv")
+      .map(row=>Row(row.getAs[Int]("mid"),row.json))
+
+Unable to find encoder for type org.apache.spark.sql.Row
+
+
+"data_bid_dataplus_bid_class_df",
+"data_bid_dataplus_bid_notice_df",
+"data_bid_dataplus_bid_notice_ent_df",
+"data_bid_dataplus_bid_object_df",
+"data_bid_dataplus_bid_sections_df",
+"data_bid_dataplus_bid_win_df",
+"data_bid_dataplus_bid_win_ent_df",
+"data_bid_dataplus_bid_notice_content_df",
+"data_bid_dataplus_bid_win_content_df",
+
+
+drop table bid_obs;
+CREATE TABLE `bid_obs`(                                        
+   `js` string)                                               
+ ROW FORMAT SERDE                                             
+   'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'       
+ STORED AS INPUTFORMAT                                        
+   'org.apache.hadoop.mapred.TextInputFormat'                 
+ OUTPUTFORMAT                                                 
+   'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+ LOCATION                                                     
+   'obs://jindi-oss-wangsu/SN_BID/';  
+
