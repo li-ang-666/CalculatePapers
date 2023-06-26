@@ -96,12 +96,6 @@ LOAD DATA local INPATH 'hdfs:///000000' INTO TABLE stream_laod [PARTITION (partc
    'transient_lastDdlTime'='1687156824')
 这是我的hive建表语句,我如何将hdfs的数据写入到这个表里呢
 
-
-
-
-
-
-
 drop table `stream_test`;
  CREATE TABLE `stream_test`(                           
    `id` string,                                           
@@ -113,3 +107,16 @@ drop table `stream_test`;
  OUTPUTFORMAT                                          
    'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat' ;
             
+CREATE TABLE `test.obs_writer_test`(                                     
+   `js` string)                                                 
+ ROW FORMAT SERDE                                               
+   'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'         
+ STORED AS INPUTFORMAT                                          
+   'org.apache.hadoop.mapred.TextInputFormat'                   
+ OUTPUTFORMAT                                                   
+   'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat' 
+ LOCATION                                                       
+   'obs://hadoop-obs/flink/tb1/';
+
+CREATE TABLE `test.obs_writer_test_hive`(                                     
+   `js` string) stored as textfile;   
