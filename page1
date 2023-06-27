@@ -120,3 +120,32 @@ CREATE TABLE `test.obs_writer_test`(
 
 CREATE TABLE `test.obs_writer_test_hive`(                                     
    `js` string) stored as textfile;   
+
+
+网智天元客户是数据库产品，FTP的，反馈：
+日更文件格式不对的问题：
+20230616，company_patent、company_tm
+20230617，company、company_patent、company_tm
+20230618，company_tm
+
+
+视野金融的
+20230619， company_patent、compnay_tm
+20230617，company_paten
+20230616, company_patent
+20230615, company_patent
+
+
+cp /nfs/open_data/dblog/20230616/all_table/20230616/_c1\=company_patent/* /nfs/ftp/databases3/wangzhitianyuanT7/20230616/_c1\=company_patent/
+cp /nfs/open_data/dblog/20230616/all_table/20230616/_c1\=company_tm/* /nfs/ftp/databases3/wangzhitianyuanT7/20230616/_c1\=company_tm/
+cp /nfs/open_data/dblog/20230617/all_table/20230617/_c1\=company/* /nfs/ftp/databases3/wangzhitianyuanT7/20230617/_c1\=company/
+cp /nfs/open_data/dblog/20230617/all_table/20230617/_c1\=company_patent/* /nfs/ftp/databases3/wangzhitianyuanT7/20230617/_c1\=company_patent/
+cp /nfs/open_data/dblog/20230617/all_table/20230617/_c1\=company_tm/* /nfs/ftp/databases3/wangzhitianyuanT7/20230617/_c1\=company_tm/
+cp /nfs/open_data/dblog/20230619/all_table/20230618/_c1\=company_tm/* /nfs/ftp/databases3/wangzhitianyuanT7/20230618/_c1\=company_tm/
+
+
+cp /nfs/open_data/dblog/20230615/all_table/20230615/_c1\=company_patent/* /nfs/ftp/databases3/shiyejinfunew/20230615/_c1\=company_patent/
+cp /nfs/open_data/dblog/20230616/all_table/20230616/_c1\=company_patent/* /nfs/ftp/databases3/shiyejinfunew/20230616/_c1\=company_patent/
+cp /nfs/open_data/dblog/20230617/all_table/20230617/_c1\=company_patent/* /nfs/ftp/databases3/shiyejinfunew/20230617/_c1\=company_patent/
+cp /nfs/open_data/dblog/20230619/all_table/20230619/_c1\=company_patent/* /nfs/ftp/databases3/shiyejinfunew/20230619/_c1\=company_patent/
+cp /nfs/open_data/dblog/20230619/all_table/20230619/_c1\=company_tm/* /nfs/ftp/databases3/shiyejinfunew/20230619/_c1\=company_tm/
