@@ -27,4 +27,28 @@ dwt_open_data_union_di -> dwt_open_data_all_di -> dwt_open_data_all_to_nfs_di
 
 ll /nfs/ftp/databases3 
 
+select * from t1 join t2 on t1.id = t2.id 已知t1和t2在不同的数据库实例,java如何执行这句SQL
 
+CREATE CATALOG jdbc_mysql PROPERTIES (
+    "type"="jdbc",
+    "user"="root",
+    "password"="123456",
+    "jdbc_url" = "jdbc:mysql://127.0.0.1:3306/demo",
+    "driver_url" = "mysql-connector-java-5.1.47.jar",
+    "driver_class" = "com.mysql.jdbc.Driver"
+)
+        //companyBase: { host: "ee59dd05fc0f4bb9a2497c8d9146a53cin01.internal.cn-north-4.mysql.rds.myhuaweicloud.com",database: "company_base",user: "jdhw_d_data_dml",password: "2s0^tFa4SLrp72" }
+
+
+CREATE CATALOG catalog_company_base PROPERTIES (
+    "type"="jdbc",
+    "user"="jdhw_d_data_dml",
+    "password"="2s0^tFa4SLrp72",
+    "jdbc_url" = "jdbc:mysql://ee59dd05fc0f4bb9a2497c8d9146a53cin01.internal.cn-north-4.mysql.rds.myhuaweicloud.com:3306/company_base?useSSL=false&trustServerCertificate=true",
+    "driver_url" = "http://doris-community-test-1308700295.cos.ap-hongkong.myqcloud.com/jdbc_driver/mysql-connector-java-8.0.25.jar",
+    "driver_class" = "com.mysql.jdbc.Driver",
+    "only_specified_database"="true"
+);
+
+
+alter catalog catalog_company_base set properties("driver_url" = "http://doris-community-test-1308700295.cos.ap-hongkong.myqcloud.com/jdbc_driver/mysql-connector-java-8.0.25.jar");
