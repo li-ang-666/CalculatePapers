@@ -17,7 +17,7 @@ cp /nfs/open_data/dblog/20230619/all_table/20230619/_c1=company_tm/*     /nfs/ft
 rm -rf /nfs/ftp/databases3/shiyejinfunew/20230615/_c1\=company_patent/*
 rm -rf /nfs/ftp/databases3/shiyejinfunew/20230616/_c1\=company_patent/*
 rm -rf /nfs/ftp/databases3/shiyejinfunew/20230617/_c1\=company_patent/*
-rm -rf /nfs/ftp/databases3/shiyejinfunew/20230619/_c1\=company_patent/*
+rm -rf /nfs/ftp/databases3/shiyejinfunew/20230619/_c1\=company_patent/*Moka20190520
 rm -rf /nfs/ftp/databases3/shiyejinfunew/20230619/_c1\=company_tm/*
 
 
