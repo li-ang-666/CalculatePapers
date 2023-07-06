@@ -1,0 +1,404 @@
+ruler.equity_count.sql = SELECT  equity_pledgee_company_id AS company_id\n        ,COUNT(is_history = 0 OR NULL) equity_count\n        ,COUNT(is_history = 1 OR NULL) AS past_equity_count\nFROM    operating_risk.equity_pledge_reinvest_index\nWHERE   equity_pledgee_company_id = ${company_id}\nGROUP BY equity_pledgee_company_id
+ruler.equity_count.type = sql
+source.operating_risk.equity_pledge_reinvest_index.equity_pledgee_company_id = company_id
+ruler.judicial_case_count.type = sql
+source.bigdata_online.company_law_judicial_case_new_index_split = auto
+source.bigdata_online.company_law_judicial_case_new_index_split.hbase_cols = judicial_case_count
+source.bigdata_online.company_law_judicial_case_new_index_split.cols = company_id:company_id
+ruler.judicial_case_count.sql = SELECT  COUNT(1) judicial_case_count\nFROM    bigdata_online.company_law_judicial_case_new_index_split\nWHERE   company_id = ${company_id}\n  AND     (\n            latest_court_proceedings NOT IN\n            ('刑事复核','刑事申诉再审审查','刑事依职权再申审查案件','刑事一审','刑事变更','刑事抗诉再审审查',\n             '刑事审判监督','刑事申诉再审审查案件','刑事指定管辖','刑事管辖','刑事','刑事再审','刑事申诉','刑事案件',\n             '减刑刑事','刑事二审','刑事其他','其他刑事','刑事执行','刑事依职权再审审查','刑事司法救助')\n        OR      latest_court_proceedings IS NULL\n    )
+ruler.environmental_penalties_count.type = sql
+source.data_index.environmental_penalties_index = auto
+source.data_index.environmental_penalties_index.hbase_cols = environmental_penalties_count,past_environment_num
+source.data_index.environmental_penalties_index.cols = gid:company_id
+ruler.environmental_penalties_count.sql = SELECT  gid AS company_id\n        ,COUNT(is_deleted = 0 OR NULL) environmental_penalties_count\n        ,COUNT(is_deleted = 2 OR NULL) AS past_environment_num\nFROM    data_index.environmental_penalties_index\nWHERE   gid = ${company_id}
+source.bigdata_online.company_count_compute_trigger.clazz = com.tyc.darwin.markets.company_count.new_count.source.CountTrigger
+source.operating_risk.equity_pledge_reinvest_index.cols = equity_pledgee_company_id:company_id
+source.operating_risk.equity_pledge_reinvest_index.hbase_cols = past_equity_count,equity_count
+source.bigdata_online.company_count_compute_trigger = java
+source.operating_risk.equity_pledge_reinvest_index = auto
+ruler.illegal_count.type = sql
+ruler.illegal_count.sql = SELECT  COUNT((is_deleted = 0 AND is_history = 0) OR NULL) illegal_count\n        ,COUNT((is_deleted = 1 AND is_history IN (0,1) OR is_history = 1 AND is_deleted IN (0,1)) OR NULL) past_illegal_num\nFROM    operating_risk.serious_violation\nWHERE   company_id = ${company_id}
+ruler.court_register_count.table = company_all_count_ali
+ruler.past_court_register_num.table = company_all_count_ali
+source.bigdata_online.court_notice_new_index_split = auto
+source.bigdata_online.court_notice_new_index_split.hbase_cols = announcement_count,past_announcement_count
+source.bigdata_online.court_notice_new_index_split.cols = company_id:company_id
+ruler.court_count.type = sql
+ruler.announcement_count.table = company_all_count_ali
+ruler.past_announcement_count.table = company_all_count_ali
+ruler.announcement_count.type = sql
+ruler.announcement_count.sql = SELECT  COUNT(is_history = 0 OR NULL) announcement_count\n        ,COUNT(is_history = 1 OR NULL) past_announcement_count\nFROM    (\n            SELECT  company_id\n                    ,main_id\n                    ,is_history\n            FROM    bigdata_online.court_notice_new_index_split\n            WHERE   company_id = ${company_id}\n            GROUP BY company_id\n                     ,main_id\n                     ,is_history\n        ) a
+source.bigdata_online.court_announcement_new_index_split = auto
+source.bigdata_online.court_announcement_new_index_split.hbase_cols = court_count,past_court_count
+source.bigdata_online.court_announcement_new_index_split.cols = company_id:company_id
+ruler.court_count.sql = SELECT  \n        COUNT(is_history = 0 OR NULL) court_count\n       ,COUNT(is_history = 1 OR NULL) AS past_court_count\nFROM    bigdata_online.court_announcement_new_index_split\nWHERE   company_id = ${company_id}
+ruler.court_register_count.type = sql
+ruler.court_register_count.sql = SELECT  COUNT(is_history = 0 OR NULL) court_register_count\n        ,COUNT(is_history = 1 OR NULL) past_court_register_num\nFROM    (\n            SELECT  company_id\n                    ,main_id\n                    ,is_history\n            FROM    bigdata_online.court_filing_new_index_split\n            WHERE   company_id = ${company_id}\n            GROUP BY company_id\n                     ,main_id\n                     ,is_history\n        ) a
+source.bigdata_online.court_filing_new_index_split.hbase_cols = court_register_count,past_court_register_num
+source.bigdata_online.court_filing_new_index_split = auto
+source.bigdata_online.court_filing_new_index_split.cols = company_id:company_id
+source.operating_risk.tax_lackage_notice = auto
+source.operating_risk.tax_lackage_notice.hbase_cols = own_tax_count,past_taxes_announcement_count
+source.operating_risk.tax_lackage_notice.cols = company_id:company_id
+ruler.own_tax_count.type = sql
+ruler.own_tax_count.sql = SELECT  COUNT(is_deleted = 0 OR NULL) own_tax_count\n     ,COUNT(is_deleted = 2 OR NULL) AS past_taxes_announcement_count\nFROM    operating_risk.tax_lackage_notice\nWHERE   company_id = ${company_id}
+ruler.litigation_related_count.sql = SELECT  IFNULL(SUM(total_count),0) litigation_related_count\nFROM    judicial_risk.litigation_related_statistics\nWHERE   company_id = ${company_id}\n  AND     is_deleted = 0
+source.judicial_risk.litigation_related_statistics = auto
+source.judicial_risk.litigation_related_statistics.hbase_cols = litigation_related_count
+source.judicial_risk.litigation_related_statistics.cols = company_id:company_id
+ruler.litigation_related_count.type = sql
+ruler.litigation_related_count.table = company_all_count_ali
+ruler.equity_freeze_count.sql = SELECT  COUNT((is_deleted = 0 OR is_deleted IS NULL) OR NULL) equity_freeze_count\n        ,COUNT(is_deleted = 1 OR NULL) past_equity_freeze_count\nFROM    (\n            SELECT  id\n                    ,is_deleted\n            FROM    judicial_risk.judicial_assistance_index\n            WHERE   judicial_assistance_type = '股权冻结'\n            AND     company_id = ${company_id}\n            UNION\n            SELECT  id\n                    ,is_deleted\n            FROM    judicial_risk.judicial_assistance_index\n            WHERE   judicial_assistance_type = '股权冻结'\n            AND     enforced_target_type = 1\n            AND     enforced_target_id = ${company_id}\n        ) t
+source.judicial_risk.judicial_assistance_index = auto
+source.judicial_risk.judicial_assistance_index.hbase_cols = equity_freeze_count
+source.judicial_risk.judicial_assistance_index.cols = company_id:company_id,enforced_target_id:company_id
+ruler.equity_freeze_count.type = sql
+ruler.history_shareholder_mirror.sql = SELECT  ifnull(SUM(total),0) history_shareholder_mirror\nFROM    prism.company_history_sholder_mirror\nWHERE   company_gid = ${company_id}\n  AND     deleted = 0
+source.prism.company_history_sholder_mirror = auto
+source.prism.company_history_sholder_mirror.hbase_cols = history_shareholder_mirror
+source.prism.company_history_sholder_mirror.cols = company_gid:company_id
+ruler.history_shareholder_mirror.type = sql
+ruler.history_shareholder_mirror.table = company_all_count_ali
+ruler.merge_punish_count.table = company_all_count_ali
+ruler.merge_past_punish_count.table = company_all_count_ali
+source.operating_risk.equity_pledge_detail_index = auto
+source.operating_risk.equity_pledge_detail_index.hbase_cols = equity_pledge_total_count
+source.operating_risk.equity_pledge_detail_index.cols = company_id:company_id
+ruler.equity_pledge_total_count.type = sql
+ruler.equity_pledge_total_count.sql = select\n	count(is_deleted = 0 or null) as equity_pledge_total_count\nfrom\n	operating_risk.equity_pledge_detail\nwhere\n	company_id = ${company_id}
+source.operating_risk.taxation_violation_index = auto
+source.operating_risk.taxation_violation_index.hbase_cols = tax_contraventions_count
+source.operating_risk.taxation_violation_index.cols = company_id:company_id
+ruler.tax_contraventions_count.type = sql
+ruler.tax_contraventions_count.sql = select\n   count(is_deleted = 0 or null) as tax_contraventions_count\nfrom\n   operating_risk.taxation_violation_index\nwhere\n    company_id = ${company_id}
+source.operating_risk.labor_arbitration_court_deliver_service_index = auto
+source.operating_risk.labor_arbitration_court_deliver_service_index.hbase_cols = labor_arbit_count
+source.operating_risk.labor_arbitration_court_deliver_service_index.cols = company_id:company_id
+source.operating_risk.labor_arbitration_court_notice_index = auto
+source.operating_risk.labor_arbitration_court_notice_index.hbase_cols = labor_arbit_count
+source.operating_risk.labor_arbitration_court_notice_index.cols = company_id:company_id
+ruler.labor_arbit_count.type = sql
+ruler.labor_arbit_count.sql = SELECT  SUM(labour_arbitration_open_cnt) labor_arbit_count\nFROM    (\n            SELECT  COUNT(1) labour_arbitration_open_cnt\n            FROM    operating_risk.labor_arbitration_court_deliver_service_index\n            WHERE   company_id = ${company_id}\n            UNION ALL\n            SELECT  COUNT(1) labor_arbit_count\n            FROM    operating_risk.labor_arbitration_court_notice_index\n            WHERE   company_id =  ${company_id}\n        ) t
+source.operating_risk.administration_punish = auto
+source.operating_risk.administration_punish.hbase_cols = merge_punish_count
+source.operating_risk.administration_punish.cols = company_id:company_id
+ruler.merge_punish_count.type = sql
+ruler.merge_punish_count.sql = SELECT   COUNT(is_history = 0 or null) merge_punish_count    ,\nCOUNT(is_history = 1 or null) AS merge_past_punish_count\nFROM    operating_risk.administration_punish WHERE   company_id = ${company_id} and admin_punish_similar_id=0
+ruler.abnormal_count.type = sql
+ruler.abnormal_count.sql = SELECT\n    COUNT(is_deleted = 0 OR NULL) abnormal_count\n     ,COUNT(is_deleted = 1 OR NULL) AS history_abnormal_list_count\nFROM    operating_risk.company_abnormal_operation\nWHERE   company_id = ${company_id}
+source.operating_risk.company_abnormal_operation = auto
+source.operating_risk.company_abnormal_operation.hbase_cols = abnormal_count,history_abnormal_list_count
+source.operating_risk.company_abnormal_operation.cols = company_id:company_id
+source.judicial_risk.enforced_info_index.hbase_cols = zhixing,past_zhixing
+ruler.zhixing.sql = SELECT\n    COUNT(is_history = 0 OR NULL) zhixing\n     ,COUNT(is_history = 1 OR NULL) AS past_zhixing\nFROM    judicial_risk.enforced_info_index\nWHERE   company_id = ${company_id}  and is_deleted=0
+source.judicial_risk.enforced_info_index.cols = company_id:company_id
+source.judicial_risk.enforced_info_index = auto
+ruler.zhixing.type = sql
+source.operating_risk.serious_violation = auto
+source.operating_risk.serious_violation.hbase_cols = illegal_count
+source.operating_risk.serious_violation.cols = company_id:company_id
+source.prism.compete_risk_count.hbase_cols = competition_risk_count
+ruler.competition_risk_count.sql = select\n   ifnull(compete_risk_count, 0) + ifnull(compete_opponent_count, 0) as competition_risk_count\nfrom\n   prism.compete_risk_count\nwhere\n   gid = ${company_id} and deleted = 0
+ruler.competition_risk_count.type = sql
+source.prism.compete_risk_count = auto
+source.prism.compete_risk_count.cols = gid:company_id
+source.operating_risk.non_estate_pledge = auto
+source.operating_risk.non_estate_pledge.hbase_cols = mortgage_count,past_mortgage_count
+source.operating_risk.non_estate_pledge.cols = company_id:company_id
+ruler.mortgage_count.type = sql
+ruler.mortgage_count.sql = select \n	count(is_deleted = 0 or null) as mortgage_count,\n	count(is_deleted = 1 or null) as past_mortgage_count\nfrom\n	operating_risk.non_estate_pledge\nwhere\n	company_id = ${company_id}
+source.operating_risk.company_liquidation_info = auto
+source.operating_risk.company_liquidation_info.hbase_cols = clearing_count
+source.operating_risk.company_liquidation_info.cols = company_id:company_id
+ruler.clearing_count.type = sql
+ruler.clearing_count.sql = select\n    count(1) as clearing_count\nfrom   operating_risk.company_liquidation_info\nwhere\n is_deleted = 0 and\n  company_id= ${company_id}
+source.operating_risk.intellectual_property_pledge = auto
+source.operating_risk.intellectual_property_pledge.hbase_cols = intellectual_property,past_intel_property_pledge_count
+source.operating_risk.intellectual_property_pledge.cols = company_id:company_id
+ruler.intellectual_property.type = sql
+ruler.intellectual_property.sql = select\n    COUNT(is_history = 0 OR NULL) intellectual_property\n     ,COUNT(is_history = 1 OR NULL) past_intel_property_pledge_count\nfrom   operating_risk.intellectual_property_pledge\nwhere\n        company_id= ${company_id}
+source.operating_risk.public_for_exhortation_index = auto
+source.operating_risk.public_for_exhortation_index.hbase_cols = public_notice
+source.operating_risk.public_for_exhortation_index.cols = company_id:company_id
+ruler.public_notice.type = sql
+ruler.public_notice.sql = select\n    COUNT(1) public_notice\nfrom   operating_risk.public_for_exhortation_index\nwhere\n        company_id= ${company_id} and is_deleted=0
+source.operating_risk.gov_conversation_index = auto
+source.operating_risk.gov_conversation_index.hbase_cols = gov_summon_count
+source.operating_risk.gov_conversation_index.cols = company_id:company_id
+ruler.gov_summon_count.type = sql
+ruler.gov_summon_count.sql = select\n    COUNT(1) gov_summon_count\nfrom   operating_risk.gov_conversation_index\nwhere\n        company_id= ${company_id} and is_deleted=0
+source.operating_risk.guarantee_risk_index = auto
+source.operating_risk.guarantee_risk_index.hbase_cols = guaranty_insurance_count
+source.operating_risk.guarantee_risk_index.cols = company_id:company_id
+ruler.guaranty_insurance_count.type = sql
+ruler.guaranty_insurance_count.sql = select\n    COUNT(1) guaranty_insurance_count\nfrom   operating_risk.guarantee_risk_index\nwhere\n        company_id= ${company_id}
+source.operating_risk.simplified_cancellation_announcement = auto
+source.operating_risk.simplified_cancellation_announcement.hbase_cols = brief_cancel_announcements_count_v2
+source.operating_risk.simplified_cancellation_announcement.cols = company_id:company_id
+ruler.brief_cancel_announcements_count_v2.type = sql
+ruler.brief_cancel_announcements_count_v2.sql = select\n    COUNT(1) brief_cancel_announcements_count_v2\nfrom   operating_risk.simplified_cancellation_announcement\nwhere\n        company_id= ${company_id} and  is_deleted = 0
+source.operating_risk.product_recall_index = auto
+source.operating_risk.product_recall_index.hbase_cols = product_recall_count
+source.operating_risk.product_recall_index.cols = company_id:company_id
+ruler.product_recall_count.type = sql
+ruler.product_recall_count.sql = SELECT  COUNT(1) product_recall_count\nFROM    operating_risk.product_recall_index\nWHERE   company_id = ${company_id} and is_deleted=0
+source.operating_risk.cancel_filing_record = auto
+source.operating_risk.cancel_filing_record.hbase_cols = cancel_record_count
+source.operating_risk.cancel_filing_record.cols = company_id:company_id
+ruler.cancel_record_count.type = sql
+ruler.cancel_record_count.sql = SELECT  COUNT(1) cancel_record_count\nFROM    operating_risk.cancel_filing_record\nWHERE   company_id = ${company_id}
+source.operating_risk.equity_pledge_detail = auto
+source.operating_risk.equity_pledge_detail.hbase_cols = equity_pledge_total_count
+source.operating_risk.equity_pledge_detail.cols = company_id:company_id
+
+
+# 土地抵押
+
+# 土地抵押
+
+# 土地抵押
+
+# 土地抵押
+
+# 土地抵押
+
+source.operating_risk.land_mortgage_index = auto
+source.operating_risk.land_mortgage_index.hbase_cols = land_mortgages_count_v1
+source.operating_risk.land_mortgage_index.cols = company_id:company_id
+ruler.land_mortgages_count_v1.type = sql
+ruler.land_mortgages_count_v1.sql = select\n       count(land_mortgage_ending_dates_clean > current_date() or null) as land_mortgages_count_v1,\n       count(land_mortgage_ending_dates_clean <= current_date() or null) as past_land_mortgages_count\nfrom operating_risk.land_mortgage_index\nwhere company_id=${company_id}\nand is_deleted = 0
+
+# 终本案件、历史终本案件 - mqq
+source.judicial_risk.final_case_info = auto
+source.judicial_risk.final_case_info.hbase_cols = end_case_count,history_termination_case_count
+source.judicial_risk.final_case_info.cols = enforced_company_id:company_id
+ruler.end_case_count.type = sql
+ruler.end_case_count.sql = select\n  count(is_history = 0 or null) as end_case_count,\n  count(is_history = 1 or null ) as history_termination_case_count\nfrom\n  judicial_risk.final_case_info \nwhere\n  enforced_company_id = ${company_id} \nand enforced_type = 1
+
+
+# 法律诉讼
+ruler.lawsuit_with_label_count.table = company_all_count
+ruler.past_lawsuit_with_label_count.table = company_all_count
+ruler.lawsuit_with_label_count.type = sqlmysql> show tables;
+Empty set (0.01 sec)
+
+mysql> exit
+Bye
+~ » spark                                                                                                                                                                                  liang@mbp [15:29:49 07/04]
+Last login: Tue Jul  4 10:00:07 2023 from 10.2.56.101
+	
+	Welcome to Huawei Cloud Service
+
+[hive@s119-prod-kunpenghuawei ~]$ beeline
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/data/bigdata/hadoopclient/Hive/Beeline/lib/log4j-slf4j-impl-2.17.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/data/bigdata/hadoopclient/Hive/Beeline/lib/slf4j-log4j12-1.7.30.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Connecting to jdbc:hive2://10.99.202.153:2181,10.99.198.86:2181,10.99.203.51:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2
+Connected to: Apache Hive (version 3.1.0-hw-ei-312019)
+Driver: Hive JDBC (version 3.1.0-hw-ei-312019)
+Transaction isolation: TRANSACTION_REPEATABLE_READ
+Beeline version 3.1.0-hw-ei-312019 by Apache Hive
+0: jdbc:hive2://10.99.202.153:10000/> select * from dwc.dwc_new_tab3_entity_beneficiary_details_df where pt='20230702' and tyc_unique_entity_id = 2318455639;
+INFO  : State: Compiling.
+INFO  : Compiling command(queryId=omm_20230704153040_b999d5cc-6ad9-4300-9110-05c35fc07e43): select * from dwc.dwc_new_tab3_entity_beneficiary_details_df where pt='20230702' and tyc_unique_entity_id = 2318455639; Current sessionId=8675fd49-30ce-4f9d-9344-3f835fd3c8e4
+INFO  : hive.compile.auto.avoid.cbo=true
+INFO  : Insert table not follow columns
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : Current sql is not contains insert syntax, not need record dest table flag
+INFO  : Semantic Analysis Completed (retrial = false)
+INFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.id, type:bigint, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.tyc_unique_entity_id, type:string, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.entity_type_id, type:int, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.entity_name_valid, type:string, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.entity_name_beneficiary, type:string, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.tyc_unique_entity_id_beneficiary, type:string, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.equity_relation_path_cnt, type:int, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.estimated_equity_ratio_total, type:decimal(24,12), comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.beneficiary_validation_time_year, type:int, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.beneficiary_equity_relation_path_detail, type:string, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.create_time, type:string, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.update_time, type:string, comment:null), FieldSchema(name:dwc_new_tab3_entity_beneficiary_details_df.pt, type:string, comment:null)], properties:null)
+INFO  : Completed compiling command(queryId=omm_20230704153040_b999d5cc-6ad9-4300-9110-05c35fc07e43); Time taken: 0.06 seconds
+INFO  : Concurrency mode is disabled, not creating a lock manager
+INFO  : State: Executing.
+INFO  : Executing command(queryId=omm_20230704153040_b999d5cc-6ad9-4300-9110-05c35fc07e43): select * from dwc.dwc_new_tab3_entity_beneficiary_details_df where pt='20230702' and tyc_unique_entity_id = 2318455639; Current sessionId=8675fd49-30ce-4f9d-9344-3f835fd3c8e4
+INFO  : Query ID = omm_20230704153040_b999d5cc-6ad9-4300-9110-05c35fc07e43, Current sessionId=8675fd49-30ce-4f9d-9344-3f835fd3c8e4
+INFO  : Total jobs = 1
+INFO  : Launching Job 1 out of 1
+INFO  : Starting task [Stage-1:MAPRED] in serial mode
+INFO  : Hive on Spark State: STARTED
+INFO  : Running with YARN Application = application_1685067363746_1687373
+INFO  : Kill Command = /opt/Bigdata/FusionInsight_HD_8.1.2.1/install/FusionInsight-Hive-3.1.0/hive-3.1.0/bin/..//../hadoop/bin/yarn application -kill application_1685067363746_1687373
+INFO  : Hive on Spark Session Web UI URL: http://node-group-1RGvq.mrs-68gj.com:22725
+INFO  : Query Hive on Spark job[0] stages: [0]
+INFO  : Spark job[0] status = RUNNING
+INFO  : Job Progress Format
+CurrentTime StageId_StageAttemptId: SucceededTasksCount(+RunningTasksCount-FailedTasksCount)/TotalTasksCount
+INFO  : 2023-07-04 15:31:05,412	Stage-0_0: 0(+1)/38	
+INFO  : 2023-07-04 15:31:08,421	Stage-0_0: 0(+1)/38	
+INFO  : 2023-07-04 15:31:11,433	Stage-0_0: 0(+8)/38	
+INFO  : 2023-07-04 15:31:14,451	Stage-0_0: 0(+29)/38	
+INFO  : 2023-07-04 15:31:17,461	Stage-0_0: 0(+38)/38	
+INFO  : 2023-07-04 15:31:20,469	Stage-0_0: 0(+38)/38	
+INFO  : 2023-07-04 15:31:23,478	Stage-0_0: 1(+37)/38	
+INFO  : 2023-07-04 15:31:26,488	Stage-0_0: 1(+37)/38	
+INFO  : 2023-07-04 15:31:29,497	Stage-0_0: 6(+32)/38	
+INFO  : 2023-07-04 15:31:32,504	Stage-0_0: 25(+13)/38	
+INFO  : 2023-07-04 15:31:35,512	Stage-0_0: 34(+4)/38	
+INFO  : 2023-07-04 15:31:38,519	Stage-0_0: 37(+1)/38	
+INFO  : 2023-07-04 15:31:41,534	Stage-0_0: 37(+1)/38	
+INFO  : Hive on Spark State: SUCCEEDED
+INFO  : Spark job[0] finished successfully in 42.20 second(s)
+INFO  : Completed executing command(queryId=omm_20230704153040_b999d5cc-6ad9-4300-9110-05c35fc07e43); Time taken: 61.68 seconds
+INFO  : OK
+INFO  : Concurrency mode is disabled, not creating a lock manager
++------------------------------------------------+------------------------------------------------------------------+------------------------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------+------------------------------------------------------------------------------+----------------------------------------------------------------------+--------------------------------------------------------------------------+------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------+------------------------------------------------+
+| dwc_new_tab3_entity_beneficiary_details_df.id  | dwc_new_tab3_entity_beneficiary_details_df.tyc_unique_entity_id  | dwc_new_tab3_entity_beneficiary_details_df.entity_type_id  | dwc_new_tab3_entity_beneficiary_details_df.entity_name_valid  | dwc_new_tab3_entity_beneficiary_details_df.entity_name_beneficiary  | dwc_new_tab3_entity_beneficiary_details_df.tyc_unique_entity_id_beneficiary  | dwc_new_tab3_entity_beneficiary_details_df.equity_relation_path_cnt  | dwc_new_tab3_entity_beneficiary_details_df.estimated_equity_ratio_total  | dwc_new_tab3_entity_beneficiary_details_df.beneficiary_validation_time_year  | dwc_new_tab3_entity_beneficiary_details_df.beneficiary_equity_relation_path_detail  | dwc_new_tab3_entity_beneficiary_details_df.create_time  | dwc_new_tab3_entity_beneficiary_details_df.update_time  | dwc_new_tab3_entity_beneficiary_details_df.pt  |
++------------------------------------------------+------------------------------------------------------------------+------------------------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------+------------------------------------------------------------------------------+----------------------------------------------------------------------+--------------------------------------------------------------------------+------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------+------------------------------------------------+
+| 608116204                                      | 2318455639                                                       | 1                                                          | 北京金堤科技有限公司                                          | 柳超                                                                | V0M9EM200ND6FPNUP                                                            | 0                                                                    | 0.596117280000                                                           | 2023                                                                         | []                                                                                  |                                                         |                                                         | 20230702                                       |
++------------------------------------------------+------------------------------------------------------------------+------------------------------------------------------------+---------------------------------------------------------------+---------------------------------------------------------------------+------------------------------------------------------------------------------+----------------------------------------------------------------------+--------------------------------------------------------------------------+------------------------------------------------------------------------------+-------------------------------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------+------------------------------------------------+
+1 row selected (61.889 seconds)
+0: jdbc:hive2://10.99.202.153:10000/> 
+
+
+2023-07-04 20:04:53.135 [ERROR] [Sink: Unnamed (1/2)#0] (ShareholderPatchJob$Sink.invoke:72) - 张家港市杨舍镇恒诺设计工作室 , SingleCanalBinlog(database=bdp_equity, table=entity_beneficiary_details, executeMilliseconds=1688472060000, eventType=INSERT, columnMap={id=736586255, tyc_unique_entity_id=5331047904, entity_type_id=1, entity_name_valid=张家港市杨舍镇恒诺设计工作室, entity_name_beneficiary=, tyc_unique_entity_id_beneficiary=50J80M70T9JPQBM5D, equity_relation_path_cnt=1, estimated_equity_ratio_total=0.000000000, beneficiary_validation_time_year=2023, beneficiary_equity_relation_path_detail=[[{"id":"50J80M70T9JPQBM5D","properties":{"node_type":2,"human_name_id":1992816897,"name":"李颖"}},{"startNode":"50J80M70T9JPQBM5D","endNode":"5331047904","properties":{"equity_ratio":0.0}},{"id":"5331047904","properties":{"node_type":1,"company_id":5331047904,"name":"张家港市杨舍镇恒诺设计工作室"}}]], create_time=2023-07-04 20:00:23, update_time=2023-07-04 20:00:23})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ruler.lawsuit_with_label_count.sql = select\n count(substr(judge_date,1,10) >= concat(YEAR(NOW()) - 1,'-10-01') or null) as lawsuit_with_label_count,\n count((substr(judge_date,1,10) < concat(YEAR(NOW()) - 1,'-10-01') or judge_date = '') or null) as past_lawsuit_with_label_count\nfrom (\nselect  main_id,max(judge_date) as judge_date\n from   bigdata_online.company_lawsuit_new_index_split\n where company_id = ${company_id}\n group by main_id,company_id\n) a
+source.bigdata_online.company_lawsuit_new_index_split = auto
+source.bigdata_online.company_lawsuit_new_index_split.hbase_cols = lawsuit_with_label_count,past_lawsuit_with_label_count
+source.bigdata_online.company_lawsuit_new_index_split.cols = company_id:company_id
+
+
+
+
+# 债务债权
+source.dim_statistics.debt_debtee_summarize = auto
+source.dim_statistics.debt_debtee_summarize.hbase_cols = com_debt_count
+source.dim_statistics.debt_debtee_summarize.cols = gid:company_id
+ruler.com_debt_count.type = sql
+ruler.com_debt_count.sql = SELECT  ifnull(SUM(branches_count),0) com_debt_count\nFROM    dim_statistics.debt_debtee_summarize\nWHERE   gid = '${company_id}'\nAND     deleted = 0
+
+
+# 抽查检查-ll
+source.operating_info.sampling_inspection = auto
+source.operating_info.sampling_inspection.hbase_cols = check_count_v2
+source.operating_info.sampling_inspection.cols = company_id:company_id
+source.operating_info.product_quality_supervision_sampling_inspection = auto
+source.operating_info.product_quality_supervision_sampling_inspection.hbase_cols = check_count_v2
+source.operating_info.product_quality_supervision_sampling_inspection.cols = company_id:company_id
+source.operating_info.cert_supervision_sampling_inspection = auto
+source.operating_info.cert_supervision_sampling_inspection.hbase_cols = check_count_v2
+source.operating_info.cert_supervision_sampling_inspection.cols = company_id:company_id
+ruler.check_count_v2.type = sql
+ruler.check_count_v2.sql = select sum(checkCountV2) check_count_v2 from (SELECT\n  COUNT(1) AS checkCountV2 \nFROM    operating_info.sampling_inspection\nWHERE   company_id = ${company_id} union SELECT\n  COUNT(1) AS checkCountV2 \nFROM    operating_info.product_quality_supervision_sampling_inspection\nWHERE   company_id = ${company_id} and is_deleted=0 union all SELECT\n  COUNT(1) AS checkCountV2 \nFROM    operating_info.cert_supervision_sampling_inspection\nWHERE   company_id = ${company_id} and is_deleted=0 ) t
+ruler.check_count_v2.table = company_all_count_ali
+
+
+# 实际控制人、受益所有人、实际控制权
+source.prism_shareholder_path.shareholder_type_label = auto
+source.prism_shareholder_path.shareholder_type_label.hbase_cols = real_controller_graph,final_holder_count,final_invest_count
+source.prism_shareholder_path.shareholder_type_label.cols = entity_name_id:company_id,shareholder_name_id:company_id
+ruler.real_controller_graph.type = sql
+ruler.real_controller_graph.sql = select\n     -- 实际控制人\n     count((shareholder_identity_type='实际控制人' and tyc_unique_entity_id='${company_id}') or null) as real_controller_graph,\n     -- 受益所有人\n     count((shareholder_identity_type='受益所有人' and tyc_unique_entity_id='${company_id}') or null) as final_holder_count,\n     -- 实际控制权\n     count((shareholder_identity_type='实际控制人' and shareholder_id='${company_id}') or null) as final_invest_count\n from\n     prism_shareholder_path.shareholder_type_label\n where\n     (\n             (\n                         tyc_unique_entity_id = '${company_id}'\n                     and entity_type = 1\n                 )\n             or (\n                         shareholder_id = '${company_id}'\n                     and shareholder_entity_type = 1\n                 )\n         )\n   and shareholder_identity_type in ('实际控制人', '受益所有人')

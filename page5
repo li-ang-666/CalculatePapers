@@ -1,0 +1,37 @@
+
+Data Source: 457-企查详情页-股东标签 Schema: prism_shareholder_path Table: ratio_path_company  -- 投资路径结果表 
+-- auto-generated definition
+create table ratio_path_company
+(
+    id                         bigint unsigned auto_increment comment '主键id'
+        primary key,
+    company_id                 bigint          default 0                 not null comment '公司id',
+    shareholder_id             varchar(120)    default ''                not null comment '股东id,人存human-pid,公司存储company_id',
+    shareholder_entity_type    smallint        default 0                 not null comment '1-company,2-human,3-abnormal entity',
+    shareholder_name_id        bigint          default 0                 not null comment '股东的gid',
+    investment_ratio_total     decimal(24, 12) default 0.000000000000    not null comment '投资总比例',
+    is_controller              smallint(1)     default 0                 not null comment '1-controller, 0-not controller',
+    is_ultimate                smallint(1)     default 0                 not null comment '1-ultimate, 0-not ultimate',
+    is_big_shareholder         smallint(1)     default 0                 not null comment '1-is big_shareholder, 0-not big_shareholder',
+    is_controlling_shareholder smallint(1)     default 0                 not null comment '1-is controlling_shareholder, 0-not controlling_shareholder',
+    equity_holding_path        longtext                                  null comment '持股路径',
+    create_time                datetime        default CURRENT_TIMESTAMP not null comment 'create_time',
+    update_time                datetime        default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment 'update_time',
+    is_deleted                 smallint(1)     default 0                 not null comment '1-deleted, 0-not deleted',
+    constraint uniq_company_id_shareholder_id
+        unique (company_id, shareholder_id)
+)
+    comment '投资路径结果表' charset = utf8mb4;
+
+create index idx_company_ultimate
+    on ratio_path_company (company_id, is_ultimate);
+
+create index idx_shardholder_graph
+    on ratio_path_company (shareholder_name_id, shareholder_entity_type);
+
+create index idx_shardholder_percent
+    on ratio_path_company (shareholder_id, shareholder_entity_type, investment_ratio_total);
+
+create index idx_shareholder_company
+    on ratio_path_company (shareholder_id, company_id);
+ Show table preview 
