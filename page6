@@ -1,0 +1,64 @@
+
+
+兰肖琴
+ """
+        |insert overwrite table test.test_dirty_company_df_lxq partition(pt='20230629')
+        |select /*+ REPARTITION(600) */ t1.name,t2.dirty_company from
+        |t1 join t2 on t1.sub_name=t2.dirty_company
+        |group by t1.name,t2.dirty_company
+        |""".stripMargin)
+lombok
+SELECT   `id`,   `tyc_unique_entity_id`,   `entity_type_id`,   `entity_name_valid`,   `company_name_controlled`,   `company_id_controlled`,   `equity_relation_path_cnt`,   `estimated_equity_ratio_total`,   `controlling_equity_relation_path_detail`,   `control_validation_time_year`,   `create_time`,   `update_time` FROM entity_controller_details WHERE tyc_unique_entity_id = #{entity_id} ORDER BY `id`
+
+if(cast(id, as string)=='',null,id,)
+if(cast(case_no as string)=='',null,case_no)
+if(cast(cids as string)=='',null,cids)
+if(cast(case_reason as string)=='',null,case_reason)
+if(cast(start_time as string)=='',null,start_time)
+if(cast(court as string)=='',null,court)
+if(cast(department as string)=='',null,department)
+if(cast(area as string)=='',null,area)
+if(cast(assistant as string)=='',null,assistant)
+if(cast(judge as string)=='',null,judge)
+if(cast(plaintiff as string)=='',null,plaintiff)
+if(cast(defendant as string)=='',null,defendant)
+if(cast(litigant as string)=='',null,litigant)
+if(cast(third as string)=='',null,third)
+if(cast(filing_date as string)=='',null,filing_date)
+if(cast(close_date as string)=='',null,close_date)
+if(cast(content as string)=='',null,content)
+if(cast(case_status as string)=='',null,case_status)
+if(cast(case_type as string)=='',null,case_type)
+if(cast(source as string)=='',null,source)
+if(cast(source_url as string)=='',null,source_url)
+if(cast(create_time as string)=='',null,create_time)
+if(cast(update_time as string)=='',null,update_time)
+if(cast(deleted as string)=='',null,deleted)
+
+id,
+case_no
+cids
+case_reason
+start_time
+court
+department
+area
+assistant
+judge
+plaintiff
+defendant
+litigant
+third
+filing_date
+close_date
+content
+case_status
+case_type
+source
+source_url
+create_time
+update_time
+deleted
+
+​​​
+Shift + Enter 换行
