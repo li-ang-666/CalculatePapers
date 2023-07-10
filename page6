@@ -10,30 +10,30 @@
 lombok
 SELECT   `id`,   `tyc_unique_entity_id`,   `entity_type_id`,   `entity_name_valid`,   `company_name_controlled`,   `company_id_controlled`,   `equity_relation_path_cnt`,   `estimated_equity_ratio_total`,   `controlling_equity_relation_path_detail`,   `control_validation_time_year`,   `create_time`,   `update_time` FROM entity_controller_details WHERE tyc_unique_entity_id = #{entity_id} ORDER BY `id`
 
-if(id is null or cast(id as string)=='','NULL',id,)
-if(case_no is null or cast(case_no as string)=='','NULL',case_no)
-if(cids is null or cast(cids as string)=='','NULL',cids)
-if(case_reason is null or cast(case_reason as string)=='','NULL',case_reason)
-if(start_time is null or cast(start_time as string)=='','NULL',start_time)
-if(court is null or cast(court as string)=='','NULL',court)
-if(department is null or cast(department as string)=='','NULL',department)
-if(area is null or cast(area as string)=='','NULL',area)
-if(assistant is null or cast(assistant as string)=='','NULL',assistant)
-if(judge is null or cast(judge as string)=='','NULL',judge)
-if(plaintiff is null or cast(plaintiff as string)=='','NULL',plaintiff)
-if(defendant is null or cast(defendant as string)=='','NULL',defendant)
-if(litigant is null or cast(litigant as string)=='','NULL',litigant)
-if(third is null or cast(third as string)=='','NULL',third)
-if(filing_date is null or cast(filing_date as string)=='','NULL',filing_date)
-if(close_date is null or cast(close_date as string)=='','NULL',close_date)
-if(content is null or cast(content as string)=='','NULL',content)
-if(case_status is null or cast(case_status as string)=='','NULL',case_status)
-if(case_type is null or cast(case_type as string)=='','NULL',case_type)
-if(source is null or cast(source as string)=='','NULL',source)
-if(source_url is null or cast(source_url as string)=='','NULL',source_url)
-if(create_time is null or cast(create_time as string)=='','NULL',create_time)
-if(update_time is null or cast(update_time as string)=='','NULL',update_time)
-if(deleted is null or cast(deleted as string)=='','NULL',deleted)
+nvl(if(id is null or cast(id as string)='','NULL',id,),'NULL'),
+nvl(if(case_no is null or cast(case_no as string)='','NULL',case_no),'NULL'),
+nvl(if(cids is null or cast(cids as string)='','NULL',cids),'NULL'),
+nvl(if(case_reason is null or cast(case_reason as string)='','NULL',case_reason),'NULL'),
+nvl(if(start_time is null or cast(start_time as string)='','NULL',start_time),'NULL'),
+nvl(if(court is null or cast(court as string)='','NULL',court),'NULL'),
+nvl(if(department is null or cast(department as string)='','NULL',department),'NULL'),
+nvl(if(area is null or cast(area as string)='','NULL',area),'NULL'),
+nvl(if(assistant is null or cast(assistant as string)='','NULL',assistant),'NULL'),
+nvl(if(judge is null or cast(judge as string)='','NULL',judge),'NULL'),
+nvl(if(plaintiff is null or cast(plaintiff as string)='','NULL',plaintiff),'NULL'),
+nvl(if(defendant is null or cast(defendant as string)='','NULL',defendant),'NULL'),
+nvl(if(litigant is null or cast(litigant as string)='','NULL',litigant),'NULL'),
+nvl(if(third is null or cast(third as string)='','NULL',third),'NULL'),
+nvl(if(filing_date is null or cast(filing_date as string)='','NULL',filing_date),'NULL'),
+nvl(if(close_date is null or cast(close_date as string)='','NULL',close_date),'NULL'),
+nvl(if(content is null or cast(content as string)='','NULL',content),'NULL'),
+nvl(if(case_status is null or cast(case_status as string)='','NULL',case_status),'NULL'),
+nvl(if(case_type is null or cast(case_type as string)='','NULL',case_type),'NULL'),
+nvl(if(source is null or cast(source as string)='','NULL',source),'NULL'),
+nvl(if(source_url is null or cast(source_url as string)='','NULL',source_url),'NULL'),
+nvl(if(create_time is null or cast(create_time as string)='','NULL',create_time),'NULL'),
+nvl(if(update_time is null or cast(update_time as string)='','NULL',update_time),'NULL'),
+nvl(if(deleted is null or cast(deleted as string)='','NULL',deleted),'NULL')
 
 id,
 case_no
@@ -60,5 +60,122 @@ create_time
 update_time
 deleted
 
-​​​
-Shift + Enter 换行
+drop table test.test_dwt_company_court_register_df_2;
+CREATE TABLE test.test_dwt_company_court_register_df_2(
+  id string,
+  case_no string COMMENT '案号',
+  cids string COMMENT '当事人,公司标识',
+  case_reason string COMMENT '案由',
+  start_time string COMMENT '开庭时间',
+  court string COMMENT '法院',
+  department string COMMENT '承办部门',
+  area string COMMENT '地区',
+  assistant string COMMENT '法官助理',
+  judge string COMMENT '法官',
+  plaintiff string COMMENT '公诉人/原告/上诉人/申请人',
+  defendant string COMMENT '被告人/被告/被上诉人/被申请人',
+  litigant string COMMENT '当事人',
+  third string COMMENT '第三人',
+  filing_date string COMMENT '立案时间',
+  close_date string COMMENT '结案时间',
+  content string COMMENT '案件详情',
+  case_status string COMMENT '案件状态',
+  case_type string COMMENT '案件类型',
+  source string COMMENT '来源',
+  source_url string COMMENT '源链接',
+  create_time string COMMENT '创建时间',
+  update_time string COMMENT '更新时间',
+  deleted string COMMENT '是否删除，1:删除，0:未删除'
+) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' stored as textfile;
+
+
+
+SET hive.execution.engine=spark;
+SET spark.executor.cores=1;
+SET spark.executor.memory=10G;
+SET spark.executor.instances=1;
+
+insert overwrite table test.test_dwt_company_court_register_df_2
+select /*+REPARTITION(1)*/
+nvl(if(id is null or cast(id as string)='','NULL',id),'NULL'),
+nvl(if(case_no is null or cast(case_no as string)='','NULL',case_no),'NULL'),
+nvl(if(cids is null or cast(cids as string)='','NULL',cids),'NULL'),
+nvl(if(case_reason is null or cast(case_reason as string)='','NULL',case_reason),'NULL'),
+nvl(if(start_time is null or cast(start_time as string)='','NULL',start_time),'NULL'),
+nvl(if(court is null or cast(court as string)='','NULL',court),'NULL'),
+nvl(if(department is null or cast(department as string)='','NULL',department),'NULL'),
+nvl(if(area is null or cast(area as string)='','NULL',area),'NULL'),
+nvl(if(assistant is null or cast(assistant as string)='','NULL',assistant),'NULL'),
+nvl(if(judge is null or cast(judge as string)='','NULL',judge),'NULL'),
+nvl(if(plaintiff is null or cast(plaintiff as string)='','NULL',plaintiff),'NULL'),
+nvl(if(defendant is null or cast(defendant as string)='','NULL',defendant),'NULL'),
+nvl(if(litigant is null or cast(litigant as string)='','NULL',litigant),'NULL'),
+nvl(if(third is null or cast(third as string)='','NULL',third),'NULL'),
+nvl(if(filing_date is null or cast(filing_date as string)='','NULL',filing_date),'NULL'),
+nvl(if(close_date is null or cast(close_date as string)='','NULL',close_date),'NULL'),
+nvl(if(content is null or cast(content as string)='','NULL',content),'NULL'),
+nvl(if(case_status is null or cast(case_status as string)='','NULL',case_status),'NULL'),
+nvl(if(case_type is null or cast(case_type as string)='','NULL',case_type),'NULL'),
+nvl(if(source is null or cast(source as string)='','NULL',source),'NULL'),
+nvl(if(source_url is null or cast(source_url as string)='','NULL',source_url),'NULL'),
+nvl(if(create_time is null or cast(create_time as string)='','NULL',create_time),'NULL'),
+nvl(if(update_time is null or cast(update_time as string)='','NULL',update_time),'NULL'),
+nvl(if(deleted is null or cast(deleted as string)='','NULL',deleted),'NULL')
+from dwt_offline.dwt_company_court_register_df  where pt='20230705' distribute by 1
+
+,2311997024,2311997028,2348503284,151858344,765289672,3014405561,2548732599
+
+
+
+insert overwrite table test.test_dwt_company_court_register_df
+select 
+if(cast(id as string)='',null,id),
+if(cast(case_no as string)='',null,case_no),
+if(cast(cids as string)='',null,cids),
+if(cast(case_reason as string)='',null,case_reason),
+if(cast(start_time as string)='',null,start_time),
+if(cast(court as string)='',null,court),
+if(cast(department as string)='',null,department),
+if(cast(area as string)='',null,area),
+if(cast(assistant as string)='',null,assistant),
+if(cast(judge as string)='',null,judge),
+if(cast(plaintiff as string)='',null,plaintiff),
+if(cast(defendant as string)='',null,defendant),
+if(cast(litigant as string)='',null,litigant),
+if(cast(third as string)='',null,third),
+if(cast(filing_date as string)='',null,filing_date),
+if(cast(close_date as string)='',null,close_date),
+if(cast(content as string)='',null,content),
+if(cast(case_status as string)='',null,case_status),
+if(cast(case_type as string)='',null,case_type),
+if(cast(source as string)='',null,source),
+if(cast(source_url as string)='',null,source_url),
+if(cast(create_time as string)='',null,create_time),
+if(cast(update_time as string)='',null,update_time),
+if(cast(deleted as string)='',null,deleted)
+from dwt_offline.dwt_company_court_register_df  where pt='20230705'
+
+https://b3sh6jivuw.feishu.cn/wiki/F9fUwPfYBi6IEGkYJaEc1bASn8U#part-I9LIdq4lBoDrJnx7Zcwcrx5PnAd
+
+
+三亚人和科技投资有限公司2311515373
+北京长峰医院股份有限公司2348986410
+北京金堤科技有限公司2318455639
+北京麦达人餐饮管理有限公司43162303
+重庆市涪陵榨菜集团股份有限公司154213205
+北京三快在线科技有限公司26141112
+北京金堤科技有限公司 2318455639
+海南国通文贸商旅有限公司5572390829
+海南国通文贸商旅有限公司5572390829
+石家庄桓宇霖商贸有限公司3224456221
+,'2311515373','2348986410','2318455639','43162303','154213205','26141112','5572390829','3224456221'
+
+
+
+
+RatioPathCompany(id=null, companyId=3014405561, shareholderId=, shareholderEntityType=0, shareholderNameId=0, investmentRatioTotal=0.415000000000, isController=1, isUltimate=0, isBigShareholder=1, isControllingShareholder=1, equityHoldingPath=Path(struct=[[InvestmentRelation(id=114887569, shareholderEntityType=0, companyEntityInlink=供销大集集团股份有限公司破产企业财产处置专用账户::other, companyType=, isListedCompany=0, isForeignBranches=0, listedCompanyActualController=, isPartnershipCompany=0, legalRepInlinks=, companyUsccPrefixCodeTwo=, companyIdInvested=3014405561, companyNameInvested=供销大集集团股份有限公司, companyTypeInvested=股份有限公司(上市), isListedCompanyInvested=1, isForeignBranchesInvested=0, listedCompanyActualControllerInvested=, isPartnershipCompanyInvested=0, legalRepInlinksInvested=尚多旭:2314982992-3014405561:400YK9H00D743TZDB:human, companyUsccPrefixCodeTwoInvested=91, companyItemPositionsSet=[], shareholderCompanyPositionListClean=, investmentRatio=0.415000000000, shareholderNameId=0, createTime=Tue Jun 06 22:38:44 CST 2023, updateTime=Fri Jul 07 21:47:02 CST 2023, isController=null, isUltimate=null, isBigShareholder=null, isControllingShareholder=null, path=null, end=null)]]), createTime=null, updateTime=null, isDeleted=0)
+
+
+
+
+,258211724,2311838590,3298894550,2311337085,294683209,2358468919,1046287963,2318708598,330615647,14927131,2342554847,1710182904,2310091850,9746245,723143019,717558047,24702788,24842778,366677329,26480137,2388081390,3014405561,2320560619,748620729,2322837107,25178760,3365149293,967032820,24785070,24714675,24648683,3457934996,3015127810,23071182,773016,13219712,1012241,7554034,27022068,26499739,25056505,2350688602,3379701254,2350477876,194984303,2357763457,21400648,2352102186,306941189,2335053443,191813490,3379550189,865049663,2310125164,254829485,3762985,275005213,3024773906,2352148260,864368800,2358792155,291438035,3204881825,22849548,3214214196,151521126,180335730,3378617127,536469119,2943331658,3073451732,2316116852,178616305,2316463872,2349729001,2320298423,423335882,377221973,864375173,653326675,2352504113,26422602,159427824,839228584,2349112537,2344720748,587771556,1171724610,7506909,224281611,3454156653,200707224,19243325,24546821,3031131692,2343830225,578305814,55745190,78957398,1220207568,442643380,187648494,3205273356,2329807527,26685390,1393475079,2351052047,780854459,2350685860,754140022,608426021,79387648,8282211,79938367,765289672,3029475133,151858344,2548732599,3177464960,2944421999,305463652,16874639,1256077300,536161213,2326558905,1284419886,3134843947,144245287,779688,216535022,237562985,415325769,2354400488,3269398046,2087816,422242300,3275897789,2351399289,3351085383,29894899,3188208030,1605495,3429830724,864822352,3151725787,2423003416,796921039,2309562876,640247702,3462656206,3372913783,8239528,863929085,2982766172,180325585,3158366678,3053343420,7549384,141831110,761394666,63696217,93990091,226473227,350093554,3366744601,3384557267
