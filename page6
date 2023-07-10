@@ -1,6 +1,5 @@
 
 
-兰肖琴
  """
         |insert overwrite table test.test_dirty_company_df_lxq partition(pt='20230629')
         |select /*+ REPARTITION(600) */ t1.name,t2.dirty_company from
