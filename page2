@@ -1,3 +1,55 @@
 分区 20230702
 最终受益人 dwc.dwc_new_tab3_entity_beneficiary_details_df
 实际控制人 dwc.dwc_new_tab3_entity_controller_details_df
+
+
+curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
+--header 'Content-Type: application/json' \
+--data '{
+    "sshUserName": "liang",
+    "sshPassWord": "Moka20190520",
+    "yarnName": "ShareholderPatchRepairJob",
+    "isMonitored": 0
+}'
+
+重写静虎代码 2天
+主表ratio_path_company刷数4.5e    5天
+
+改 investment_relation->ratio_path_company, 国旺代码2.5天,世伟代码1.5天
+主表investment_relation刷数1.6e  影响下游实际控制人明细表和count  10天
+方案1:切表,下游实际控制人明细表需要ratio_path_company的binlog
+investment_relation刷3天,ratio_path_company刷5天
+影响下游实际控制人以及count、受益所有人以及count,限制1000条/秒,3600秒(一小时)36000条,一天80w,需要200天
+
+
+TODO
+每天的 2.0对齐 与产品一起
+每天的 2.0对齐 与基础数据一起
+方案可行与否,如果可能有风险,让产品和技术数据在文档上签字
+涉及到重构python代码等无法估计时间的,也写上,时间标注待定,不要默默背负
+
+
+drop table entity_beneficiary_details_bak;
+drop table entity_controller_details_new;
+drop table shareholder_identity_type_details_bak;
+CREATE TABLE `entity_controller_details_v2` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体ID',
+  `entity_type_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT '实体类型',
+  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体名称',
+  `company_name_controlled` varchar(255) NOT NULL DEFAULT '' COMMENT '被控制的企业名称',
+  `company_id_controlled` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被控制的企业ID',
+  `equity_relation_path_cnt` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关联路径数',
+  `estimated_equity_ratio_total` decimal(24,12) NOT NULL DEFAULT '0.000000000000' COMMENT '预计总持股比例',
+  `controlling_equity_relation_path_detail` longtext COMMENT '实际控制关系路径详情',
+  `control_validation_time_year` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '实际控制起始生效年份',
+  `is_controller_tyc_unique_entity_id` tinyint not null default '1' comment '是否为实际控制人(否则只是拥有实际控制权)',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_tyc_unique_entity_id_company_id_controlled` (`tyc_unique_entity_id`,`company_id_controlled`),
+  KEY `idx_company_id_controlled` (`company_id_controlled`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='实际控制人/对外控制企业';
+
+
+

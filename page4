@@ -29,8 +29,8 @@ create index idx_entity_id
 curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
 --header 'Content-Type: application/json' \
 --data '{
-    "sshUserName": "liang",
+    "sshUserName": "shaojinghu",
     "sshPassWord": "Moka20190520",
-    "yarnName": "ShareholderPatchJob",
+    "yarnName": "ShareholderIdentityTypeDetails.prod",
     "isMonitored": 0
 }'
