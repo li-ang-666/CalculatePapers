@@ -1,6 +1,27 @@
-分区 20230702
-最终受益人 dwc.dwc_new_tab3_entity_beneficiary_details_df
-实际控制人 dwc.dwc_new_tab3_entity_controller_details_df
+drop table hbase_test;
+CREATE TABLE `hbase_test`(
+`row` string
+)stored as textfile LOCATION 'obs://hadoop-obs/flink/hbase/';
+
+
+drop table test.test1;
+create table test.test1(
+    id bigint,
+    name string
+);
+
+insert into table test.test1
+values(1,'tom'),(2,'jack'),(3,'jerry');
+
+drop table test.test2;
+create table test.test2(
+    id bigint,
+    name string
+);
+
+
+一秒30
+一分钟1800
 
 
 curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
@@ -8,48 +29,39 @@ curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
 --data '{
     "sshUserName": "liang",
     "sshPassWord": "Moka20190520",
-    "yarnName": "ShareholderPatchRepairJob",
+    "yarnName": "DemoJob",
     "isMonitored": 0
 }'
 
-重写静虎代码 2天
-主表ratio_path_company刷数4.5e    5天
-
-改 investment_relation->ratio_path_company, 国旺代码2.5天,世伟代码1.5天
-主表investment_relation刷数1.6e  影响下游实际控制人明细表和count  10天
-方案1:切表,下游实际控制人明细表需要ratio_path_company的binlog
-investment_relation刷3天,ratio_path_company刷5天
-影响下游实际控制人以及count、受益所有人以及count,限制1000条/秒,3600秒(一小时)36000条,一天80w,需要200天
+,5762708421,218211599,4187662795,102559667,3421982569,358925075
 
 
-TODO
-每天的 2.0对齐 与产品一起
-每天的 2.0对齐 与基础数据一起
-方案可行与否,如果可能有风险,让产品和技术数据在文档上签字
-涉及到重构python代码等无法估计时间的,也写上,时间标注待定,不要默默背负
+如果只会离线,我会在意工作年限,以及是不是能耐心改离职同事的代码以及每天早晨的调度问题
+所以只会离线但是工龄不足5年的,我会考察spark底层
+2种shuffle manager
+3种shuffle writer
+5种join方式
+集群大概有多少机器,多少内存,一般第一次跑一个陌生的程序,会开几个executor,每个多少内存,多少core
+spark内存模型
+
+如果会实时,我会考察:
+1.知不知道flink的checkpoint,代码层面都需要写哪些配置,程序重启的时候怎么使用checkpoint
+2.每秒数据量多大,高峰有多大,线上bug或者版本迭代,程序下线上线的流程规范
+3.有没有遇到背压,checkpoint有没有超时过,flink背压是怎么形成的,遇到背压怎么解决
+4.exactly-once如何保证,对齐、非对齐检查点原理
+5.知不知道flink的内存模型
+6.Java基础,23种设计模式有使用过吗,分别举一下使用场景,写过多线程吗,自己实现过Flink二阶段提交的source或者sink吗
+7.写过java多线程生产消费模型吗,concurrent包有了解吗
+8.了解布隆过滤器和bitmap吗
+9.现在有一张5e数据量的表,直接select *是不行的,如何把它抽取出来,sink到别的地方
+10.mysql B+Tree复习过吗,如何命中索引或者设计索引
+11.mpp数据库,mysql,hbase,分别的选型和使用场景
 
 
-drop table entity_beneficiary_details_bak;
-drop table entity_controller_details_new;
-drop table shareholder_identity_type_details_bak;
-CREATE TABLE `entity_controller_details_v2` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体ID',
-  `entity_type_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT '实体类型',
-  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体名称',
-  `company_name_controlled` varchar(255) NOT NULL DEFAULT '' COMMENT '被控制的企业名称',
-  `company_id_controlled` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被控制的企业ID',
-  `equity_relation_path_cnt` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关联路径数',
-  `estimated_equity_ratio_total` decimal(24,12) NOT NULL DEFAULT '0.000000000000' COMMENT '预计总持股比例',
-  `controlling_equity_relation_path_detail` longtext COMMENT '实际控制关系路径详情',
-  `control_validation_time_year` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '实际控制起始生效年份',
-  `is_controller_tyc_unique_entity_id` tinyint not null default '1' comment '是否为实际控制人(否则只是拥有实际控制权)',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_tyc_unique_entity_id_company_id_controlled` (`tyc_unique_entity_id`,`company_id_controlled`),
-  KEY `idx_company_id_controlled` (`company_id_controlled`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='实际控制人/对外控制企业';
+
+
+
+
 
 
 

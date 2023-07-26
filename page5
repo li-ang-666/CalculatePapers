@@ -1,8 +1,0 @@
-实控权图谱: get_entity_controller_details_by_tyc_unique_entity_id           查询 controller_detail 不用改
-实控权列表单独的count接口: get_cnt_by_shareholder_id_and_type                 查询 ratio_path_company 需要 is_controller in (1,2)
-实控权列表: get_ultimate_right_by_shareholder_id_shareholder_entity_type    查询 ratio_path_company 需要 is_controller in (1,2)
-实控人图谱: get_controller_by_company_id_controlled                         查询 controller_detail 需要改动 is_controller_tyc_unique_entity_id = 1
-实控人列表: get_ratio_path_company_info_by_company_id                       查询 ratio_path_company 不用改
-
-
-{"id":1.11111111111111111111111111111111111111,"name":"tom"}
