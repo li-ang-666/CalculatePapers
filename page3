@@ -1,0 +1,74 @@
+CREATE TABLE `annual_report` (
+`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+`company_id` bigint(20) DEFAULT NULL COMMENT '公司id',
+`report_year` varchar(20) DEFAULT NULL COMMENT '年报年度',
+`company_name` varchar(255) DEFAULT NULL COMMENT '企业名称',
+`credit_code` varchar(20) DEFAULT NULL COMMENT '统一社会信用代码',
+`reg_number` varchar(50) DEFAULT NULL COMMENT '注册号',
+`phone_number` varchar(50) DEFAULT NULL COMMENT '企业联系电话',
+`postcode` varchar(20) DEFAULT NULL COMMENT '邮政编码',
+`postal_address` varchar(255) DEFAULT NULL COMMENT '企业通信地址',
+`email` varchar(255) DEFAULT NULL COMMENT '电子邮箱',
+`manage_state` varchar(20) DEFAULT NULL COMMENT '企业经营状态',
+`employee_num` varchar(200) DEFAULT NULL COMMENT '从业人数',
+`operator_name` varchar(50) DEFAULT NULL COMMENT '经营者名称',
+`total_assets` varchar(50) DEFAULT NULL COMMENT '资产总额',
+`total_equity` varchar(50) DEFAULT NULL COMMENT '所有者权益合计',
+`total_sales` varchar(50) DEFAULT NULL COMMENT '销售总额(营业总收入)',
+`total_profit` varchar(50) DEFAULT NULL COMMENT '利润总额',
+`prime_bus_profit` varchar(50) DEFAULT NULL COMMENT '主营业务收入',
+`retained_profit` varchar(50) DEFAULT NULL COMMENT '净利润',
+`total_tax` varchar(50) DEFAULT NULL COMMENT '纳税总额',
+`total_liability` varchar(50) DEFAULT NULL COMMENT '负债总额',
+`createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (`id`),
+UNIQUE KEY `index_unique` (`company_id`, `report_year`),
+KEY `index_phone` (`phone_number`)
+) ENGINE = InnoDB AUTO_INCREMENT = 4434761356 DEFAULT CHARSET = utf8 COMMENT = '企业年报'
+
+--------
+
+CREATE TABLE `report_equity_change_info` (
+`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+`annualreport_id` bigint(20) DEFAULT NULL COMMENT '年报id',
+`investor_name` varchar(100) DEFAULT NULL COMMENT '股东（发起人）',
+`ratio_before` varchar(20) DEFAULT NULL COMMENT '变更前股权比例',
+`ratio_after` varchar(20) DEFAULT NULL COMMENT '变更后股权比例',
+`change_time` datetime DEFAULT NULL COMMENT '股权变更日期',
+`createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (`id`),
+KEY `annualreport_id` (`annualreport_id`),
+KEY `investor_name` (`investor_name`)
+) ENGINE = InnoDB AUTO_INCREMENT = 352429076 DEFAULT CHARSET = utf8 COMMENT = '股东股权变更信息'
+
+-- 表三 年报公示的股东股权变更表----------------------------------------------------------------------------------------------------------------
+
+drop table if exists entity_annualreport_shareholder_equity_change_details;
+CREATE TABLE if not exists `entity_annualreport_shareholder_equity_change_details` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+
+  `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
+  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
+  `entity_type_id` tinyint NOT NULL DEFAULT '1' COMMENT '实体类型',
+
+  `annual_report_tyc_unique_entity_id_shareholder` varchar(50) NOT NULL DEFAULT '' COMMENT '股东实体id',
+  `annual_report_entity_name_valid_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体name',
+  `annual_report_entity_type_id_shareholder` tinyint NOT NULL DEFAULT '2' COMMENT '股东实体类型',
+
+  `annual_report_equity_ratio_before_change` varchar(50) NOT NULL DEFAULT '' COMMENT '变更前股权比例',
+  `annual_report_equity_ratio_after_change` varchar(50) NOT NULL DEFAULT '' COMMENT '变更后股权比例',
+  `annual_report_equity_ratio_change_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '股权变更日期',
+  `is_display_annual_report_equity_ratio_change` tinyint NOT NULL DEFAULT '1' COMMENT '是否公示',
+
+  `delete_status` tinyint NOT NULL DEFAULT '0' COMMENT '删除状态',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_company_shareholder` (`tyc_unique_entity_id`,`annual_report_tyc_unique_entity_id_shareholder`),
+  KEY `idx_shareholder` (`annual_report_tyc_unique_entity_id_shareholder`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报公示的股东股权变更表';
+
+
+
+
+
