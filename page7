@@ -1,0 +1,44 @@
+CREATE TABLE `report_webinfo` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `annualreport_id` bigint(20) DEFAULT NULL COMMENT '年报id',
+  `web_type` varchar(20) DEFAULT NULL COMMENT '网站类型',
+  `name` varchar(500) DEFAULT NULL COMMENT '名称',
+  `website` varchar(500) DEFAULT NULL COMMENT '网址',
+  `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `annualreport_id` (`annualreport_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=182585335 DEFAULT CHARSET=utf8 COMMENT='网站或网店信息'
+
+-- 表七 年报网店运营明细表 ----------------------------------------------------------------------------------------------------------------
+
+drop table if exists entity_annual_report_ebusiness_details;
+CREATE TABLE if not exists `entity_annual_report_ebusiness_details` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+
+  `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
+  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
+  `entity_type_id` tinyint NOT NULL DEFAULT '1' COMMENT '实体类型',
+
+  `annual_report_year` varchar(50) NOT NULL DEFAULT '1970' COMMENT '年报年份',
+  `annual_report_is_ebusiness` tinyint NOT NULL DEFAULT '0' COMMENT '年报登记是否有网上运营',
+  `annual_report_ebusiness_type` varchar(50) NOT NULL DEFAULT '' COMMENT '年报登记的网上运营类型',
+  `annual_report_ebusiness_name` varchar(255) NOT NULL DEFAULT '' COMMENT '年报登记的网上运营产品名称',
+  `annual_report_ebusiness_website` varchar(255) NOT NULL DEFAULT '' COMMENT '年报登记的网址',
+
+  `delete_status` tinyint NOT NULL DEFAULT '0' COMMENT '删除状态',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_company` (`tyc_unique_entity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报网店运营明细表'
+
+
+年报年份脏数据默认值?
+是否有网上运营字段来自?
+年报登记的网上运营类型 枚举?脏数据默认值?
+产品名称脏数据默认值?
+产品网址脏数据默认值?
+
+
+
+

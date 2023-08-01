@@ -1,33 +1,3 @@
-CREATE TABLE `annual_report` (
-`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-`company_id` bigint(20) DEFAULT NULL COMMENT '公司id',
-`report_year` varchar(20) DEFAULT NULL COMMENT '年报年度',
-`company_name` varchar(255) DEFAULT NULL COMMENT '企业名称',
-`credit_code` varchar(20) DEFAULT NULL COMMENT '统一社会信用代码',
-`reg_number` varchar(50) DEFAULT NULL COMMENT '注册号',
-`phone_number` varchar(50) DEFAULT NULL COMMENT '企业联系电话',
-`postcode` varchar(20) DEFAULT NULL COMMENT '邮政编码',
-`postal_address` varchar(255) DEFAULT NULL COMMENT '企业通信地址',
-`email` varchar(255) DEFAULT NULL COMMENT '电子邮箱',
-`manage_state` varchar(20) DEFAULT NULL COMMENT '企业经营状态',
-`employee_num` varchar(200) DEFAULT NULL COMMENT '从业人数',
-`operator_name` varchar(50) DEFAULT NULL COMMENT '经营者名称',
-`total_assets` varchar(50) DEFAULT NULL COMMENT '资产总额',
-`total_equity` varchar(50) DEFAULT NULL COMMENT '所有者权益合计',
-`total_sales` varchar(50) DEFAULT NULL COMMENT '销售总额(营业总收入)',
-`total_profit` varchar(50) DEFAULT NULL COMMENT '利润总额',
-`prime_bus_profit` varchar(50) DEFAULT NULL COMMENT '主营业务收入',
-`retained_profit` varchar(50) DEFAULT NULL COMMENT '净利润',
-`total_tax` varchar(50) DEFAULT NULL COMMENT '纳税总额',
-`total_liability` varchar(50) DEFAULT NULL COMMENT '负债总额',
-`createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-PRIMARY KEY (`id`),
-UNIQUE KEY `index_unique` (`company_id`, `report_year`),
-KEY `index_phone` (`phone_number`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4434761356 DEFAULT CHARSET = utf8 COMMENT = '企业年报'
-
---------
-
 CREATE TABLE `report_outbound_investment` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `annual_report_id` bigint(20) DEFAULT NULL COMMENT '年报id',
@@ -52,7 +22,6 @@ CREATE TABLE if not exists `entity_annualreport_investment_details` (
   `entity_type_id` tinyint NOT NULL DEFAULT '1' COMMENT '实体类型',
 
   `annual_report_year` varchar(50) NOT NULL DEFAULT '1970' COMMENT '年报年份',
-
   `annual_report_company_id_invested` varchar(50) NOT NULL DEFAULT '' COMMENT '被投资实体id',
   `annual_report_company_name_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资实体name',
 
@@ -63,6 +32,10 @@ CREATE TABLE if not exists `entity_annualreport_investment_details` (
   KEY `idx_company_invested_company` (`tyc_unique_entity_id`,`annual_report_company_id_invested`),
   KEY `idx_invested_company` (`annual_report_company_id_invested`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报对外投资明细表';
+
+
+对外投资公司只提供了name
+年报年份脏数据默认值?
 
 
 
