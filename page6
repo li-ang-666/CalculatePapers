@@ -21,7 +21,7 @@ CREATE TABLE if not exists `entity_annualreport_investment_details` (
   `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
   `entity_type_id` tinyint NOT NULL DEFAULT '1' COMMENT '实体类型',
 
-  `annual_report_year` varchar(50) NOT NULL DEFAULT '1970' COMMENT '年报年份',
+  `annual_report_year` varchar(50) COMMENT '年报年份',
   `annual_report_company_id_invested` varchar(50) NOT NULL DEFAULT '' COMMENT '被投资实体id',
   `annual_report_company_name_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资实体name',
 
@@ -35,7 +35,6 @@ CREATE TABLE if not exists `entity_annualreport_investment_details` (
 
 
 对外投资公司只提供了name
-年报年份脏数据默认值?
 
 
 

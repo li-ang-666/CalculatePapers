@@ -1,0 +1,20 @@
+
+curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
+--header 'Content-Type: application/json' \
+--data '{
+    "sshUserName": "liang",
+    "sshPassWord": "Moka20190520",
+    "yarnName": "DimensionCalculate",
+    "isMonitored": 0
+}'
+
+
+22min 100w
+1h    300w
+24h   7200w
+
+
+
+实控权列表单独的count接口: get_cnt_by_shareholder_id_and_type                 查询 ratio_path_company 需要 is_controller in (1,2)
+实控权列表: get_ultimate_right_by_shareholder_id_shareholder_entity_type    查询 ratio_path_company 需要 is_controller in (1,2)
+实控人图谱: get_controller_by_company_id_controlled                         查询 controller_detail 需要改动 is_controller_tyc_unique_entity_id = 1

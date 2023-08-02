@@ -27,7 +27,7 @@ CREATE TABLE if not exists `entity_annual_report_shareholder_equity_change_detai
 
   `annual_report_equity_ratio_before_change` varchar(50) NOT NULL DEFAULT '' COMMENT '变更前股权比例',
   `annual_report_equity_ratio_after_change` varchar(50) NOT NULL DEFAULT '' COMMENT '变更后股权比例',
-  `annual_report_equity_ratio_change_time` datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '股权变更日期',
+  `annual_report_equity_ratio_change_time` datetime COMMENT '股权变更日期',
   `is_display_annual_report_equity_ratio_change` tinyint NOT NULL DEFAULT '1' COMMENT '是否公示',
 
   `delete_status` tinyint NOT NULL DEFAULT '0' COMMENT '删除状态',
@@ -40,9 +40,6 @@ CREATE TABLE if not exists `entity_annual_report_shareholder_equity_change_detai
 
 
 只提供了股东姓名
-
-变更前后是varchar还是decimal,脏数据默认值?
-变更日期脏数据默认值?
 是否公示来自?
 
 

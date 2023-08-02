@@ -19,8 +19,8 @@ CREATE TABLE if not exists `entity_annual_report_ebusiness_details` (
   `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
   `entity_type_id` tinyint NOT NULL DEFAULT '1' COMMENT '实体类型',
 
-  `annual_report_year` varchar(50) NOT NULL DEFAULT '1970' COMMENT '年报年份',
-  `annual_report_is_ebusiness` tinyint NOT NULL DEFAULT '0' COMMENT '年报登记是否有网上运营',
+  `annual_report_year` varchar(50) COMMENT '年报年份',
+  `annual_report_is_ebusiness` tinyint NOT NULL DEFAULT '1' COMMENT '年报登记是否有网上运营',
   `annual_report_ebusiness_type` varchar(50) NOT NULL DEFAULT '' COMMENT '年报登记的网上运营类型',
   `annual_report_ebusiness_name` varchar(255) NOT NULL DEFAULT '' COMMENT '年报登记的网上运营产品名称',
   `annual_report_ebusiness_website` varchar(255) NOT NULL DEFAULT '' COMMENT '年报登记的网址',
@@ -33,11 +33,8 @@ CREATE TABLE if not exists `entity_annual_report_ebusiness_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报网店运营明细表'
 
 
-年报年份脏数据默认值?
 是否有网上运营字段来自?
 年报登记的网上运营类型 枚举?脏数据默认值?
-产品名称脏数据默认值?
-产品网址脏数据默认值?
 
 
 
