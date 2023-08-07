@@ -13,8 +13,8 @@ CREATE TABLE `report_outbound_investment` (
 
 -- 表六 年报对外投资明细表 ----------------------------------------------------------------------------------------------------------------
 
-drop table if exists entity_annualreport_investment_details;
-CREATE TABLE if not exists `entity_annualreport_investment_details` (
+drop table if exists entity_annual_report_investment_details;
+CREATE TABLE if not exists `entity_annual_report_investment_details` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
 
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
@@ -36,7 +36,7 @@ CREATE TABLE if not exists `entity_annualreport_investment_details` (
 
 对外投资公司只提供了name
 
-
+年报年份不可能为空?
 
 
 

@@ -22,7 +22,7 @@ KEY `idx_investor_id` (`investor_id`)
 drop table if exists entity_annual_report_shareholder_equity_details;
 CREATE TABLE if not exists `entity_annual_report_shareholder_equity_details` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-
+  `business_id` bigint unsigned NOT NULL default '1' COMMENT '业务表(report_shareholder表)主键',
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
   `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
   `entity_type_id` tinyint NOT NULL DEFAULT '1' COMMENT '实体类型',
@@ -31,22 +31,19 @@ CREATE TABLE if not exists `entity_annual_report_shareholder_equity_details` (
   `annual_report_entity_name_valid_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体name',
   `annual_report_entity_type_id_shareholder` tinyint NOT NULL DEFAULT '2' COMMENT '股东实体类型',
 
-  `annual_report_shareholder_equity_subscribed_capital_amt` varchar(50) NOT NULL DEFAULT '' COMMENT '股东认缴出资额',
-  `annual_report_shareholder_equity_subscribed_capital_currency` varchar(50) NOT NULL DEFAULT '' COMMENT '股东出资额单位及币种',
-  `annual_report_shareholder_equity_subscribed_capital_valid_date` datetime COMMENT '出资日期',
-  `annual_report_shareholder_equity_subscribed_capital_submission_method` tinyint NOT NULL DEFAULT '1' COMMENT '出资方式',
-
-  `annual_report_shareholder_equity_actual_capital_amt` varchar(50) NOT NULL DEFAULT '' COMMENT '股东实缴出资额',
-  `annual_report_shareholder_equity_actual_capital_currency` varchar(50) NOT NULL DEFAULT '' COMMENT '股东出资额单位及币种',
-  `annual_report_shareholder_equity_actual_capital_valid_date` datetime COMMENT '出资日期',
-  `annual_report_shareholder_equity_actual_capital_submission_method` tinyint NOT NULL DEFAULT '1' COMMENT '出资方式',
+  `annual_report_year` varchar(50) COMMENT '年报年份',
+  `annual_report_shareholder_capital_type` tinyint not null default '0' comment '出资是认缴 or 实缴',
+  `annual_report_shareholder_equity_amt` decimal(60,12) NOT NULL DEFAULT '0' COMMENT '股东出资额',
+  `annual_report_shareholder_equity_currency` varchar(50) NOT NULL DEFAULT '' COMMENT '股东出资额单位及币种',
+  `annual_report_shareholder_equity_valid_date` datetime COMMENT '出资日期',
+  `annual_report_shareholder_equity_submission_method` varchar(50) NOT NULL DEFAULT '' COMMENT '出资方式',
 
   `is_display_annual_report_shareholder_equity_details` tinyint NOT NULL DEFAULT '1' COMMENT '是否公示',
-
   `delete_status` tinyint NOT NULL DEFAULT '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
+  KEY idx_business_id(business_id),
   KEY `idx_company_shareholder` (`tyc_unique_entity_id`,`annual_report_tyc_unique_entity_id_shareholder`),
   KEY `idx_shareholder` (`annual_report_tyc_unique_entity_id_shareholder`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报股东及出资信息明细表';
@@ -54,8 +51,23 @@ CREATE TABLE if not exists `entity_annual_report_shareholder_equity_details` (
 
 只提供了股东姓名和hid/cid,非人非公司的时候的id是什么意思
 
-出资单位/币种来自出资额?空值脏数据默认值?
-出资方式枚举?脏数据默认值?
-是否公示来自?
+出资单位/币种来自出资额?空值脏数据默认值?  
+出资方式枚举?脏数据默认值?  保持原值
+
+日期 原样
+
+是否公示 都是 1
 
 
+select trim(regexp_replace(subscribe_amount,'\\d|\\.|\\s|,','')),count(1)
+from ods_prism1_report_shareholder_df
+where pt=20230803 and dw_is_del=0
+group by trim(regexp_replace(subscribe_amount,'\\d|\\.|\\s|,',''));
+
+
+vlink -ynm DWDOrderInfo2DorisNew -yjm 2048 -ytm 1024 -p 5 -c com.tyc.taolins.ods2dwd.order.DWDOrderInfo2DorisNew /data/flink/jobs/wangshiwei/1.14/olap/dwd_order_info/new/taolin-1.0.jar --mode timestamp  --f_time 2023-08-04T00:00:00  --t_name dwd_order_info
+
+
+实控权列表单独的count接口: get_cnt_by_shareholder_id_and_type  v1.2               查询 ratio_path_company 需要 is_controller in (1,2)
+实控权列表: get_ultimate_right_by_shareholder_id_shareholder_entity_type v2.2    查询 ratio_path_company 需要 is_controller in (1,2)
+实控人图谱: get_controller_by_company_id_controlled   v1.1                      查询 controller_detail 需要改动 is_controller_tyc_unique_entity_id = 1

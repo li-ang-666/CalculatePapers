@@ -21,15 +21,16 @@ CREATE TABLE if not exists `entity_annual_report_shareholder_equity_change_detai
   `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
   `entity_type_id` tinyint NOT NULL DEFAULT '1' COMMENT '实体类型',
 
+  `annual_report_year` varchar(50) COMMENT '年报年份',
   `annual_report_tyc_unique_entity_id_shareholder` varchar(50) NOT NULL DEFAULT '' COMMENT '股东实体id',
   `annual_report_entity_name_valid_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体name',
   `annual_report_entity_type_id_shareholder` tinyint NOT NULL DEFAULT '2' COMMENT '股东实体类型',
 
-  `annual_report_equity_ratio_before_change` varchar(50) NOT NULL DEFAULT '' COMMENT '变更前股权比例',
-  `annual_report_equity_ratio_after_change` varchar(50) NOT NULL DEFAULT '' COMMENT '变更后股权比例',
+  `annual_report_equity_ratio_before_change` decimal(60,12) NOT NULL DEFAULT '0' COMMENT '变更前股权比例',
+  `annual_report_equity_ratio_after_change` decimal(60,12) NOT NULL DEFAULT '0' COMMENT '变更后股权比例',
   `annual_report_equity_ratio_change_time` datetime COMMENT '股权变更日期',
-  `is_display_annual_report_equity_ratio_change` tinyint NOT NULL DEFAULT '1' COMMENT '是否公示',
 
+  `is_display_annual_report_equity_ratio_change` tinyint NOT NULL DEFAULT '1' COMMENT '是否公示',
   `delete_status` tinyint NOT NULL DEFAULT '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -37,6 +38,14 @@ CREATE TABLE if not exists `entity_annual_report_shareholder_equity_change_detai
   KEY `idx_company_shareholder` (`tyc_unique_entity_id`,`annual_report_tyc_unique_entity_id_shareholder`),
   KEY `idx_shareholder` (`annual_report_tyc_unique_entity_id_shareholder`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报公示的股东股权变更表';
+
+比例 存decimal(24,12)
+空数据 0
+空值 0 分别有多少?
+
+股权变更日期 为空?
+
+是否公示 都是 1
 
 
 只提供了股东姓名
