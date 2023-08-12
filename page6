@@ -13,19 +13,17 @@ CREATE TABLE `report_outbound_investment` (
 
 -- 表六 年报对外投资明细表 ----------------------------------------------------------------------------------------------------------------
 
-drop table if exists entity_annual_report_investment_details;
-CREATE TABLE if not exists `entity_annual_report_investment_details` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-
+DROP TABLE entity_annual_report_investment_details;
+CREATE TABLE `entity_annual_report_investment_details` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `annual_report_year` varchar(50) DEFAULT NULL COMMENT '年报年份',
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
   `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
-  `entity_type_id` tinyint NOT NULL DEFAULT '1' COMMENT '实体类型',
-
-  `annual_report_year` varchar(50) COMMENT '年报年份',
+  `entity_type_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体类型',
   `annual_report_company_id_invested` varchar(50) NOT NULL DEFAULT '' COMMENT '被投资实体id',
   `annual_report_company_name_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资实体name',
-
-  `delete_status` tinyint NOT NULL DEFAULT '0' COMMENT '删除状态',
+  `annual_report_company_name_invested_register_name` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资实体name快照',
+  `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
@@ -33,10 +31,6 @@ CREATE TABLE if not exists `entity_annual_report_investment_details` (
   KEY `idx_invested_company` (`annual_report_company_id_invested`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报对外投资明细表';
 
-
-对外投资公司只提供了name
-
-年报年份不可能为空?
 
 
 
