@@ -24,14 +24,15 @@ CREATE TABLE `entity_annual_report_shareholder_equity_change_details` (
   `annual_report_entity_name_valid_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体name',
   `annual_report_entity_name_register_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体name快照',
   `annual_report_entity_type_id_shareholder` tinyint(4) NOT NULL DEFAULT '2' COMMENT '股东实体类型',
-  `annual_report_equity_ratio_before_change` decimal(60,12) NOT NULL DEFAULT '0.000000000000' COMMENT '变更前股权比例',
-  `annual_report_equity_ratio_after_change` decimal(60,12) NOT NULL DEFAULT '0.000000000000' COMMENT '变更后股权比例',
+  `annual_report_equity_ratio_before_change` decimal(38,12) NOT NULL DEFAULT '0.000000000000' COMMENT '变更前股权比例',
+  `annual_report_equity_ratio_after_change` decimal(38,12) NOT NULL DEFAULT '0.000000000000' COMMENT '变更后股权比例',
   `annual_report_equity_ratio_change_time` datetime DEFAULT NULL COMMENT '股权变更日期',
   `is_display_annual_report_equity_ratio_change` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否公示',
   `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
+  KEY `idx_company_year` (`tyc_unique_entity_id`,`annual_report_tyc_unique_entity_id_shareholder`),
   KEY `idx_company_shareholder` (`tyc_unique_entity_id`,`annual_report_tyc_unique_entity_id_shareholder`),
   KEY `idx_shareholder` (`annual_report_tyc_unique_entity_id_shareholder`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报公示的股东股权变更表';
@@ -39,4 +40,60 @@ CREATE TABLE `entity_annual_report_shareholder_equity_change_details` (
 
 
 
+CREATE TABLE `ads.ads_company_base_entity_annual_report_shareholder_equity_change_details_df` (
+  `id` bigint COMMENT '主键',
+  `annual_report_year` int COMMENT '年报年份',
+  `tyc_unique_entity_id` string COMMENT '实体id',
+  `entity_name_valid` string COMMENT '实体name',
+  `entity_type_id` int COMMENT '实体类型',
+  `annual_report_tyc_unique_entity_id_shareholder` string COMMENT '股东实体id',
+  `annual_report_entity_name_valid_shareholder` string COMMENT '股东实体name',
+  `annual_report_entity_name_register_shareholder` string COMMENT '股东实体name快照',
+  `annual_report_entity_type_id_shareholder` int COMMENT '股东实体类型',
+  `annual_report_equity_ratio_before_change` decimal(38,12) COMMENT '变更前股权比例',
+  `annual_report_equity_ratio_after_change` decimal(38,12) COMMENT '变更后股权比例',
+  `annual_report_equity_ratio_change_time` string COMMENT '股权变更日期',
+  `is_display_annual_report_equity_ratio_change` int COMMENT '是否公示',
+  `delete_status` int COMMENT '删除状态',
+  `create_time` string COMMENT '创建时间',
+  `update_time` string COMMENT '更新时间'
+)partitioned by (pt string);
 
+
+
+
+
+
+
+select
+  id,
+  annual_report_year,
+  tyc_unique_entity_id,
+  entity_name_valid,
+  entity_type_id,
+  annual_report_tyc_unique_entity_id_shareholder,
+  annual_report_entity_name_valid_shareholder,
+  annual_report_entity_name_register_shareholder,
+  annual_report_entity_type_id_shareholder,
+  annual_report_equity_ratio_before_change,
+  annual_report_equity_ratio_after_change,
+  annual_report_equity_ratio_change_time,
+  is_display_annual_report_equity_ratio_change,
+  delete_status,
+  create_time,
+  update_time
+from company_base.entity_annual_report_shareholder_equity_change_details
+where
+delete_status = 0
+and tyc_unique_entity_id = #{tyc_unique_entity_id}
+and entity_type_id = #{entity_type_id}
+  <if test = 'annual_report_tyc_unique_entity_id_shareholder != null'> AND annual_report_tyc_unique_entity_id_shareholder = #{annual_report_tyc_unique_entity_id_shareholder} </if>
+  <if test = 'annual_report_equity_ratio_change_time_from != null'> AND annual_report_equity_ratio_change_time &gt;= #{annual_report_equity_ratio_change_time_from} </if>
+  <if test = 'annual_report_equity_ratio_change_time_to != null'> AND annual_report_equity_ratio_change_time &lt;= #{annual_report_equity_ratio_change_time_to} </if>
+  <if test = 'is_display_annual_report_equity_ratio_change != null'> AND is_display_annual_report_equity_ratio_change = #{is_display_annual_report_equity_ratio_change} </if>
+limit #{offset}, #{limit}
+
+<   &lt;
+<=  &lt;=
+>   &gt;
+>=  &gt;=

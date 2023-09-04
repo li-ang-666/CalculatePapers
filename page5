@@ -1,141 +1,56 @@
-set mapreduce.job.queuename=offline;
-set spark.app.name=dwd_company_investment_relation_wide_df_${zdt.addDay(-1).format("yyyyMMdd")};
+drop table ads.ads_bdp_equity_entity_controller_details;
+create table ads.ads_bdp_equity_entity_controller_details
+(
+    id                                      bigint,
+    tyc_unique_entity_id                    string comment '实体ID',
+    entity_type_id                          int comment '实体类型',
+    entity_name_valid                       string comment '实体名称',
+    company_name_controlled                 string comment '被控制的企业名称',
+    company_id_controlled                   string comment '被控制的企业ID',
+    equity_relation_path_cnt                int comment '关联路径数',
+    estimated_equity_ratio_total            decimal(38,12) comment '预计总持股比例',
+    controlling_equity_relation_path_detail string comment '实际控制关系路径详情',
+    control_validation_time_year            int comment '实际控制起始生效年份',
+    is_controller_tyc_unique_entity_id      int comment '是否为实际控制人(否则只是拥有实际控制权)',
+    create_time                             string comment '创建时间',
+    update_time                             string comment '更新时间'
+)partitioned by (pt string);
 
 
-with t_equity as (
-    select
-        company_id_invested,
-        company_id_investor,
-        tyc_unique_entity_name_investor,
-  		tyc_unique_entity_name_invested,
-  		tyc_unique_entity_id_investor,
-        case when investor_identity_type=1 then 2
-  			when investor_identity_type=2 then 1
-  			else investor_identity_type end as investor_identity_type,
-        equity_ratio
-    from ods.ods_graph_data_company_equity_relation_details_df
-    where pt='${zdt.addDay(-1).format("yyyyMMdd")}' and dw_is_del=0 and reference_pt_year=substring('${zdt.addDay(-1).format("yyyyMMdd")}',1,4)
-),
-t_actual_controller as (
-    select 
-        company_id,
-        concat_ws(',',collect_set(
-            case when controller_type=0 then concat(controller_name,":",controller_gid,'-',company_id,":",controller_pid,":human")
-               when controller_type=1 then concat(controller_name,":",if(controller_gid=0,'',controller_gid),":company")
-               else concat(controller_name,":",if(controller_gid=0,'',controller_gid),":other") end
-        )) as listed_company_actual_controller
-    from(
-        select
-            company_name,
-            graph_id as company_id,
-            controller_name,
-            controller_gid,
-            controller_pid,
-            controller_type
-        from ods.ods_data_listed_company_stock_actual_controller_df
-        where pt='${zdt.addDay(-1).format("yyyyMMdd")}' and dw_is_del=0 and is_deleted=0
-    )t_ac
-    group by company_id
-),
-t_listed_status as (
-    select
-        t2.graph_id as company_id
-    from(
-        select
-            distinct company_id
-        from ods.ods_prism1_company_bond_plates_df
-        where pt='${zdt.addDay(-1).format("yyyyMMdd")}' and dw_is_del=0 and deleted=0 and listing_status not in('暂停上市','IPO终止','退市整理','终止上市')
-    )t1
-    join(
-        select company_id,graph_id from ods.ods_prism1_company_graph_df
-        where pt='${zdt.addDay(-1).format("yyyyMMdd")}' and dw_is_del=0 and deleted=0
-    )t2
-    on t1.company_id=t2.company_id
-),
-t_legal as(
-    select
-        company_id,
-        concat_ws(',',collect_set(
-          case when legal_rep_type=2 then concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,concat(legal_rep_name_id,'-',company_id),''),':',nvl(legal_rep_human_id,''),':human')
-          	when legal_rep_type=1 then concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,legal_rep_name_id,''),':company')
-          	else concat(nvl(legal_rep_name,''),':',if(legal_rep_name_id!=0,legal_rep_name_id,''),':other') end
-        )) as legal_rep_inlinks
-    from ods.ods_company_base_company_legal_person_df
-    where pt='${zdt.addDay(-1).format("yyyyMMdd")}' and dw_is_del=0
-    group by company_id
-),
-t_company_info as(
-    select
-        t_index.id,
-        t_index.company_id,
-        t_index.org_type as company_type,
-        if(t_listed_status.company_id is not null,1,0) is_listed_company,
-        t_index.is_foreign_branches,
-        if(t_listed_status.company_id is not null,t_actual_controller.listed_company_actual_controller,null) as listed_company_actual_controller,
-        if(t_index.company_type=11,1,0) is_partnership_company,
-        t_legal.legal_rep_inlinks,
-        t_index.company_uscc_prefix_code_two
-    from(
-        select 
-            id,
-            org_type,
-            company_id,
-            company_name,
-            company_type,
-            substring(unified_social_credit_code,1,2) as company_uscc_prefix_code_two,
-            case when (org_type like '%外国%分%' or org_type like '%外国%驻%' or org_type like '%外国%境内%') 
-                and org_type not like '%外国法人独资%' and org_type not like '%外国自然人独资%' 
-                and org_type not like '%台湾澳与外国投资者合资%' and org_type not like '%新闻%' 
-                and org_type not like '%旅游%' and org_type not like '%外国非法人%' then 1 else 0 end as is_foreign_branches
-        from ods.ods_company_base_company_index_df 
-        where pt='${zdt.addDay(-1).format("yyyyMMdd")}' and dw_is_del=0
-    )t_index
-    left join t_listed_status
-    on t_index.company_id=t_listed_status.company_id
-    left join t_actual_controller
-    on t_index.company_id=t_actual_controller.company_id
-    left join t_legal
-    on t_index.company_id=t_legal.company_id
-),
-t_normal_personnel as (
-    select
-        personnel_name_id,
-        company_id,
-        concat_ws(',',collect_set(personnel_position)) as personnel_positions
-    from dwc.dwc_new_human_base_personnel_employment_history_df 
-    where pt='${zdt.addDay(-1).format("yyyyMMdd")}' and is_deleted=0 and is_history=0
-    group by personnel_name_id,company_id
-)
-insert overwrite table dwd_offline.dwd_company_investment_relation_wide_df partition(pt='${zdt.addDay(-1).format("yyyyMMdd")}')
-select
-    investor_identity_type as shareholder_entity_type,
-    case when investor_identity_type=2 then concat(tyc_unique_entity_name_investor,":",company_id_investor,'-',company_id_invested,":",tyc_unique_entity_id_investor,":human")
-         when investor_identity_type=1 then concat(tyc_unique_entity_name_investor,":",if(company_id_investor=0,'',company_id_investor),":company")
-         else concat(tyc_unique_entity_name_investor,":",if(company_id_investor=0,'',company_id_investor),":other") end as company_entity_inlink,
-    nvl(tci2.company_type,''),
-    nvl(tci2.is_listed_company,0),
-    nvl(tci2.is_foreign_branches,0),
-    nvl(tci2.listed_company_actual_controller,''),
-    nvl(tci2.is_partnership_company,0),
-    nvl(tci2.legal_rep_inlinks,''),
-    nvl(tci2.company_uscc_prefix_code_two,''),
-    company_id_invested,
-    tyc_unique_entity_name_invested as company_name_invested,
-    nvl(tci1.company_type,'') as company_type_invested,
-    nvl(tci1.is_listed_company,0) as is_listed_company_invested,
-    nvl(tci1.is_foreign_branches,0) as is_foreign_branches_invested,
-    nvl(tci1.listed_company_actual_controller,'') as listed_company_actual_controller_invested,
-    nvl(tci1.is_partnership_company,0) as is_partnership_company_invested,
-    nvl(tci1.legal_rep_inlinks,'') as legal_rep_inlinks_invested,
-    nvl(tci1.company_uscc_prefix_code_two,'') as company_uscc_prefix_code_two_invested,
-    nvl(t_normal_personnel.personnel_positions,'') as shareholder_company_position_list_clean,
-    equity_ratio as investment_ratio,
-    company_id_investor as shareholder_name_id
-from t_equity
-left join t_company_info as tci1
-on t_equity.company_id_invested=tci1.company_id
-left join t_company_info as tci2
-on t_equity.company_id_investor=tci2.company_id and investor_identity_type=1
-left join t_normal_personnel
-on t_equity.investor_identity_type=2 and t_equity.company_id_investor=t_normal_personnel.personnel_name_id and t_equity.company_id_invested=t_normal_personnel.company_id
-;
+drop table ads.ads_bdp_equity_entity_beneficiary_details;
+create table ads.ads_bdp_equity_entity_beneficiary_details
+(
+    id                                      bigint,
+    tyc_unique_entity_id                    string comment '实体ID',
+    entity_type_id                          int comment '实体类型',
+    entity_name_valid                       string comment '实体名称',
+    entity_name_beneficiary                 string comment '受益所有人名称',
+    tyc_unique_entity_id_beneficiary        string comment '受益所有人实体ID',
+    equity_relation_path_cnt                int comment '关联路径数',
+    estimated_equity_ratio_total            decimal(38,12) comment '预计总持股比例',
+    beneficiary_validation_time_year        int comment '受益所有人起始生效年份',
+    beneficiary_equity_relation_path_detail string comment '受益关系路径详情',
+    create_time                             string comment '创建时间',
+    update_time                             string comment '更新时间'
+)partitioned by (pt string);
+
+drop table ads.ads_bdp_equity_shareholder_identity_type_details;
+create table ads.ads_bdp_equity_shareholder_identity_type_details
+(
+    id                                                  bigint,
+    tyc_unique_entity_id                                string comment '实体ID',
+    entity_type_id                                      int comment '实体类型',
+    entity_name_valid                                   string comment '实体名称',
+    entity_type_id_with_shareholder_identity_type       int comment '拥有股东身份标签的实体类型',
+    tyc_unique_entity_id_with_shareholder_identity_type string comment '拥有股东身份标签的实体ID',
+    entity_name_valid_with_shareholder_identity_type    string comment '拥有股东身份标签的实体名称',
+    shareholder_identity_type                           int comment '股东身份标签类型',
+    equity_ratio_path_cnt                               int comment '持股路径数',
+    estimated_equity_ratio_total                        decimal(38,12) comment '总持股比例',
+    shareholder_validation_time_year                    int comment '拥有股东起始生效年份',
+    create_time                                         string comment '创建时间',
+    update_time                                         string comment '更新时间'
+)partitioned by (pt string);
+
+
+
