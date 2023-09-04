@@ -1,31 +1,25 @@
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=3293201654&direction=portrait&statusBarHeight=39	安卓APP	3
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=4303178036&direction=portrait&statusBarHeight=36	安卓APP	3
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=152357095&direction=portrait&statusBarHeight=29	安卓APP	2
-https://graph.tianyancha.com/app/tree/controller?entityId=179429360&direction=portrait&statusBarHeight=36	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller?entityId=3300631542&direction=portrait&statusBarHeight=27	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller?entityId=3365096092&direction=portrait&statusBarHeight=29	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller?entityId=3482234900&direction=portrait&statusBarHeight=24	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller?entityId=4425610732&direction=portrait&statusBarHeight=27	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller?entityId=501708137&direction=portrait&statusBarHeight=28	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller?entityId=5846357508&direction=portrait&statusBarHeight=42	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=12321232&direction=portrait&statusBarHeight=32	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=1268152066&direction=portrait&statusBarHeight=24	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=1268152066&direction=portrait&statusBarHeight=36	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=1268152066&direction=portrait&statusBarHeight=46	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=20372864&direction=portrait&statusBarHeight=32	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=2353689640&direction=portrait&statusBarHeight=36	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=270279790&direction=portrait&statusBarHeight=36	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=6262944217&direction=portrait&statusBarHeight=28	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=6317143561&direction=portrait&statusBarHeight=33	安卓APP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=7219966&direction=portrait&statusBarHeight=33	安卓APP	1
-https://graph.tianyancha.com/app/tree/shareholder?entityId=2560221083&direction=portrait&statusBarHeight=27	安卓APP	1
-https://graph.tianyancha.com/web/tree/controller?cid=3476851647&category=SAC&depth=3&entityType=2&spm=&pm=&export=	其他	1
-https://graph.tianyancha.com/app/tree/controller?entityId=3299362870&direction=portrait&statusBarHeight=47	iOSAPP	3
-https://graph.tianyancha.com/app/tree/controller?entityId=2342426744&direction=portrait&statusBarHeight=47	iOSAPP	2
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=3022479539&direction=portrait&statusBarHeight=47	iOSAPP	2
-https://graph.tianyancha.com/app/tree/controller?entityId=194635616&direction=portrait&statusBarHeight=47	iOSAPP	1
-https://graph.tianyancha.com/app/tree/controller?entityId=4988422873&direction=portrait&statusBarHeight=54	iOSAPP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=1268152066&direction=portrait&statusBarHeight=48	iOSAPP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=1540171&direction=portrait&statusBarHeight=47	iOSAPP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=3053723260&direction=portrait&statusBarHeight=47	iOSAPP	1
-https://graph.tianyancha.com/app/tree/controller_rights?entityId=3072552&direction=portrait&statusBarHeight=47
+CREATE TABLE `entity_evaluation_details` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `business_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '业务表主键',
+  `tyc_unique_entity_id_subject_to_enforcement` varchar(50) NOT NULL DEFAULT '' COMMENT '被执行实体id',
+  `entity_name_valid_subject_to_enforcement` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行实体name',
+  `entity_type_id_subject_to_enforcement` tinyint(4) NOT NULL DEFAULT '1' COMMENT '被执行实体类型',
+  `tyc_unique_entity_id_candidate_evaluation_institution` varchar(50) NOT NULL DEFAULT '' COMMENT '候选机构实体id',
+  `entity_name_valid_selected_evaluation_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '候选机构实体name',
+  `entity_type_id_candidate_evaluation_institution` tinyint(4) NOT NULL DEFAULT '1' COMMENT '候选机构实体类型',
+  `enforcement_case_number` varchar(255) NOT NULL DEFAULT '' COMMENT '执行案号清洗',
+  `enforcement_case_number_original` varchar(255) NOT NULL DEFAULT '' COMMENT '执行案号原始',
+  `enforcement_case_type` varchar(255) NOT NULL DEFAULT '' COMMENT '案件类型',
+  `enforcement_object_evaluation_court_name` varchar(255) NOT NULL DEFAULT '' COMMENT '委托法院',
+  `enforcement_object_asset_type` varchar(255) NOT NULL DEFAULT '' COMMENT '财产类型',
+  `enforcement_object_name` varchar(255) NOT NULL DEFAULT '' COMMENT '财产名称',
+  `lottery_date_to_candidate_evaluation_institution` datetime DEFAULT NULL COMMENT '摇号日期',
+  `is_eventual_evaluation_institution` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否最终选定的机构',
+  `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_entity` (`tyc_unique_entity_id_subject_to_enforcement`),
+  KEY `idx_agency` (`tyc_unique_entity_id_candidate_evaluation_institution`),
+  KEY `idx_business_id` (`business_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构'
