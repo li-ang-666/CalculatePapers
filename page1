@@ -4,9 +4,9 @@ drop table entity_mainland_general_registration_info_details;
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
   `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
   `entity_type_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体类型',
-  `register_capital_amount` varchar(255) NOT NULL DEFAULT '' COMMENT '注册资本精确到分',
+  `register_capital_amount` decimal(38,12) NOT NULL DEFAULT '0.0' COMMENT '注册资本精确到分',
   `register_capital_currency` varchar(255) NOT NULL DEFAULT '' COMMENT '注册资本单位',
-  `actual_capital_amount` varchar(255) NOT NULL DEFAULT '' COMMENT '实缴额度精确到分',
+  `actual_capital_amount` decimal(38,12) NOT NULL DEFAULT '0.0' COMMENT '实缴额度精确到分',
   `actual_capital_currency` varchar(255) NOT NULL DEFAULT '' COMMENT '实缴额度单位',
   `entity_registration_status` varchar(255) NOT NULL DEFAULT '' COMMENT '登记经营状态',
   `register_number` varchar(255) NOT NULL DEFAULT '' COMMENT '工商注册号',
@@ -37,7 +37,7 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
   `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
   `entity_type_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体类型',
-  `register_capital_amount` varchar(255) NOT NULL DEFAULT '' COMMENT '注册资本精确到分',
+  `register_capital_amount` decimal(38,12) NOT NULL DEFAULT '0.0' COMMENT '注册资本精确到分',
   `register_capital_currency` varchar(255) NOT NULL DEFAULT '' COMMENT '注册资本单位',
   `entity_registration_status` varchar(255) NOT NULL DEFAULT '' COMMENT '登记经营状态',
   `register_unit_public_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '举办单位名称',
@@ -51,7 +51,7 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   `business_term_is_permanent` tinyint(4) NOT NULL DEFAULT '0' COMMENT '经营期限是否长期',
   `entity_register_address` varchar(255) NOT NULL DEFAULT '' COMMENT '登记注册地址',
   `business_registration_scope` varchar(5000) NOT NULL DEFAULT '' COMMENT '经营范围',
-  `is_national_public_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '是否中央级事业单位',
+  `is_national_public_institution` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否中央级事业单位',
   `organization_code` varchar(255) NOT NULL DEFAULT '' COMMENT '组织机构代码',
   `taxpayer_identification_code` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
   `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
@@ -59,7 +59,7 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_company` (`tyc_unique_entity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2370357899 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 truncate table entity_mainland_general_registration_info_details;
 truncate table entity_mainland_public_institution_registration_info_details;
@@ -174,6 +174,29 @@ PROPERTIES (
 
 
 5123793160,5324940500,5420027444,5440105892,5451772358,5466012263,5805774479,5954680040,5338083495,2357589612
+
+
+
+curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
+--header 'Content-Type: application/json' \
+--data '{
+    "sshUserName": "hudi",
+    "sshPassWord": "Moka20190520",
+    "yarnName": "DemoJob",
+    "isMonitored": 0
+}'
+
+
+curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
+--header 'Content-Type: application/json' \
+--data '{
+    "sshUserName": "liang",
+    "sshPassWord": "Moka20190520",
+    "yarnName": "AnnualReportJob",
+    "isMonitored": 0
+}'
+
+
 
 
 
