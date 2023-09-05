@@ -2,11 +2,11 @@ drop table entity_mainland_general_registration_info_details;
  CREATE TABLE `entity_mainland_general_registration_info_details` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
-  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
+  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体名称',
   `entity_type_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体类型',
-  `register_capital_amount` decimal(38,12) NOT NULL DEFAULT '0.0' COMMENT '注册资本精确到分',
+  `register_capital_amount` bigint NOT NULL DEFAULT '0' COMMENT '注册资本精确到分',
   `register_capital_currency` varchar(255) NOT NULL DEFAULT '' COMMENT '注册资本单位',
-  `actual_capital_amount` decimal(38,12) NOT NULL DEFAULT '0.0' COMMENT '实缴额度精确到分',
+  `actual_capital_amount` bigint NOT NULL DEFAULT '0' COMMENT '实缴额度精确到分',
   `actual_capital_currency` varchar(255) NOT NULL DEFAULT '' COMMENT '实缴额度单位',
   `entity_registration_status` varchar(255) NOT NULL DEFAULT '' COMMENT '登记经营状态',
   `register_number` varchar(255) NOT NULL DEFAULT '' COMMENT '工商注册号',
@@ -35,9 +35,9 @@ drop table entity_mainland_public_institution_registration_info_details;
 CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
-  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
+  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体名称',
   `entity_type_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体类型',
-  `register_capital_amount` decimal(38,12) NOT NULL DEFAULT '0.0' COMMENT '注册资本精确到分',
+  `register_capital_amount` bigint NOT NULL DEFAULT '0' COMMENT '注册资本精确到分',
   `register_capital_currency` varchar(255) NOT NULL DEFAULT '' COMMENT '注册资本单位',
   `entity_registration_status` varchar(255) NOT NULL DEFAULT '' COMMENT '登记经营状态',
   `register_unit_public_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '举办单位名称',
@@ -64,8 +64,8 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
 truncate table entity_mainland_general_registration_info_details;
 truncate table entity_mainland_public_institution_registration_info_details;
 
-
-
+entity_enforcement_object_evaluation_institution_candlidlate_details
+entity_enforcement_object_evaluation_institution_candidate_details
 
 curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
 --header 'Content-Type: application/json' \

@@ -14,9 +14,9 @@ CREATE TABLE `report_webinfo` (
 DROP TABLE entity_annual_report_ebusiness_details;
 CREATE TABLE `entity_annual_report_ebusiness_details` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `annual_report_year` varchar(50) DEFAULT NULL COMMENT '年报年份',
+  `annual_report_year` int not null DEFAULT '0' COMMENT '年报年份',
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
-  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
+  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体名称',
   `entity_type_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体类型',
   `annual_report_is_ebusiness` tinyint(4) NOT NULL DEFAULT '1' COMMENT '年报登记是否有网上运营',
   `annual_report_ebusiness_type` varchar(50) NOT NULL DEFAULT '' COMMENT '年报登记的网上运营类型',
@@ -30,11 +30,12 @@ CREATE TABLE `entity_annual_report_ebusiness_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报网店运营明细表';
 
 
-CREATE TABLE `ads.ads_company_base_entity_annual_report_ebusiness_details` (
+drop table `ads.ads_entity_operation_development_entity_annual_report_ebusiness_details`;
+CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_ebusiness_details` (
   `id` bigint COMMENT '主键',
   `annual_report_year` int COMMENT '年报年份',
   `tyc_unique_entity_id` string COMMENT '实体id',
-  `entity_name_valid` string COMMENT '实体name',
+  `entity_name_valid` string COMMENT '实体名称',
   `entity_type_id` int COMMENT '实体类型',
   `annual_report_is_ebusiness` int COMMENT '年报登记是否有网上运营',
   `annual_report_ebusiness_type` string COMMENT '年报登记的网上运营类型',
@@ -45,31 +46,4 @@ CREATE TABLE `ads.ads_company_base_entity_annual_report_ebusiness_details` (
   `update_time` string COMMENT '更新时间'
 )partitioned by (pt string);
 
-
-
-insert overwrite table ads.ads_company_base_entity_annual_report_ebusiness_details partition(pt = '20230828')
-select * from test.entity_annual_report_ebusiness_details;
-
-
-select
-  `id`,
-  `annual_report_year`,
-  `tyc_unique_entity_id`,
-  `entity_name_valid`,
-  `entity_type_id`,
-  `annual_report_is_ebusiness`,
-  `annual_report_ebusiness_type`,
-  `annual_report_ebusiness_name`,
-  `annual_report_ebusiness_website`,
-  `delete_status`,
-  `create_time`,
-  `update_time`
-from entity_annual_report_ebusiness_details
-where
-delete_status = 0
-and tyc_unique_entity_id = #{tyc_unique_entity_id}
-and entity_type_id = #{entity_type_id}
-<if test = 'annual_report_year_from != null'> AND annual_report_year &gt;= #{annual_report_year_from} </if>
-<if test = 'annual_report_year_to != null'> AND annual_report_year &lt;= #{annual_report_year_to} </if>
-limit #{offset}, #{limit}
 

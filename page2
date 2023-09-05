@@ -1,4 +1,4 @@
-CREATE TABLE `entity_evaluation_details` (
+CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `business_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '业务表主键',
   `tyc_unique_entity_id_subject_to_enforcement` varchar(50) NOT NULL DEFAULT '' COMMENT '被执行实体id',
@@ -22,4 +22,4 @@ CREATE TABLE `entity_evaluation_details` (
   KEY `idx_entity` (`tyc_unique_entity_id_subject_to_enforcement`),
   KEY `idx_agency` (`tyc_unique_entity_id_candidate_evaluation_institution`),
   KEY `idx_business_id` (`business_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构';

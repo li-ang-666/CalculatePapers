@@ -23,17 +23,17 @@ DROP TABLE entity_annual_report_shareholder_equity_details;
 CREATE TABLE `entity_annual_report_shareholder_equity_details` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `business_id` bigint(20) unsigned NOT NULL DEFAULT '1' COMMENT '业务表(report_shareholder表)主键',
-  `annual_report_year` varchar(50) DEFAULT NULL COMMENT '年报年份',
+  `annual_report_year` int not null DEFAULT '0' COMMENT '年报年份',
   `tyc_unique_entity_id` varchar(50) NOT NULL DEFAULT '' COMMENT '实体id',
-  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体name',
+  `entity_name_valid` varchar(255) NOT NULL DEFAULT '' COMMENT '实体名称',
   `entity_type_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体类型',
   `annual_report_tyc_unique_entity_id_shareholder` varchar(50) NOT NULL DEFAULT '' COMMENT '股东实体id',
-  `annual_report_entity_name_valid_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体name',
-  `annual_report_entity_name_register_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体name快照',
+  `annual_report_entity_name_valid_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体名称',
+  `annual_report_entity_name_register_shareholder` varchar(255) NOT NULL DEFAULT '' COMMENT '股东实体名称快照',
   `annual_report_entity_type_id_shareholder` tinyint(4) NOT NULL DEFAULT '2' COMMENT '股东实体类型',
   `annual_report_shareholder_capital_type` varchar(50) NOT NULL DEFAULT '认缴' COMMENT '出资是认缴 or 实缴',
   `annual_report_shareholder_capital_source` varchar(255) DEFAULT NULL COMMENT '业务表原值',
-  `annual_report_shareholder_equity_amt` decimal(38,12) NOT NULL DEFAULT '0.000000000000' COMMENT '股东出资额',
+  `annual_report_shareholder_equity_amt` decimal(38,12) NOT NULL DEFAULT '0.0' COMMENT '股东出资额',
   `annual_report_shareholder_equity_currency` varchar(50) NOT NULL DEFAULT '' COMMENT '股东出资额单位及币种',
   `annual_report_shareholder_equity_valid_date` datetime DEFAULT NULL COMMENT '出资日期',
   `annual_report_shareholder_equity_submission_method` varchar(50) NOT NULL DEFAULT '' COMMENT '出资方式',
@@ -44,23 +44,23 @@ CREATE TABLE `entity_annual_report_shareholder_equity_details` (
   PRIMARY KEY (`id`),
   KEY `idx_business_id` (`business_id`),
   KEY `idx_company_year` (`tyc_unique_entity_id`,`annual_report_year`),
-
   KEY `idx_company_shareholder` (`tyc_unique_entity_id`,`annual_report_tyc_unique_entity_id_shareholder`),
   KEY `idx_shareholder` (`annual_report_tyc_unique_entity_id_shareholder`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报股东及出资信息明细表';
 
 
 
-CREATE TABLE `ads.ads_company_base_entity_annual_report_shareholder_equity_details` (
+drop table `ads.ads_entity_operation_development_entity_annual_report_shareholder_equity_details`;
+CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_shareholder_equity_details` (
   `id` bigint COMMENT '主键',
   `business_id` bigint COMMENT '业务表(report_shareholder表)主键',
   `annual_report_year` int COMMENT '年报年份',
   `tyc_unique_entity_id` string COMMENT '实体id',
-  `entity_name_valid` string COMMENT '实体name',
+  `entity_name_valid` string COMMENT '实体名称',
   `entity_type_id` int COMMENT '实体类型',
   `annual_report_tyc_unique_entity_id_shareholder` string COMMENT '股东实体id',
-  `annual_report_entity_name_valid_shareholder` string COMMENT '股东实体name',
-  `annual_report_entity_name_register_shareholder` string COMMENT '股东实体name快照',
+  `annual_report_entity_name_valid_shareholder` string COMMENT '股东实体名称',
+  `annual_report_entity_name_register_shareholder` string COMMENT '股东实体名称快照',
   `annual_report_entity_type_id_shareholder` int COMMENT '股东实体类型',
   `annual_report_shareholder_capital_type` string COMMENT '出资是认缴 or 实缴',
   `annual_report_shareholder_capital_source` string COMMENT '业务表原值',
@@ -74,65 +74,3 @@ CREATE TABLE `ads.ads_company_base_entity_annual_report_shareholder_equity_detai
   `update_time` string COMMENT '更新时间'
 )partitioned by (pt string);
 
-
-
-insert overwrite table ads.ads_company_base_entity_annual_report_shareholder_equity_details partition(pt = '20230828')
-select * from test.entity_annual_report_shareholder_equity_details;
-
-
-select 
-  `id`,
-  `business_id`,
-  `annual_report_year`,
-  `tyc_unique_entity_id`,
-  `entity_name_valid`,
-  `entity_type_id`,
-  `annual_report_tyc_unique_entity_id_shareholder`,
-  `annual_report_entity_name_valid_shareholder`,
-  `annual_report_entity_name_register_shareholder`,
-  `annual_report_entity_type_id_shareholder`,
-  `annual_report_shareholder_capital_type`,
-  `annual_report_shareholder_capital_source`,
-  `annual_report_shareholder_equity_amt`,
-  `annual_report_shareholder_equity_currency`,
-  `annual_report_shareholder_equity_valid_date`,
-  `annual_report_shareholder_equity_submission_method`,
-  `is_display_annual_report_shareholder_equity_details`,
-  `delete_status`,
-  `create_time`,
-  `update_time`
-from entity_annual_report_shareholder_equity_details
-where
-delete_status = 0
-and tyc_unique_entity_id = #{tyc_unique_entity_id}
-and entity_type_id = #{entity_type_id}
-  <if test = 'annual_report_tyc_unique_entity_id_shareholder != null'>
-    AND annual_report_tyc_unique_entity_id_shareholder = #{annual_report_tyc_unique_entity_id_shareholder}
-  </if>
-
-  <if test = 'annual_report_shareholder_capital_types != null'>
-    AND annual_report_shareholder_capital_type in 
-    <foreach collection = 'annual_report_shareholder_capital_types' item = 'annual_report_shareholder_capital_type' open = '(' close = ')' separator = ','>
-      #{annual_report_shareholder_capital_type}
-    </foreach>
-  </if>
-
-  <if test = 'annual_report_shareholder_equity_valid_date_from != null'>
-    AND annual_report_shareholder_equity_valid_date &gt;= #{annual_report_shareholder_equity_valid_date_from}
-  </if>
-
-  <if test = 'annual_report_shareholder_equity_valid_date_to != null'>
-    AND annual_report_shareholder_equity_valid_date &lt;= #{annual_report_shareholder_equity_valid_date_to}
-  </if>
-
-  <if test = 'annual_report_shareholder_equity_submission_methods != null'>
-    AND annual_report_shareholder_equity_submission_method in
-    <foreach collection = 'annual_report_shareholder_equity_submission_methods' item = 'annual_report_shareholder_equity_submission_method' open = '(' close = ')' separator = ','>
-      #{annual_report_shareholder_equity_submission_method}
-    </foreach>
-  </if>
-  
-  <if test = 'is_display_annual_report_shareholder_equity_details != null'>
-    AND is_display_annual_report_shareholder_equity_details = #{is_display_annual_report_shareholder_equity_details}
-  </if>
-limit #{offset}, #{limit}
