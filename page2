@@ -14,7 +14,7 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
   `enforcement_object_evaluation_court_name` varchar(255) NOT NULL DEFAULT '' COMMENT '委托法院',
   `enforcement_object_asset_type` varchar(255) NOT NULL DEFAULT '' COMMENT '财产类型',
   `enforcement_object_name` varchar(255) NOT NULL DEFAULT '' COMMENT '财产名称',
-  `lottery_date_to_candidate_evaluation_institution` datetime not null DEFAULT '0000-01-01' COMMENT '摇号日期',
+  `lottery_date_to_candidate_evaluation_institution` date not null DEFAULT '0000-01-01' COMMENT '摇号日期',
   `is_eventual_evaluation_institution` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否最终选定的机构',
   `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

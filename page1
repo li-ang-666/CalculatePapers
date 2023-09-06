@@ -14,13 +14,13 @@ drop table entity_mainland_general_registration_info_details;
   `entity_property` int NOT NULL DEFAULT '0' COMMENT '实体性质',
   `entity_property_original` varchar(255) NOT NULL DEFAULT '' COMMENT '实体性质(原始)',
   `entity_register_address` varchar(255) NOT NULL DEFAULT '' COMMENT '登记注册地址',
-  `registration_date` datetime not null DEFAULT '0000-01-01' COMMENT '成立日期',
-  `business_term_start_date` datetime not NULL default '0000-01-01' COMMENT '经营期限(起始)',
-  `business_term_end_date` datetime not NULL default '0000-01-01' COMMENT '经营期限(结束)',
+  `registration_date` date not null DEFAULT '0000-01-01' COMMENT '成立日期',
+  `business_term_start_date` date not NULL default '0000-01-01' COMMENT '经营期限(起始)',
+  `business_term_end_date` date not NULL default '0000-01-01' COMMENT '经营期限(结束)',
   `business_term_is_permanent` tinyint(4) NOT NULL DEFAULT '0' COMMENT '经营期限是否长期',
   `business_registration_scope` varchar(5000) NOT NULL DEFAULT '' COMMENT '注册经营范围',
   `registration_institute` varchar(255) NOT NULL DEFAULT '' COMMENT '登记机关',
-  `approval_date` datetime not NULL default '0000-01-01' COMMENT '核准日期',
+  `approval_date` date not NULL default '0000-01-01' COMMENT '核准日期',
   `organization_code` varchar(255) NOT NULL DEFAULT '' COMMENT '组织机构代码',
   `taxpayer_identification_code` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
   `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
@@ -46,8 +46,8 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   `original_certificate_number_public_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '原证书号',
   `register_number` varchar(255) NOT NULL DEFAULT '' COMMENT '工商注册号',
   `unified_social_credit_code` varchar(255) NOT NULL DEFAULT '' COMMENT '统一社会信用代码',
-  `business_term_start_date` datetime not NULL default '0000-01-01' COMMENT '经营期限(起始)',
-  `business_term_end_date` datetime not NULL default '0000-01-01' COMMENT '经营期限(结束)',
+  `business_term_start_date` date not NULL default '0000-01-01' COMMENT '经营期限(起始)',
+  `business_term_end_date` date not NULL default '0000-01-01' COMMENT '经营期限(结束)',
   `business_term_is_permanent` tinyint(4) NOT NULL DEFAULT '0' COMMENT '经营期限是否长期',
   `entity_register_address` varchar(255) NOT NULL DEFAULT '' COMMENT '登记注册地址',
   `business_registration_scope` varchar(5000) NOT NULL DEFAULT '' COMMENT '经营范围',
@@ -62,6 +62,37 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   KEY `idx_company` (`tyc_unique_entity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment '事业单位';
 
+################################################ hive ###################################################################
+
+drop table ads.ads_entity_operation_development_entity_mainland_general_registration_info_details;
+ CREATE TABLE `ads.ads_entity_operation_development_entity_mainland_general_registration_info_details` (
+  `id` bigint COMMENT '主键',
+  `tyc_unique_entity_id` string COMMENT '实体id',
+  `entity_name_valid` string COMMENT '实体名称',
+  `entity_type_id` int COMMENT '实体类型',
+  `register_capital_amount` bigint COMMENT '注册资本精确到分',
+  `register_capital_currency` string COMMENT '注册资本单位',
+  `actual_capital_amount` bigint COMMENT '实缴额度精确到分',
+  `actual_capital_currency` string COMMENT '实缴额度单位',
+  `entity_registration_status` string COMMENT '登记经营状态',
+  `register_number` string COMMENT '工商注册号',
+  `unified_social_credit_code` string COMMENT '统一社会信用代码',
+  `entity_property` int COMMENT '实体性质',
+  `entity_property_original` string COMMENT '实体性质(原始)',
+  `entity_register_address` string COMMENT '登记注册地址',
+  `registration_date` date COMMENT '成立日期',
+  `business_term_start_date` date COMMENT '经营期限(起始)',
+  `business_term_end_date` date COMMENT '经营期限(结束)',
+  `business_term_is_permanent` int COMMENT '经营期限是否长期',
+  `business_registration_scope` string COMMENT '注册经营范围',
+  `registration_institute` string COMMENT '登记机关',
+  `approval_date` date COMMENT '核准日期',
+  `organization_code` string COMMENT '组织机构代码',
+  `taxpayer_identification_code` string COMMENT '纳税人识别号',
+  `delete_status` int COMMENT '删除状态',
+  `create_time` timestamp COMMENT '创建时间',
+  `update_time` timestamp COMMENT '更新时间'
+) partitioned by (pt string);
 
 
 
