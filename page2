@@ -1,11 +1,12 @@
+drop table entity_enforcement_object_evaluate_institution_candidate_details;
 CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `business_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '业务表主键',
+  `business_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '爬虫表主键',
   `tyc_unique_entity_id_subject_to_enforcement` varchar(50) NOT NULL DEFAULT '' COMMENT '被执行实体id',
-  `entity_name_valid_subject_to_enforcement` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行实体name',
+  `entity_name_valid_subject_to_enforcement` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行实体名称',
   `entity_type_id_subject_to_enforcement` tinyint(4) NOT NULL DEFAULT '1' COMMENT '被执行实体类型',
   `tyc_unique_entity_id_candidate_evaluation_institution` varchar(50) NOT NULL DEFAULT '' COMMENT '候选机构实体id',
-  `entity_name_valid_selected_evaluation_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '候选机构实体name',
+  `entity_name_valid_selected_evaluation_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '候选机构实体名称',
   `entity_type_id_candidate_evaluation_institution` tinyint(4) NOT NULL DEFAULT '1' COMMENT '候选机构实体类型',
   `enforcement_case_number` varchar(255) NOT NULL DEFAULT '' COMMENT '执行案号清洗',
   `enforcement_case_number_original` varchar(255) NOT NULL DEFAULT '' COMMENT '执行案号原始',
@@ -13,7 +14,7 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
   `enforcement_object_evaluation_court_name` varchar(255) NOT NULL DEFAULT '' COMMENT '委托法院',
   `enforcement_object_asset_type` varchar(255) NOT NULL DEFAULT '' COMMENT '财产类型',
   `enforcement_object_name` varchar(255) NOT NULL DEFAULT '' COMMENT '财产名称',
-  `lottery_date_to_candidate_evaluation_institution` datetime DEFAULT NULL COMMENT '摇号日期',
+  `lottery_date_to_candidate_evaluation_institution` datetime not null DEFAULT '0000-01-01' COMMENT '摇号日期',
   `is_eventual_evaluation_institution` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否最终选定的机构',
   `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -23,3 +24,9 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
   KEY `idx_agency` (`tyc_unique_entity_id_candidate_evaluation_institution`),
   KEY `idx_business_id` (`business_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构';
+
+
+
+
+
+

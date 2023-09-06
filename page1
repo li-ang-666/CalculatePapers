@@ -14,13 +14,13 @@ drop table entity_mainland_general_registration_info_details;
   `entity_property` int NOT NULL DEFAULT '0' COMMENT '实体性质',
   `entity_property_original` varchar(255) NOT NULL DEFAULT '' COMMENT '实体性质(原始)',
   `entity_register_address` varchar(255) NOT NULL DEFAULT '' COMMENT '登记注册地址',
-  `registration_date` datetime DEFAULT NULL COMMENT '成立日期',
-  `business_term_start_date` datetime DEFAULT NULL COMMENT '经营期限(起始)',
-  `business_term_end_date` datetime DEFAULT NULL COMMENT '经营期限(结束)',
+  `registration_date` datetime not null DEFAULT '0000-01-01' COMMENT '成立日期',
+  `business_term_start_date` datetime not NULL default '0000-01-01' COMMENT '经营期限(起始)',
+  `business_term_end_date` datetime not NULL default '0000-01-01' COMMENT '经营期限(结束)',
   `business_term_is_permanent` tinyint(4) NOT NULL DEFAULT '0' COMMENT '经营期限是否长期',
   `business_registration_scope` varchar(5000) NOT NULL DEFAULT '' COMMENT '注册经营范围',
   `registration_institute` varchar(255) NOT NULL DEFAULT '' COMMENT '登记机关',
-  `approval_date` datetime DEFAULT NULL COMMENT '核准日期',
+  `approval_date` datetime not NULL default '0000-01-01' COMMENT '核准日期',
   `organization_code` varchar(255) NOT NULL DEFAULT '' COMMENT '组织机构代码',
   `taxpayer_identification_code` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
   `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
@@ -28,7 +28,7 @@ drop table entity_mainland_general_registration_info_details;
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_company` (`tyc_unique_entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment '基础工商';
 
 
 drop table entity_mainland_public_institution_registration_info_details;
@@ -46,11 +46,12 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   `original_certificate_number_public_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '原证书号',
   `register_number` varchar(255) NOT NULL DEFAULT '' COMMENT '工商注册号',
   `unified_social_credit_code` varchar(255) NOT NULL DEFAULT '' COMMENT '统一社会信用代码',
-  `business_term_start_date` datetime DEFAULT NULL COMMENT '经营期限(起始)',
-  `business_term_end_date` datetime DEFAULT NULL COMMENT '经营期限(结束)',
+  `business_term_start_date` datetime not NULL default '0000-01-01' COMMENT '经营期限(起始)',
+  `business_term_end_date` datetime not NULL default '0000-01-01' COMMENT '经营期限(结束)',
   `business_term_is_permanent` tinyint(4) NOT NULL DEFAULT '0' COMMENT '经营期限是否长期',
   `entity_register_address` varchar(255) NOT NULL DEFAULT '' COMMENT '登记注册地址',
   `business_registration_scope` varchar(5000) NOT NULL DEFAULT '' COMMENT '经营范围',
+  `entity_property` int NOT NULL DEFAULT '0' COMMENT '实体性质',
   `is_national_public_institution` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否中央级事业单位',
   `organization_code` varchar(255) NOT NULL DEFAULT '' COMMENT '组织机构代码',
   `taxpayer_identification_code` varchar(255) NOT NULL DEFAULT '' COMMENT '纳税人识别号',
@@ -59,144 +60,13 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_company` (`tyc_unique_entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment '事业单位';
 
-truncate table entity_mainland_general_registration_info_details;
-truncate table entity_mainland_public_institution_registration_info_details;
 
-entity_enforcement_object_evaluation_institution_candlidlate_details
-entity_enforcement_object_evaluation_institution_candidate_details
 
-curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
---header 'Content-Type: application/json' \
---data '{
-    "sshUserName": "liang",
-    "sshPassWord": "Moka20190520",
-    "yarnName": "CompanyBaseInfoJob",
-    "isMonitored": 0
-}'
-
-where
-  company_id in <foreach collection = 'company_ids' item = 'company_id' open = '(' close = ')' separator = ','> #{company_id} </foreach>
-
-<if test = 'annual_report_year != null'> AND h_year = #{annual_report_year} </if>
-
-limit
-  #{offset}, #{limit}
-
-tyc2_annual_report_query_shareholder_equity_change
 
 <   &lt;
 <=  &lt;=
 >   &gt;
 >=  &gt;=
-
-
-,id,company_id,shareholder_id,shareholder_entity_type,shareholder_name_id,investment_ratio_total,is_controller,is_ultimate,is_big_shareholder,is_controlling_shareholder,equity_holding_path,create_time,update_time,is_deleted                 
-
-CREATE TABLE `dwd_coupon_info` (
-  `promotion_code` string NOT NULL DEFAULT "" COMMENT '优惠码',
-  `unique_user_id` bigint NOT NULL DEFAULT "0" COMMENT '天眼查用户ID-new',
-  `promotion_id` bigint NOT NULL DEFAULT "0" COMMENT '优惠ID',
-  `use_status` int NOT NULL DEFAULT "0" COMMENT '使用状态',
-  `receive_time` datetime  COMMENT '发券时间',
-  `effective_time` datetime  COMMENT '有效开始日期',
-  `expiration_time` datetime  COMMENT '有效结束日期',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '写入doris时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新doris时间'
-) ENGINE=OLAP
-UNIQUE KEY(`promotion_code`, `unique_user_id`)
-COMMENT '优惠券发放记录新表-实时'
-DISTRIBUTED BY HASH(`promotion_code`) BUCKETS 9
-PROPERTIES (
-"replication_allocation" = "tag.location.default: 3",
-"in_memory" = "false",
-"storage_format" = "V2",
-"enable_unique_key_merge_on_write" = "true",
-"disable_auto_compaction" = "false"
-);
-
-
----------------+
- 10.99.193.211 |
- 10.99.197.34  |
- 10.99.201.130 |
- 10.99.202.71  |
- 10.99.203.124 |
- 10.99.203.88  |
----------------+
-source /etc/profile
-sh  /opt/module/doris/be/bin/stop_be.sh
-sh  /opt/module/doris/be/bin/start_be.sh --daemon
-
-CREATE TABLE `dwd_user_register_details_v2` (
-  `tyc_user_id` bigint(20) NOT NULL DEFAULT "0" COMMENT '天眼查用户ID',
-  `mobile` bigint(20) NOT NULL DEFAULT "0" COMMENT '手机号',
-  `register_time` datetimev2(6) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
-  `vip_from_time` datetimev2(6) NULL COMMENT 'VIP开始时间',
-  `vip_to_time` datetimev2(6) NULL COMMENT 'VIP结束日期',
-  `user_type` int(11) NOT NULL DEFAULT "0" COMMENT '用户类型 0:普通，1:vvip,2:媒体用户，3:3个月vip，4:6个月vip，5:12个月以上vip，6:24个月vip，7:26个月以上vip，-1:删除，-2:黑名单',
-  `create_time` datetimev2(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '写入doris时间',
-  `update_time` datetimev2(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新doris时间'
-) ENGINE=OLAP
-UNIQUE KEY(`tyc_user_id`)
-COMMENT '用户注册明细表-实时'
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
-PROPERTIES (
-"replication_allocation" = "tag.location.default: 3",
-"in_memory" = "false",
-"storage_format" = "V2",
-"enable_unique_key_merge_on_write" = "true",
-"disable_auto_compaction" = "false"
-); 
-
-
-
-CREATE TABLE `dwd_coupon_info` (
-  `promotion_code` varchar(30) NOT NULL DEFAULT "" COMMENT '优惠码',
-  `unique_user_id` bigint(20) NOT NULL DEFAULT "0" COMMENT '天眼查用户ID-new',
-  `promotion_id` bigint(20) NOT NULL DEFAULT "0" COMMENT '优惠ID',
-  `use_status` int(11) NOT NULL DEFAULT "0" COMMENT '使用状态',
-  `receive_time` datetime NULL COMMENT '发券时间',
-  `effective_time` datetime NULL COMMENT '有效开始日期',
-  `expiration_time` datetime NULL COMMENT '有效结束日期',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '写入doris时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新doris时间'
-) ENGINE=OLAP
-UNIQUE KEY(`promotion_code`, `unique_user_id`)
-COMMENT '优惠券发放记录新表-实时'
-DISTRIBUTED BY HASH(`promotion_code`) BUCKETS 9
-PROPERTIES (
-"replication_allocation" = "tag.location.default: 3",
-"in_memory" = "false"
-);
-
-
-
-5123793160,5324940500,5420027444,5440105892,5451772358,5466012263,5805774479,5954680040,5338083495,2357589612
-
-
-
-curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
---header 'Content-Type: application/json' \
---data '{
-    "sshUserName": "hudi",
-    "sshPassWord": "Moka20190520",
-    "yarnName": "DemoJob",
-    "isMonitored": 0
-}'
-
-
-curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
---header 'Content-Type: application/json' \
---data '{
-    "sshUserName": "liang",
-    "sshPassWord": "Moka20190520",
-    "yarnName": "AnnualReportJob",
-    "isMonitored": 0
-}'
-
-
-
-
 

@@ -1,0 +1,35 @@
+application_1683968765756_3412	liuyifeng	DWDPromotionRecord2DorisNew2	Apache Flink	online	0	Tue Sep 5 17:36:42 +0800 2023	N/A	RUNNING	UNDEFINED	11	11	31744	0	0	0	0	1.7	1.2	
+application_1683968765756_3400	wangshiwei	DWDPromotionRecord2DorisNew	Apache Flink	online	0	Mon Sep 4 23:01:34 +0800 2023	N/A	RUNNING	UNDEFINED	21	21	31744	0	0	0	0	1.7	1.2	
+application_1683968765756_3399	wangshiwei	DimUserComparison2DorisNew	Apache Flink	online	0	Mon Sep 4 23:00:47 +0800 2023	N/A	RUNNING	UNDEFINED	2	2	2048	0	0	0	0	0.1	0.1	
+application_1683968765756_3398	luliang	DWDSensorDelayTime2Doris	Apache Flink	online	0	Mon Sep 4 23:00:37 +0800 2023	N/A	RUNNING	UNDEFINED	2	2	2560	0	0	0	0	0.1	0.1	
+application_1683968765756_3397	luliang	DWDSensorUserEventLog2Doris	Apache Flink	online	0	Mon Sep 4 22:59:51 +0800 2023	N/A	RUNNING	UNDEFINED	2	2	2560	0	0	0	0	0.1	0.1	
+application_1683968765756_3396	luliang	DWDSensorCodelessLog2Doris	Apache Flink	online	0	Mon Sep 4 22:58:36 +0800 2023	N/A	RUNNING	UNDEFINED	2	2	1536	0	0	0	0	0.1	0.1	
+application_1683968765756_3395	luliang	DWDPayPointComDetail2Doris	Apache Flink	online	0	Mon Sep 4 22:56:30 +0800 2023	N/A	RUNNING	UNDEFINED	2	2	1536	0	0	0	0	0.1	0.1	
+application_1683968765756_3394	chenyanlong	ADSPushDetailDoris	Apache Flink	online	0	Mon Sep 4 22:19:06 +0800 2023	N/A	RUNNING	UNDEFINED	6	6	12288	0	0	0	0	0.6	0.5	
+application_1683968765756_3391	wangshiwei	DWDPushClick2DorisNew	Apache Flink	online	0	Mon Sep 4 22:14:36 +0800 2023	N/A	RUNNING	UNDEFINED	2	6	2048	0	0	0	0	0.2	0.2	
+application_1683968765756_3389	wangshiwei	DWDUserRegisterDetails2DorisNew	Apache Flink	online	0	Mon Sep 4 22:12:01 +0800 2023	N/A	RUNNING	UNDEFINED	11	11	11264	0	0	0	0	0.6	0.4	
+application_1683968765756_3387	wangshiwei	DWDAppActive2DorisNew	Apache Flink	online	0	Mon Sep 4 22:07:56 +0800 2023	N/A	RUNNING	UNDEFINED	2	6	2048	0	0	0	0	0.2	0.2	
+application_1683968765756_3386	wangshiwei	DWDOrderInfo2DorisNew	Apache Flink	online	0	Mon Sep 4 22:07:09 +0800 2023	N/A	RUNNING	UNDEFINED	11	11	31744	0	0	0	0	1.7	1.2	
+
+
+
+
+
+
+
+yarn application -kill application_1683968765756_3412
+yarn application -kill application_1683968765756_3400
+yarn application -kill application_1683968765756_3399
+yarn application -kill application_1683968765756_3398
+yarn application -kill application_1683968765756_3397
+yarn application -kill application_1683968765756_3396
+yarn application -kill application_1683968765756_3395
+yarn application -kill application_1683968765756_3394
+yarn application -kill application_1683968765756_3391
+yarn application -kill application_1683968765756_3389
+yarn application -kill application_1683968765756_3387
+yarn application -kill application_1683968765756_3386
+
+
+
+
