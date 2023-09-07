@@ -28,9 +28,12 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
 
 
 ################################### hive ###########################################
+
+
+
 CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` (
   `id` bigint COMMENT '主键',
-  `data_source_trace_id` bigint COMMENT '爬虫表(zhixinginfo_evaluate)主键',
+  `data_source_trace_id` string COMMENT '爬虫表(zhixinginfo_evaluate)主键',
   `tyc_unique_entity_id_subject_to_enforcement` string COMMENT '被执行实体id',
   `entity_name_valid_subject_to_enforcement` string COMMENT '被执行实体名称',
   `entity_type_id_subject_to_enforcement` int COMMENT '被执行实体类型',
