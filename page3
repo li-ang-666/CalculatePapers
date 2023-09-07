@@ -59,3 +59,5 @@ CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_sharehol
   `update_time` timestamp COMMENT '更新时间'
 )partitioned by (pt string);
 
+
+
