@@ -42,7 +42,7 @@ CREATE TABLE `entity_annual_report_shareholder_equity_details` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `idx_business_id` (`business_id`),
+  KEY `idx_data_source_trace_id` (`data_source_trace_id`),
   KEY `idx_company_year` (`tyc_unique_entity_id`,`annual_report_year`),
   KEY `idx_company_shareholder` (`tyc_unique_entity_id`,`annual_report_tyc_unique_entity_id_shareholder`),
   KEY `idx_shareholder` (`annual_report_tyc_unique_entity_id_shareholder`)
