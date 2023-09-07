@@ -44,7 +44,7 @@ CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_investme
   `annual_report_company_name_invested` string COMMENT '被投资实体名称',
   `annual_report_company_name_invested_register_name` string COMMENT '被投资实体名称快照',
   `delete_status` int COMMENT '删除状态',
-  `create_time` string COMMENT '创建时间',
-  `update_time` string COMMENT '更新时间'
+  `create_time` timestamp COMMENT '创建时间',
+  `update_time` timestamp COMMENT '更新时间'
 )partitioned by (pt string);
 

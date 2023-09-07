@@ -50,12 +50,12 @@ CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_sharehol
   `annual_report_entity_name_valid_shareholder` string COMMENT '股东实体名称',
   `annual_report_entity_name_register_shareholder` string COMMENT '股东实体名称快照',
   `annual_report_entity_type_id_shareholder` int COMMENT '股东实体类型',
-  `annual_report_equity_ratio_before_change` decimal(38,12) COMMENT '变更前股权比例',
-  `annual_report_equity_ratio_after_change` decimal(38,12) COMMENT '变更后股权比例',
-  `annual_report_equity_ratio_change_time` string COMMENT '股权变更日期',
+  `annual_report_equity_ratio_before_change` decimal(24,12) COMMENT '变更前股权比例',
+  `annual_report_equity_ratio_after_change` decimal(24,12) COMMENT '变更后股权比例',
+  `annual_report_equity_ratio_change_time` date COMMENT '股权变更日期',
   `is_display_annual_report_equity_ratio_change` int COMMENT '是否公示',
   `delete_status` int COMMENT '删除状态',
-  `create_time` string COMMENT '创建时间',
-  `update_time` string COMMENT '更新时间'
+  `create_time` timestamp COMMENT '创建时间',
+  `update_time` timestamp COMMENT '更新时间'
 )partitioned by (pt string);
 

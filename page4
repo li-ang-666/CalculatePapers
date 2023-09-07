@@ -64,13 +64,13 @@ CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_sharehol
   `annual_report_entity_type_id_shareholder` int COMMENT '股东实体类型',
   `annual_report_shareholder_capital_type` string COMMENT '出资是认缴 or 实缴',
   `annual_report_shareholder_capital_source` string COMMENT '业务表原值',
-  `annual_report_shareholder_equity_amt` decimal(38,12) COMMENT '股东出资额',
+  `annual_report_shareholder_equity_amt` bigint COMMENT '股东出资额精确到分',
   `annual_report_shareholder_equity_currency` string COMMENT '股东出资额单位及币种',
-  `annual_report_shareholder_equity_valid_date` string COMMENT '出资日期',
+  `annual_report_shareholder_equity_valid_date` date COMMENT '出资日期',
   `annual_report_shareholder_equity_submission_method` string COMMENT '出资方式',
   `is_display_annual_report_shareholder_equity_details` int COMMENT '是否公示',
   `delete_status` int COMMENT '删除状态',
-  `create_time` string COMMENT '创建时间',
-  `update_time` string COMMENT '更新时间'
+  `create_time` timestamp COMMENT '创建时间',
+  `update_time` timestamp COMMENT '更新时间'
 )partitioned by (pt string);
 

@@ -42,8 +42,8 @@ CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_ebusines
   `annual_report_ebusiness_name` string COMMENT '年报登记的网上运营产品名称',
   `annual_report_ebusiness_website` string COMMENT '年报登记的网址',
   `delete_status` int COMMENT '删除状态',
-  `create_time` string COMMENT '创建时间',
-  `update_time` string COMMENT '更新时间'
+  `create_time` timestamp COMMENT '创建时间',
+  `update_time` timestamp COMMENT '更新时间'
 )partitioned by (pt string);
 
 
