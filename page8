@@ -1,11 +1,1 @@
-
-curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
---header 'Content-Type: application/json' \
---data '{
-    "sshUserName": "liang",
-    "sshPassWord": "Moka20190520",
-    "yarnName": "AnnualReportJob",
-    "isMonitored": 0
-}'
-
-
+,"房产","交通运输工具","森林、林木所有权","集体土地所有权","土地使用权","机器设备","产品原材料","古玩字画","珠宝玉石首饰","股权","知识产权","探矿、采矿权","其他财产"
