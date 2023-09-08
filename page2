@@ -22,7 +22,9 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
   PRIMARY KEY (`id`),
   KEY `idx_entity` (`tyc_unique_entity_id_subject_to_enforcement`),
   KEY `idx_agency` (`tyc_unique_entity_id_candidate_evaluation_institution`),
-  KEY `idx_data_source_trace_id` (`data_source_trace_id`)
+  KEY `idx_data_source_trace_id` (`data_source_trace_id`),
+  KEY `idx_obs` (`enforcement_case_number`,`entity_name_valid_selected_evaluation_institution`,`enforcement_object_name`),
+  KEY `idx_is_eventual_evaluation_institution` (`is_eventual_evaluation_institution`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构';
 
 

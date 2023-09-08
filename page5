@@ -6,7 +6,7 @@ create table ads.ads_bdp_equity_entity_controller_details
     entity_type_id                          int comment '实体类型',
     entity_name_valid                       string comment '实体名称',
     company_name_controlled                 string comment '被控制的企业名称',
-    company_id_controlled                   string comment '被控制的企业ID',
+    company_id_controlled                   bigint comment '被控制的企业ID',
     equity_relation_path_cnt                int comment '关联路径数',
     estimated_equity_ratio_total            decimal(24,12) comment '预计总持股比例',
     controlling_equity_relation_path_detail string comment '实际控制关系路径详情',
