@@ -12,8 +12,8 @@ create table ads.ads_bdp_equity_entity_controller_details
     controlling_equity_relation_path_detail string comment '实际控制关系路径详情',
     control_validation_time_year            int comment '实际控制起始生效年份',
     is_controller_tyc_unique_entity_id      int comment '是否为实际控制人(否则只是拥有实际控制权)',
-    create_time                             string comment '创建时间',
-    update_time                             string comment '更新时间'
+    create_time                             timestamp comment '创建时间',
+    update_time                             timestamp comment '更新时间'
 )partitioned by (pt string);
 
 
@@ -30,8 +30,8 @@ create table ads.ads_bdp_equity_entity_beneficiary_details
     estimated_equity_ratio_total            decimal(24,12) comment '预计总持股比例',
     beneficiary_validation_time_year        int comment '受益所有人起始生效年份',
     beneficiary_equity_relation_path_detail string comment '受益关系路径详情',
-    create_time                             string comment '创建时间',
-    update_time                             string comment '更新时间'
+    create_time                             timestamp comment '创建时间',
+    update_time                             timestamp comment '更新时间'
 )partitioned by (pt string);
 
 drop table ads.ads_bdp_equity_shareholder_identity_type_details;
@@ -48,8 +48,8 @@ create table ads.ads_bdp_equity_shareholder_identity_type_details
     equity_ratio_path_cnt                               int comment '持股路径数',
     estimated_equity_ratio_total                        decimal(24,12) comment '总持股比例',
     shareholder_validation_time_year                    int comment '拥有股东起始生效年份',
-    create_time                                         string comment '创建时间',
-    update_time                                         string comment '更新时间'
+    create_time                                         timestamp comment '创建时间',
+    update_time                                         timestamp comment '更新时间'
 )partitioned by (pt string);
 
 
