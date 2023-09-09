@@ -1,3 +1,5 @@
+
+
 drop table entity_mainland_general_registration_info_details;
  CREATE TABLE `entity_mainland_general_registration_info_details` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
