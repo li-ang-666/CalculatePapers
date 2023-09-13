@@ -57,8 +57,8 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
 
 ################################### hive ###########################################
 
-drop table `ods_entity_enforcement_object_evaluate_institution_candidate_details`;
-CREATE TABLE `ods_entity_enforcement_object_evaluate_institution_candidate_details` (
+drop table ods.ods_entity_enforcement_object_evaluate_institution_candidate_details;
+CREATE TABLE ods.ods_entity_enforcement_object_evaluate_institution_candidate_details (
   `id` bigint COMMENT '主键',
   `tyc_unique_entity_id_subject_to_enforcement` string COMMENT '被执行实体id',
   `entity_name_valid_subject_to_enforcement` string COMMENT '被执行实体名称',
@@ -78,68 +78,3 @@ CREATE TABLE `ods_entity_enforcement_object_evaluate_institution_candidate_detai
   `create_time` timestamp COMMENT '创建时间',
   `update_time` timestamp COMMENT '更新时间'
 ) partitioned by (pt string);
-
-
-ods_prism1_zhixinginfo_evaluate_df
-ods_prism1_zhixinginfo_evaluate_index_df
-
-with t1 as(select * from ods_prism1_zhixinginfo_evaluate_df where pt = '20230911'),
-t2 as(select * from ods_prism1_zhixinginfo_evaluate_index_df where pt = '20230911')
-select distinct t1.id,t1.ename,t1.type from ods_prism1_zhixinginfo_evaluate_df t1 join ods_prism1_zhixinginfo_evaluate_index_df t2 on t1.id = t2.main_id where t1.type <> 1 and t2.gid<>0;
-
-
-
-select
-sum(1),
-sum(if(ename regexp ',|，|、| |;|；',1,0)) ,-- 被执行人
-sum(if(casenumber regexp ',|，|、| |;|；',1,0))-- 案号
-from ods.ods_prism1_zhixinginfo_evaluate_df
-where pt = '20230911';
-
-
-select
-  `tyc_unique_entity_id_subject_to_enforcement` ,
-  `tyc_unique_entity_id_candidate_evaluation_institution` ,
-  `enforcement_case_number` ,
-  `enforcement_object_name` 
-  from entity_enforcement_object_evaluate_institution_candidate_details
-  group by 
-  `tyc_unique_entity_id_subject_to_enforcement` ,
-  `tyc_unique_entity_id_candidate_evaluation_institution` ,
-  `enforcement_case_number` ,
-  `enforcement_object_name` 
-  having count(1) >1;
-
-insert into entity_enforcement_object_evaluate_institution_candidate_details
-select
-  `id`,
-  `tyc_unique_entity_id_subject_to_enforcement`,
-  `entity_name_valid_subject_to_enforcement`,
-  `entity_type_id_subject_to_enforcement`,
-  `tyc_unique_entity_id_candidate_evaluation_institution`,
-  `entity_name_valid_selected_evaluation_institution`,
-  `entity_type_id_candidate_evaluation_institution`,
-  `enforcement_case_number`,
-  `enforcement_case_number_original`,
-  `enforcement_case_type`,
-  `enforcement_object_evaluation_court_name`,
-  `enforcement_object_asset_type`,
-  `enforcement_object_name`,
-  `lottery_date_to_candidate_evaluation_institution`,
-  `is_evaluation_institution_candidate`,
-  `delete_status`,
-  `create_time`,
-  `update_time`
-from
-  entity_enforcement_object_evaluate_institution_candidate_details_middle
-where enforcement_case_number in (
-  select enforcement_case_number
-  from entity_enforcement_object_evaluate_institution_candidate_details_middle
-  where enforcement_case_number = '%s'
-  group by enforcement_case_number
-  having group_concat(tyc_unique_entity_id_subject_to_enforcement) like '%1%' and sum(is_state_organs) = 0
-)
-
-
-
-
