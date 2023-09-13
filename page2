@@ -1,5 +1,5 @@
-drop table entity_enforcement_object_evaluate_institution_candidate_details;
-CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` (
+drop table entity_enforcement_object_evaluate_institution_candidate_middle;
+CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_middle` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `data_source_trace_id` bigint(20) unsigned NOT NULL DEFAULT '1' COMMENT '爬虫表(zhixinginfo_evaluate)主键',
   `tyc_unique_entity_id_subject_to_enforcement` varchar(50) NOT NULL DEFAULT '' COMMENT '被执行对象实体id',
@@ -15,7 +15,8 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
   `enforcement_object_asset_type` varchar(255) NOT NULL DEFAULT '' COMMENT '财产类型',
   `enforcement_object_name` varchar(255) NOT NULL DEFAULT '' COMMENT '财产名称',
   `lottery_date_to_candidate_evaluation_institution` date COMMENT '摇号日期',
-  `is_eventual_evaluation_institution` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否最终选定的机构',
+  `is_evaluation_institution_candidate` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否最终选定的机构',
+  `is_state_organs` tinyint(4) NOT NULL DEFAULT '0' COMMENT '被执行实体与候选机构实体是不是国家机关',
   `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -24,18 +25,41 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
   KEY `idx_agency` (`tyc_unique_entity_id_candidate_evaluation_institution`),
   KEY `idx_data_source_trace_id` (`data_source_trace_id`),
   KEY `idx_obs` (`enforcement_case_number`,`entity_name_valid_selected_evaluation_institution`,`enforcement_object_name`),
-  KEY `idx_is_eventual_evaluation_institution` (`is_eventual_evaluation_institution`)
+  KEY `idx_is_eventual_evaluation_institution` (`is_evaluation_institution_candidate`),
+  KEY `idx_case_number` (`enforcement_case_number`,`entity_type_id_subject_to_enforcement`,`is_state_organs`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构';
 
-
+drop table entity_enforcement_object_evaluate_institution_candidate_details;
+CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tyc_unique_entity_id_subject_to_enforcement` varchar(50) NOT NULL DEFAULT '' COMMENT '被执行对象实体id',
+  `entity_name_valid_subject_to_enforcement` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行对象实体名称',
+  `entity_type_id_subject_to_enforcement` tinyint(4) NOT NULL DEFAULT '1' COMMENT '被执行对象实体类型',
+  `tyc_unique_entity_id_candidate_evaluation_institution` varchar(50) NOT NULL DEFAULT '' COMMENT '候选机构实体id',
+  `entity_name_valid_selected_evaluation_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '候选机构实体名称',
+  `entity_type_id_candidate_evaluation_institution` tinyint(4) NOT NULL DEFAULT '1' COMMENT '候选机构实体类型',
+  `enforcement_case_number` varchar(255) NOT NULL DEFAULT '' COMMENT '执行案号清洗',
+  `enforcement_case_number_original` varchar(255) NOT NULL DEFAULT '' COMMENT '执行案号原始',
+  `enforcement_case_type` varchar(255) NOT NULL DEFAULT '' COMMENT '案件类型',
+  `enforcement_object_evaluation_court_name` varchar(255) NOT NULL DEFAULT '' COMMENT '委托法院',
+  `enforcement_object_asset_type` varchar(255) NOT NULL DEFAULT '' COMMENT '财产类型',
+  `enforcement_object_name` varchar(255) NOT NULL DEFAULT '' COMMENT '财产名称',
+  `lottery_date_to_candidate_evaluation_institution` date COMMENT '摇号日期',
+  `is_evaluation_institution_candidate` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否最终选定的机构',
+  `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_entity` (`tyc_unique_entity_id_subject_to_enforcement`),
+  KEY `idx_agency` (`tyc_unique_entity_id_candidate_evaluation_institution`),
+  KEY `idx_case_number` (`enforcement_case_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构';
 
 ################################### hive ###########################################
 
-
-
-CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` (
+drop table `ods_entity_enforcement_object_evaluate_institution_candidate_details`;
+CREATE TABLE `ods_entity_enforcement_object_evaluate_institution_candidate_details` (
   `id` bigint COMMENT '主键',
-  `data_source_trace_id` bigint COMMENT '爬虫表(zhixinginfo_evaluate)主键',
   `tyc_unique_entity_id_subject_to_enforcement` string COMMENT '被执行实体id',
   `entity_name_valid_subject_to_enforcement` string COMMENT '被执行实体名称',
   `entity_type_id_subject_to_enforcement` int COMMENT '被执行实体类型',
@@ -49,13 +73,72 @@ CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` 
   `enforcement_object_asset_type` string COMMENT '财产类型',
   `enforcement_object_name` string COMMENT '财产名称',
   `lottery_date_to_candidate_evaluation_institution` date COMMENT '摇号日期',
-  `is_eventual_evaluation_institution` int COMMENT '是否最终选定的机构',
+  `is_evaluation_institution_candidate` int COMMENT '是否最终选定的机构',
   `delete_status` int COMMENT '删除状态',
   `create_time` timestamp COMMENT '创建时间',
   `update_time` timestamp COMMENT '更新时间'
 ) partitioned by (pt string);
 
 
+ods_prism1_zhixinginfo_evaluate_df
+ods_prism1_zhixinginfo_evaluate_index_df
+
+with t1 as(select * from ods_prism1_zhixinginfo_evaluate_df where pt = '20230911'),
+t2 as(select * from ods_prism1_zhixinginfo_evaluate_index_df where pt = '20230911')
+select distinct t1.id,t1.ename,t1.type from ods_prism1_zhixinginfo_evaluate_df t1 join ods_prism1_zhixinginfo_evaluate_index_df t2 on t1.id = t2.main_id where t1.type <> 1 and t2.gid<>0;
+
+
+
+select
+sum(1),
+sum(if(ename regexp ',|，|、| |;|；',1,0)) ,-- 被执行人
+sum(if(casenumber regexp ',|，|、| |;|；',1,0))-- 案号
+from ods.ods_prism1_zhixinginfo_evaluate_df
+where pt = '20230911';
+
+
+select
+  `tyc_unique_entity_id_subject_to_enforcement` ,
+  `tyc_unique_entity_id_candidate_evaluation_institution` ,
+  `enforcement_case_number` ,
+  `enforcement_object_name` 
+  from entity_enforcement_object_evaluate_institution_candidate_details
+  group by 
+  `tyc_unique_entity_id_subject_to_enforcement` ,
+  `tyc_unique_entity_id_candidate_evaluation_institution` ,
+  `enforcement_case_number` ,
+  `enforcement_object_name` 
+  having count(1) >1;
+
+insert into entity_enforcement_object_evaluate_institution_candidate_details
+select
+  `id`,
+  `tyc_unique_entity_id_subject_to_enforcement`,
+  `entity_name_valid_subject_to_enforcement`,
+  `entity_type_id_subject_to_enforcement`,
+  `tyc_unique_entity_id_candidate_evaluation_institution`,
+  `entity_name_valid_selected_evaluation_institution`,
+  `entity_type_id_candidate_evaluation_institution`,
+  `enforcement_case_number`,
+  `enforcement_case_number_original`,
+  `enforcement_case_type`,
+  `enforcement_object_evaluation_court_name`,
+  `enforcement_object_asset_type`,
+  `enforcement_object_name`,
+  `lottery_date_to_candidate_evaluation_institution`,
+  `is_evaluation_institution_candidate`,
+  `delete_status`,
+  `create_time`,
+  `update_time`
+from
+  entity_enforcement_object_evaluate_institution_candidate_details_middle
+where enforcement_case_number in (
+  select enforcement_case_number
+  from entity_enforcement_object_evaluate_institution_candidate_details_middle
+  where enforcement_case_number = '%s'
+  group by enforcement_case_number
+  having group_concat(tyc_unique_entity_id_subject_to_enforcement) like '%1%' and sum(is_state_organs) = 0
+)
 
 
 
