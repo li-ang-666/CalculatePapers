@@ -28,6 +28,7 @@ curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
     "isMonitored": 0
 }'
 
+
 insert into entity_enforcement_object_evaluate_institution_candidate_details
 select
   `id`,
