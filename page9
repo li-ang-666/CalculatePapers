@@ -28,7 +28,7 @@ create table hudi_table(
   -- compaction
   'compaction.schedule.enabled' = 'true',
   'compaction.trigger.strategy' = 'num_commits',
-  'compaction.delta_commits' = '10',
+  'compaction.delta_commits' = '5',
   'compaction.async.enabled' = 'false',
   'clean.async.enabled' = 'false'
 )
