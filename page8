@@ -22,9 +22,9 @@ spark.sql("insert overwrite table ads.ads_entity_operation_development_entity_ma
 curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
 --header 'Content-Type: application/json' \
 --data '{
-    "sshUserName": "liang",
+    "sshUserName": "hudi",
     "sshPassWord": "Moka20190520",
-    "yarnName": "CompanyBaseInfoJob",
+    "yarnName": "Flink Application Cluster",
     "isMonitored": 0
 }'
 

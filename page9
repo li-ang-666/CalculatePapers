@@ -20,15 +20,15 @@ create table hudi_table(
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'bucket',
-  'hoodie.bucket.index.num.buckets' = '128',
+  'hoodie.bucket.index.num.buckets' = '1024',
   -- write
-  'write.tasks' = '4',
+  'write.tasks' = '2',
   'write.precombine' = 'true',
   'precombine.field' = 'update_time',
   -- compaction
   'compaction.schedule.enabled' = 'true',
   'compaction.trigger.strategy' = 'num_commits',
-  'compaction.delta_commits' = '30',
+  'compaction.delta_commits' = '10',
   'compaction.async.enabled' = 'false',
   'clean.async.enabled' = 'false'
 )
