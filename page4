@@ -50,8 +50,8 @@ CREATE TABLE `entity_annual_report_shareholder_equity_details` (
 
 
 
-drop table `ads.ads_entity_operation_development_entity_annual_report_shareholder_equity_details`;
-CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_shareholder_equity_details` (
+drop table `ads.ads_company_base_entity_annual_report_shareholder_equity_details`;
+CREATE TABLE `ads.ads_company_base_entity_annual_report_shareholder_equity_details` (
   `id` bigint COMMENT '主键',
   `data_source_trace_id` bigint COMMENT '业务表(report_shareholder表)主键',
   `annual_report_year` int COMMENT '年报年份',

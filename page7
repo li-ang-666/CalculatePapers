@@ -30,8 +30,8 @@ CREATE TABLE `entity_annual_report_ebusiness_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='年报网店运营明细表';
 
 
-drop table `ads.ads_entity_operation_development_entity_annual_report_ebusiness_details`;
-CREATE TABLE `ads.ads_entity_operation_development_entity_annual_report_ebusiness_details` (
+drop table `ads.ads_company_base_entity_annual_report_ebusiness_details`;
+CREATE TABLE `ads.ads_company_base_entity_annual_report_ebusiness_details` (
   `id` bigint COMMENT '主键',
   `annual_report_year` int COMMENT '年报年份',
   `tyc_unique_entity_id` string COMMENT '实体id',

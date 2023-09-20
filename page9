@@ -16,21 +16,25 @@ create table hudi_table(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi/hudi_table',
+  'path' = 'obs://hadoop-obs/hudi-l/hudi_table04',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'bucket',
-  'hoodie.bucket.index.num.buckets' = '128',
-  -- write
-  'write.tasks' = '2',
-  'write.task.max.size' = '2048',
+  'hoodie.bucket.index.num.buckets' = '32',
+  -- unused memory
   'compaction.max_memory' = '0',
+  'write.merge.max_memory' = '0',
+  -- write
+  'write.tasks' = '8',
+  'write.task.max.size' = '512',
+  'write.batch.size' = '8',
+  'write.log_block.size' = '32',
   'write.precombine' = 'true',
   'precombine.field' = 'update_time',
   -- compaction
   'compaction.schedule.enabled' = 'true',
-  'compaction.trigger.strategy' = 'num_commits',
-  'compaction.delta_commits' = '20',
+  'compaction.trigger.strategy' = 'time_elapsed',
+  'compaction.delta_seconds' = '1800',
   'compaction.async.enabled' = 'false',
   'clean.async.enabled' = 'false'
 )
