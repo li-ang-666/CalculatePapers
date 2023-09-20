@@ -23,7 +23,7 @@ CREATE TABLE `entity_annual_report_investment_details` (
   `annual_report_company_id_invested` varchar(50)  COMMENT '被投资实体id',
   `annual_report_company_name_invested` varchar(255)  COMMENT '被投资实体名称',
   `annual_report_company_name_invested_register_name` varchar(255)  COMMENT '被投资实体名称快照',
-  `delete_status` tinyint(4)  COMMENT '删除状态',
+  `delete_status` tinyint(4) default '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),

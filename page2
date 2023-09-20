@@ -78,3 +78,6 @@ CREATE TABLE ods.ods_entity_enforcement_object_evaluate_institution_candidate_de
   `create_time` timestamp COMMENT '创建时间',
   `update_time` timestamp COMMENT '更新时间'
 ) partitioned by (pt string);
+
+
+
