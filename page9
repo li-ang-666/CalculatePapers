@@ -16,19 +16,19 @@ create table hudi_table(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi-l/hudi_table04',
+  'path' = 'obs://hadoop-obs/hudi_tables/uuid',
   'table.type' = 'MERGE_ON_READ',
   -- index
-  'index.type' = 'bucket',
+  'index.type' = 'bucket', 
   'hoodie.bucket.index.num.buckets' = '32',
   -- unused memory
   'compaction.max_memory' = '0',
   'write.merge.max_memory' = '0',
   -- write
-  'write.tasks' = '8',
-  'write.task.max.size' = '512',
-  'write.batch.size' = '8',
-  'write.log_block.size' = '32',
+  'write.tasks' = '32',
+  'write.task.max.size' = '132',
+  'write.batch.size' = '32',
+  'write.log_block.size' = '128',
   'write.precombine' = 'true',
   'precombine.field' = 'update_time',
   -- compaction
