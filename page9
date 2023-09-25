@@ -1,4 +1,4 @@
-create table hudi_table(
+create table 457___prism_sharehodler_path___ratio_path_company(
   id                         DECIMAL(20, 0),
   company_id                 BIGINT,
   shareholder_id             STRING,
@@ -13,10 +13,11 @@ create table hudi_table(
   create_time                TIMESTAMP(0),
   update_time                TIMESTAMP(0),
   is_deleted                 SMALLINT,
+  op_ts                      TIMESTAMP(0),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_tables/uuid',
+  'path' = 'obs://hadoop-obs/hudi/457___prism_sharehodler_path___ratio_path_company',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'bucket', 
