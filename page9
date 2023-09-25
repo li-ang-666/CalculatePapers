@@ -50,19 +50,19 @@ create table ratio_path_company(
   -- index
   'index.type' = 'bucket', 
   'hoodie.bucket.index.num.buckets' = '32',
-  -- memory
-  'compaction.max_memory' = '2048',
-  'write.merge.max_memory' = '0',
   -- write
+  'write.merge.max_memory' = '0',
   'write.tasks' = '2',
-  'write.task.max.size' = '132',
-  'write.batch.size' = '2',
-  'write.log_block.size' = '128',
+  'write.task.max.size' = '2660',
+  'write.batch.size' = '32',
+  'write.log_block.size' = '128', 
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
   -- compaction
   'compaction.schedule.enabled' = 'true',
   'compaction.async.enabled' = 'true',
+  'compaction.tasks' = '2',
+  'compaction.max_memory' = '2048',
   -- clean
   'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
