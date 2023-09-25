@@ -70,7 +70,7 @@ create table ratio_path_company(
   -- compaction
   'compaction.schedule.enabled' = 'true',
   'compaction.async.enabled' = 'false',
-  'clean.async.enabled' = 'false',
-  'clustering.async.enabled' = 'false'
+  -- clean
+  'clean.async.enabled' = 'false'
 );
 insert into ratio_path_company select * from source_table;
