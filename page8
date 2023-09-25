@@ -57,7 +57,7 @@ create table ratio_path_company(
   -- index
   'index.type' = 'bucket', 
   'hoodie.bucket.index.num.buckets' = '32',
-  -- unused memory
+  -- memory
   'compaction.max_memory' = '0',
   'write.merge.max_memory' = '0',
   -- write
