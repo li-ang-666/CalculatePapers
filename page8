@@ -66,10 +66,13 @@ create table ratio_path_company(
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
   -- compaction
-  'compaction.schedule.enabled' = 'false',
+  'compaction.schedule.enabled' = 'true',
   'compaction.async.enabled' = 'false',
+  'compaction.delta_commits' = '3',
   'compaction.max_memory' = '0',
   -- clean
-  'clean.async.enabled' = 'false'
+  'clean.async.enabled' = 'false',
+  'clean.policy' = 'KEEP_LATEST_BY_HOURS',
+  'clean.retain_hours' = '72'
 );
 insert into ratio_path_company select * from source_table;
