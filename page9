@@ -45,24 +45,26 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi/ratio_path_company1',
+  'path' = 'obs://hadoop-obs/hudi/ratio_path_company010',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'bucket', 
-  'hoodie.bucket.index.num.buckets' = '1024',
+  'hoodie.bucket.index.num.buckets' = '256',
   -- write
-  'write.tasks' = '1',
-  'write.task.max.size' = '232',
-  'write.batch.size' = '999',
-  'write.log_block.size' = '32', 
+  'write.tasks' = '4',
+  'write.task.max.size' = '264',
+  'write.batch.size' = '1',
+  'write.log_block.size' = '64', 
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
   -- compaction
+  'compaction.tasks' = '4',
+  'compaction.max_memory' = '1024',
   'compaction.schedule.enabled' = 'true',
-  'compaction.async.enabled' = 'false',
+  'compaction.async.enabled' = 'true',
   'compaction.delta_commits' = '3',
   -- clean
-  'clean.async.enabled' = 'false',
+  'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
   'clean.retain_hours' = '72'
 );
