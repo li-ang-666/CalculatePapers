@@ -1,8 +1,11 @@
+spark-submit \
+  --jars 'spark-1.0-jar-with-dependencies.jar' \
+  --class 'org.apache.hudi.utilities.HoodieCompactor' \
+  spark-1.0-jar-with-dependencies.jar \
+  --spark-memory '4g' \
+  --mode 'execute' \
+  --base-path "obs://hadoop-obs/hudi/ratio_path_company011" \
+  --table-name "ratio_path_company011" \
+  --parallelism "1"
 
 
-
-457.prism_shareholder_path.ratio_path_company
-
-463.bdp_equity.entity_controller_details
-463.bdp_equity.entity_beneficiary_details
-463.bdp_equity.shareholder_identity_type_details
