@@ -52,15 +52,15 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi/ratio_path_company',
+  'path' = 'obs://hadoop-obs/hudi/ratio_path_company1',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'bucket', 
-  'hoodie.bucket.index.num.buckets' = '1024',
+  'hoodie.bucket.index.num.buckets' = '32',
   -- write
   'write.tasks' = '32',
-  'write.task.max.size' = '512',
-  'write.batch.size' = '16',
+  'write.task.max.size' = '256',
+  'write.batch.size' = '32',
   'write.log_block.size' = '128',
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
