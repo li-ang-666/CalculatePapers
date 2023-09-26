@@ -54,7 +54,7 @@ create table ratio_path_company(
   'write.tasks' = '8',
   'write.task.max.size' = '512',
   'write.batch.size' = '8',
-  'write.log_block.size' = '64', 
+  'write.log_block.size' = '16', 
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
   -- compaction
