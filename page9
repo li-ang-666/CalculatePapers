@@ -47,6 +47,8 @@ create table ratio_path_company(
   'connector' = 'hudi',
   'path' = 'obs://hadoop-obs/hudi/ratio_path_company013',
   'table.type' = 'MERGE_ON_READ',
+  -- cdc
+  'changelog.enabled' = 'true',
   -- index
   'index.type' = 'bucket', 
   'hoodie.bucket.index.num.buckets' = '256',
