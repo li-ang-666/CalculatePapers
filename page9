@@ -60,7 +60,7 @@ create table ratio_path_company(
   -- compaction
   'compaction.schedule.enabled' = 'true',
   'compaction.async.enabled' = 'false',
-  'compaction.delta_commits' = '3',
+  'compaction.delta_commits' = '30',
   -- clean
   'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
