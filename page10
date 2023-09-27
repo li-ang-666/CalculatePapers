@@ -52,17 +52,17 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company010',
+  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company013',
   'table.type' = 'MERGE_ON_READ',
   -- index
-  'index.type' = 'bucket', 
-  'hoodie.bucket.index.num.buckets' = '2',
+  'index.type' = 'bucket',
+  'hoodie.bucket.index.num.buckets' = '256',
   -- write
   'write.operation' = 'bulk_insert',
   'write.bulk_insert.shuffle_input' = 'false', 
   'write.bulk_insert.sort_input' = 'false', 
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
-  'write.tasks' = '2'
+  'write.tasks' = '256'
 );
 insert into ratio_path_company select * from source_table;
