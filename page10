@@ -1,4 +1,4 @@
-CREATE TABLE jdbc_table(
+CREATE TABLE source_table(
   id                         DECIMAL(20, 0),
   company_id                 BIGINT,
   shareholder_id             STRING,
@@ -46,7 +46,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company013',
+  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company014',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'bucket',
@@ -57,6 +57,6 @@ create table ratio_path_company(
   'write.bulk_insert.sort_input' = 'false', 
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
-  'write.tasks' = '256'
+  'write.tasks' = '32'
 );
 insert into ratio_path_company select * from source_table;
