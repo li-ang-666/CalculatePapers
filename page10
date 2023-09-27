@@ -13,7 +13,7 @@ CREATE TABLE jdbc_table(
   create_time                TIMESTAMP(0),
   update_time                TIMESTAMP(0),
   is_deleted                 SMALLINT,
-  CURRENT_TIMESTAMP as op_ts,
+  op_ts as CURRENT_TIMESTAMP,
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'jdbc',
