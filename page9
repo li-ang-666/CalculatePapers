@@ -1,4 +1,4 @@
-CREATE TABLE source_table(
+CREATE TABLE source_table (
   id                         DECIMAL(20, 0),
   company_id                 BIGINT,
   shareholder_id             STRING,
@@ -13,18 +13,18 @@ CREATE TABLE source_table(
   create_time                TIMESTAMP(0),
   update_time                TIMESTAMP(0),
   is_deleted                 SMALLINT,
+  op_ts TIMESTAMP(3) METADATA FROM 'value.ingestion-timestamp' VIRTUAL,
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
-  'connector' = 'jdbc',
-  'url' = 'jdbc:mysql://e1d4c0a1d8d1456ba4b461ab8b9f293din01.internal.cn-north-4.mysql.rds.myhuaweicloud.com:3306/prism_shareholder_path?useSSL=false',
-  'table-name' = 'ratio_path_company',
-  'username' = 'jdhw_d_data_dml',
-  'password' = '2s0^tFa4SLrp72',
-  'scan.partition.column' = 'id',
-  'scan.partition.num' = '40000',
-  'scan.partition.lower-bound' = '1',
-  'scan.partition.upper-bound' = '400000000',
-  'scan.fetch-size' = '1024'
+  'connector' = 'kafka',
+  'topic' = 'e1d4c.json.prism_shareholder_path.ratio_path_company',
+  'properties.bootstrap.servers' = '10.99.202.90:9092,10.99.206.80:9092,10.99.199.2:9092',
+  'properties.group.id' = 'demo-job',
+  'scan.startup.mode' = 'earliest-offset',
+  -- canal
+  'format' = 'canal-json',
+  'canal-json.ignore-parse-errors' = 'true',
+  'canal-json.encode.decimal-as-plain-number' = 'true'
 );
 create table ratio_path_company(
   id                         DECIMAL(20, 0),
