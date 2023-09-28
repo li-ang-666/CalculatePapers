@@ -54,8 +54,8 @@ create table ratio_path_company(
   'hoodie.bucket.index.num.buckets' = '256',
   -- write
   'write.task.max.size' = '512',
-  'write.batch.size' = '8',
-  'write.merge.max_memory' = '28',
+  'write.batch.size' = '12',
+  'write.merge.max_memory' = '192',
   'write.log_block.size' = '16', 
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
