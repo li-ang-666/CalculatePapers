@@ -55,13 +55,14 @@ create table ratio_path_company(
   -- write
   'write.task.max.size' = '512',
   'write.batch.size' = '8',
+  'write.merge.max_memory' = '28',
   'write.log_block.size' = '16', 
   'write.precombine' = 'true',
   'precombine.field' = 'op_ts',
   -- compaction
   'compaction.schedule.enabled' = 'true',
   'compaction.async.enabled' = 'true',
-  'compaction.max_memory' = 'true',
+  'compaction.max_memory' = '128',
   'compaction.delta_commits' = '30',
   -- clean
   'clean.async.enabled' = 'true',
