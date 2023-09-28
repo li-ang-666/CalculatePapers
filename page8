@@ -46,7 +46,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company035',
+  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company040',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'bucket',
