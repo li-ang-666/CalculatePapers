@@ -63,7 +63,7 @@ create table ratio_path_company(
   'compaction.schedule.enabled' = 'true',
   'compaction.async.enabled' = 'true',
   'compaction.max_memory' = '128',
-  'compaction.delta_commits' = '30',
+  'compaction.delta_commits' = '10',
   -- clean
   'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
