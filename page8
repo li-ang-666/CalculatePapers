@@ -1,4 +1,4 @@
-CREATE TABLE source_table (
+CREATE TABLE source_table(
   id                         DECIMAL(20, 0),
   company_id                 BIGINT,
   shareholder_id             STRING,
@@ -13,25 +13,19 @@ CREATE TABLE source_table (
   create_time                TIMESTAMP(0),
   update_time                TIMESTAMP(0),
   is_deleted                 SMALLINT,
-  op_ts TIMESTAMP(0) METADATA FROM 'op_ts' VIRTUAL,
+  op_ts as CURRENT_TIMESTAMP,
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
-  -- common
-  'connector' = 'mysql-cdc',
-  'hostname' = 'e1d4c0a1d8d1456ba4b461ab8b9f293din01.internal.cn-north-4.mysql.rds.myhuaweicloud.com',
-  'port' = '3306',
-  'username' = 'jdhw_d_data_dml',
-  'password' = '2s0^tFa4SLrp72',
-  'database-name' = 'prism_shareholder_path',
+  'connector' = 'jdbc',
+  'url' = 'jdbc:mysql://10.99.131.246:3306/company_base',
   'table-name' = 'ratio_path_company',
-  'server-id' = '6000-6127',
-  'server-time-zone' = 'Asia/Shanghai',
-  'connect.timeout' = '60s',
-  'connect.max-retries' = '5',
-  'heartbeat.interval' = '600s',
-  -- scan
-  'scan.incremental.snapshot.chunk.size' = '10240',
-  'scan.snapshot.fetch.size' = '2048'
+  'username' = 'jdhw_d_data_dml',
+  'password' = '2s0^tFa4SLrp72',s
+  'scan.partition.column' = 'id',
+  'scan.partition.num' = '40000',
+  'scan.partition.lower-bound' = '1',
+  'scan.partition.upper-bound' = '400000000',
+  'scan.fetch-size' = '1024'
 );
 create table ratio_path_company(
   id                         DECIMAL(20, 0),
@@ -52,24 +46,15 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi/ratio_path_company',
+  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company030',
   'table.type' = 'MERGE_ON_READ',
-  -- cdc
-  'changelog.enabled' = 'true',
   -- index
-  'index.type' = 'bucket', 
+  'index.type' = 'bucket',
   'hoodie.bucket.index.num.buckets' = '256',
   -- write
-  'write.tasks' = '256',
-  'write.task.max.size' = '256',
-  'write.batch.size' = '32',
-  'write.log_block.size' = '64',
-  'write.precombine' = 'true',
-  'precombine.field' = 'op_ts',
-  -- compaction
-  'compaction.schedule.enabled' = 'false',
-  'compaction.async.enabled' = 'false',
-  -- clean
-  'clean.async.enabled' = 'false'
+  'write.operation' = 'bulk_insert',
+  'write.bulk_insert.shuffle_input' = 'false',
+  'write.bulk_insert.sort_input' = 'false',
+  'write.tasks' = '128'
 );
 insert into ratio_path_company select * from source_table;
