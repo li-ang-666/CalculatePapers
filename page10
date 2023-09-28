@@ -1,14 +1,1 @@
-385617124
-6532127324
-E09EJML0ALD8MSZY9
-2
-1958730800
-0.500000000000
-0
-1
-0
-0
-"[[{""is_red"":0,""path_usage"":1,""total_percent"":""50.00%"",""type"":""summary""},{""hid"":1958730800,""name"":""时玉明"",""type"":""human"",""cid"":6524128476},{""type_count"":1,""edges"":[{""source"":80,""type"":""INVEST"",""percent"":""50.00%""}]},{""name"":""厚积薄发（大连）网络科技有限公司"",""type"":""company"",""cid"":6524128476},{""type_count"":1,""edges"":[{""source"":80,""type"":""INVEST"",""percent"":""100.00%""}]},{""name"":""大连欣喜若狂网络科技有限公司"",""type"":""company"",""cid"":6528391245},{""type_count"":1,""edges"":[{""source"":80,""type"":""INVEST"",""percent"":""100.00%""}]},{""name"":""大连诚至金开网络科技有限公司"",""type"":""company"",""cid"":6532127324}]]"
-2023-09-27 14:42:10
-2023-09-27 14:42:10
-0
+{"type":"record","name":"ratio_path_company_record","namespace":"hoodie.ratio_path_company","fields":[{"name":"id","type":{"type":"fixed","name":"fixed","namespace":"hoodie.ratio_path_company.ratio_path_company_record.id","size":9,"logicalType":"decimal","precision":20,"scale":0}},{"name":"company_id","type":["null","long"],"default":null},{"name":"shareholder_id","type":["null","string"],"default":null},{"name":"shareholder_entity_type","type":["null","int"],"default":null},{"name":"shareholder_name_id","type":["null","long"],"default":null},{"name":"investment_ratio_total","type":["null",{"type":"fixed","name":"fixed","namespace":"hoodie.ratio_path_company.ratio_path_company_record.investment_ratio_total","size":11,"logicalType":"decimal","precision":24,"scale":12}],"default":null},{"name":"is_controller","type":["null","int"],"default":null},{"name":"is_ultimate","type":["null","int"],"default":null},{"name":"is_big_shareholder","type":["null","int"],"default":null},{"name":"is_controlling_shareholder","type":["null","int"],"default":null},{"name":"equity_holding_path","type":["null","string"],"default":null},{"name":"create_time","type":["null",{"type":"long","logicalType":"timestamp-millis"}],"default":null},{"name":"update_time","type":["null",{"type":"long","logicalType":"timestamp-millis"}],"default":null},{"name":"is_deleted","type":["null","int"],"default":null},{"name":"op_ts","type":["null",{"type":"long","logicalType":"timestamp-millis"}],"default":null}]}

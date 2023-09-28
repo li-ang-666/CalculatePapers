@@ -13,7 +13,7 @@ CREATE TABLE source_table(
   create_time                TIMESTAMP(0),
   update_time                TIMESTAMP(0),
   is_deleted                 SMALLINT,
-  op_ts as CURRENT_TIMESTAMP,
+  op_ts as CAST(NOW() AS TIMESTAMP(0)),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'jdbc',
@@ -46,7 +46,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company046',
+  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company001',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'bucket',
@@ -55,6 +55,6 @@ create table ratio_path_company(
   'write.operation' = 'bulk_insert',
   'write.bulk_insert.shuffle_input' = 'false',
   'write.bulk_insert.sort_input' = 'false',
-  'write.tasks' = '128'
+  'write.tasks' = '256'
 );
 insert into ratio_path_company select * from source_table;

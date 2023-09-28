@@ -45,7 +45,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_/ratio_path_company046',
+  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company001',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
@@ -63,9 +63,9 @@ create table ratio_path_company(
   -- compaction
   'compaction.tasks' = '8',
   'compaction.schedule.enabled' = 'true',
-  'compaction.async.enabled' = 'true',
+  'compaction.async.enabled' = 'false',
   'compaction.max_memory' = '128',
-  'compaction.delta_commits' = '10',
+  'compaction.delta_commits' = '3',
   -- clean
   'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
