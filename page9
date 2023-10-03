@@ -45,12 +45,12 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company001',
+  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company004',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
   -- index
-  'index.type' = 'bucket', 
+  'index.type' = 'BUCKET', 
   'hoodie.bucket.index.num.buckets' = '256',
   -- write
   'write.tasks' = '8',
@@ -63,12 +63,13 @@ create table ratio_path_company(
   -- compaction
   'compaction.tasks' = '8',
   'compaction.schedule.enabled' = 'true',
-  'compaction.async.enabled' = 'false',
+  'compaction.async.enabled' = 'true',
   'compaction.max_memory' = '128',
   'compaction.delta_commits' = '3',
   -- clean
   'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
-  'clean.retain_hours' = '72'
+  'clean.retain_hours' = '72',
+  'parquet.avro.readInt96AsFixed' = 'true'
 );
 insert into ratio_path_company select * from source_table;
