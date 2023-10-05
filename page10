@@ -1,5 +1,5 @@
-#Updated at 2023-10-05T16:20:28.713Z
-#Fri Oct 06 00:20:28 CST 2023
+#Updated at 2023-10-05T16:39:04.722Z
+#Fri Oct 06 00:39:04 CST 2023
 hoodie.table.keygenerator.class=org.apache.hudi.keygen.NonpartitionedAvroKeyGenerator
 hoodie.table.precombine.field=op_ts
 hoodie.table.version=6
