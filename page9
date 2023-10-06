@@ -46,7 +46,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company013',
+  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company017',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
@@ -70,8 +70,6 @@ create table ratio_path_company(
   -- clean
   'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
-  'clean.retain_hours' = '72',
-  -- parquet
-  'hoodie.parquet.outputtimestamptype' = 'TIMESTAMP_MILLIS'
+  'clean.retain_hours' = '72'
 );
-insert into ratio_path_company select * from source_table;
+insert into ratio_path_company select cast(id as DECIMAL(20, 0)) id,cast(company_id as BIGINT) company_id,cast(shareholder_id as STRING) shareholder_id,cast(shareholder_entity_type as SMALLINT) shareholder_entity_type,cast(shareholder_name_id as BIGINT) shareholder_name_id,cast(investment_ratio_total as DECIMAL(24, 12)) investment_ratio_total,cast(is_controller as SMALLINT) is_controller,cast(is_ultimate as SMALLINT) is_ultimate,cast(is_big_shareholder as SMALLINT) is_big_shareholder,cast(is_controlling_shareholder as SMALLINT) is_controlling_shareholder,cast(equity_holding_path as STRING) equity_holding_path,cast(create_time as TIMESTAMP(0)) create_time,cast(update_time as TIMESTAMP(0)) update_time,cast(is_deleted as SMALLINT) is_deleted,cast(op_ts as TIMESTAMP(0)) op_ts from source_table;
