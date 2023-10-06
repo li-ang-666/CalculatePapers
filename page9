@@ -46,7 +46,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company011',
+  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company013',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
@@ -70,6 +70,8 @@ create table ratio_path_company(
   -- clean
   'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
-  'clean.retain_hours' = '72'
+  'clean.retain_hours' = '72',
+  -- parquet
+  'hoodie.parquet.outputtimestamptype' = 'TIMESTAMP_MILLIS'
 );
 insert into ratio_path_company select * from source_table;

@@ -46,7 +46,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company011',
+  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company013',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'BUCKET',
@@ -55,6 +55,8 @@ create table ratio_path_company(
   'write.operation' = 'bulk_insert',
   'write.bulk_insert.shuffle_input' = 'false',
   'write.bulk_insert.sort_input' = 'false',
-  'write.tasks' = '128'
+  'write.tasks' = '128',
+  -- parquet
+  'hoodie.parquet.outputtimestamptype' = 'TIMESTAMP_MILLIS'
 );
 insert into ratio_path_company select * from source_table;
