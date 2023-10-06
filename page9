@@ -20,7 +20,8 @@ CREATE TABLE source_table (
   'topic' = 'e1d4c.json.prism_shareholder_path.ratio_path_company',
   'properties.bootstrap.servers' = '10.99.202.90:9092,10.99.206.80:9092,10.99.199.2:9092',
   'properties.group.id' = 'demo-job',
-  'scan.startup.mode' = 'earliest-offset',
+  --'scan.startup.mode' = 'earliest-offset',
+  'scan.startup.mode' = 'latest-offset',
   -- canal
   'format' = 'canal-json',
   'canal-json.ignore-parse-errors' = 'true',
@@ -45,7 +46,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company008',
+  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company011',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
@@ -69,10 +70,6 @@ create table ratio_path_company(
   -- clean
   'clean.async.enabled' = 'true',
   'clean.policy' = 'KEEP_LATEST_BY_HOURS',
-  'clean.retain_hours' = '72',
-  -- parquet
-  'hadoop.parquet.outputTimestampType' = 'TIMESTAMP_MILLIS',
-  'hadoop.parquet.int96AsTimestamp' = 'true',
-  'hadoop.parquet.avro.readInt96AsFixed' = 'true'
+  'clean.retain_hours' = '72'
 );
 insert into ratio_path_company select * from source_table;
