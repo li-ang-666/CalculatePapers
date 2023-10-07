@@ -10,10 +10,10 @@ CREATE TABLE source_table(
   is_big_shareholder         SMALLINT,
   is_controlling_shareholder SMALLINT,
   equity_holding_path        STRING,
-  create_time                TIMESTAMP(0),
-  update_time                TIMESTAMP(0),
+  create_time                TIMESTAMP(3),
+  update_time                TIMESTAMP(3),
   is_deleted                 SMALLINT,
-  op_ts as CAST(NOW() AS TIMESTAMP(0)),
+  op_ts as CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'jdbc',
@@ -39,22 +39,22 @@ create table ratio_path_company(
   is_big_shareholder         SMALLINT,
   is_controlling_shareholder SMALLINT,
   equity_holding_path        STRING,
-  create_time                TIMESTAMP(0),
-  update_time                TIMESTAMP(0),
+  create_time                TIMESTAMP(3),
+  update_time                TIMESTAMP(3),
   is_deleted                 SMALLINT,
-  op_ts                      TIMESTAMP(0),
+  op_ts                      TIMESTAMP(3),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company018',
+  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company005',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'BUCKET',
-  'hoodie.bucket.index.num.buckets' = '256',
+  'hoodie.bucket.index.num.buckets' = '128',
   -- write
   'write.operation' = 'bulk_insert',
   'write.bulk_insert.shuffle_input' = 'false',
   'write.bulk_insert.sort_input' = 'false',
-  'write.tasks' = '128'
+  'write.tasks' = '64'
 );
-insert into ratio_path_company select cast(id as DECIMAL(20, 0)) id,cast(company_id as BIGINT) company_id,cast(shareholder_id as STRING) shareholder_id,cast(shareholder_entity_type as SMALLINT) shareholder_entity_type,cast(shareholder_name_id as BIGINT) shareholder_name_id,cast(investment_ratio_total as DECIMAL(24, 12)) investment_ratio_total,cast(is_controller as SMALLINT) is_controller,cast(is_ultimate as SMALLINT) is_ultimate,cast(is_big_shareholder as SMALLINT) is_big_shareholder,cast(is_controlling_shareholder as SMALLINT) is_controlling_shareholder,cast(equity_holding_path as STRING) equity_holding_path,cast(create_time as TIMESTAMP(0)) create_time,cast(update_time as TIMESTAMP(0)) update_time,cast(is_deleted as SMALLINT) is_deleted,cast(op_ts as TIMESTAMP(0)) op_ts from source_table;
+insert into ratio_path_company select * from source_table;

@@ -10,16 +10,16 @@ CREATE TABLE source_table (
   is_big_shareholder         SMALLINT,
   is_controlling_shareholder SMALLINT,
   equity_holding_path        STRING,
-  create_time                TIMESTAMP(0),
-  update_time                TIMESTAMP(0),
+  create_time                TIMESTAMP(3),
+  update_time                TIMESTAMP(3),
   is_deleted                 SMALLINT,
-  op_ts TIMESTAMP(0) METADATA FROM 'value.ingestion-timestamp' VIRTUAL,
+  op_ts TIMESTAMP(3) METADATA FROM 'value.ingestion-timestamp' VIRTUAL,
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'kafka',
   'topic' = 'e1d4c.json.prism_shareholder_path.ratio_path_company',
   'properties.bootstrap.servers' = '10.99.202.90:9092,10.99.206.80:9092,10.99.199.2:9092',
-  'properties.group.id' = 'demo-job',
+  'properties.group.id' = 'hudi-demo-job',
   'scan.startup.mode' = 'earliest-offset',
   -- canal
   'format' = 'canal-json',
@@ -38,37 +38,35 @@ create table ratio_path_company(
   is_big_shareholder         SMALLINT,
   is_controlling_shareholder SMALLINT,
   equity_holding_path        STRING,
-  create_time                TIMESTAMP(0),
-  update_time                TIMESTAMP(0),
+  create_time                TIMESTAMP(3),
+  update_time                TIMESTAMP(3),
   is_deleted                 SMALLINT,
-  op_ts                      TIMESTAMP(0),
+  op_ts                      TIMESTAMP(3),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/ods_hudi/ratio_path_company018',
+  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company005',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
   -- index
   'index.type' = 'BUCKET', 
-  'hoodie.bucket.index.num.buckets' = '256',
+  'hoodie.bucket.index.num.buckets' = '128',
   -- write
-  'write.tasks' = '8',
+  'write.tasks' = '16',
   'write.task.max.size' = '512',
-  'write.batch.size' = '12',
-  'write.merge.max_memory' = '28',
-  'write.log_block.size' = '128', 
+  'write.batch.size' = '32',
+  'write.log_block.size' = '128',
   'write.precombine' = 'true',
-  'precombine.field' = 'op_ts',
+  'write.precombine.field' = 'op_ts',
   -- compaction
-  'compaction.tasks' = '8',
+  'compaction.tasks' = '16',
   'compaction.schedule.enabled' = 'true',
   'compaction.async.enabled' = 'true',
   'compaction.max_memory' = '128',
-  'compaction.delta_commits' = '2',
+  'compaction.delta_commits' = '10',
   -- clean
   'clean.async.enabled' = 'true',
-  'clean.policy' = 'KEEP_LATEST_BY_HOURS',
-  'clean.retain_hours' = '72'
+  'clean.retain_commits' = '2880'
 );
-insert into ratio_path_company select cast(id as DECIMAL(20, 0)) id,cast(company_id as BIGINT) company_id,cast(shareholder_id as STRING) shareholder_id,cast(shareholder_entity_type as SMALLINT) shareholder_entity_type,cast(shareholder_name_id as BIGINT) shareholder_name_id,cast(investment_ratio_total as DECIMAL(24, 12)) investment_ratio_total,cast(is_controller as SMALLINT) is_controller,cast(is_ultimate as SMALLINT) is_ultimate,cast(is_big_shareholder as SMALLINT) is_big_shareholder,cast(is_controlling_shareholder as SMALLINT) is_controlling_shareholder,cast(equity_holding_path as STRING) equity_holding_path,cast(create_time as TIMESTAMP(0)) create_time,cast(update_time as TIMESTAMP(0)) update_time,cast(is_deleted as SMALLINT) is_deleted,cast(op_ts as TIMESTAMP(0)) op_ts from source_table;
+insert into ratio_path_company select * from source_table;
