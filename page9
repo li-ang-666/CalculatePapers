@@ -45,7 +45,7 @@ create table ratio_path_company(
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company006',
+  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company007',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
@@ -53,18 +53,80 @@ create table ratio_path_company(
   'index.type' = 'BUCKET', 
   'hoodie.bucket.index.num.buckets' = '128',
   -- write
-  'write.tasks' = '4',
+  'write.tasks' = '2',
   'write.task.max.size' = '512',
-  'write.batch.size' = '8',
+  'write.batch.size' = '4',
   'write.log_block.size' = '64',
   'write.precombine' = 'true',
   'write.precombine.field' = 'op_ts',
   -- compaction
   'compaction.schedule.enabled' = 'true',
   'compaction.async.enabled' = 'false',
-  'compaction.delta_commits' = '5',
+  'compaction.delta_commits' = '30',
   -- clean
   'clean.async.enabled' = 'true',
   'clean.retain_commits' = '2880'
 );
 insert into ratio_path_company select * from source_table;
+
+
+#!/bin/bash
+####################################
+#                                  #
+#             variable             #
+#                                  #
+####################################
+# 类名
+export className=DemoJob
+# 配置文件名 config.yml or repair.yml
+export configName=hudi.yml
+
+####################################
+#                                  #
+#              ignore              #
+#                                  #
+####################################
+# flink env
+export FLINK_HOME=/home/hive/flink/flink-1.15.4
+export FLINK_CONF_DIR=/home/hive/flink/flink-conf
+export HADOOP_CLASSPATH=`hadoop classpath`
+# checkpoint dir
+export folderName=$(echo ${className} | sed -E 's/([A-Z])/-\1/g' | sed -E 's/^-//g' | tr 'A-Z' 'a-z')
+# yarn application name
+export jobName=$(if [[ ${configName} == config* ]] ; then echo ${className} ; else echo ${className}RepairTest ; fi)
+# restore dir
+export restoreDir=$(if [[ $1 == hdfs* ]] ; then echo '-s '$1 ; else echo '' ; fi)
+
+####################################
+#                                  #
+#    maybe change Memory or Slot   #
+#                                  #
+##########u#########################
+/home/hive/flink/flink-1.15.4/bin/flink run-application -t yarn-application ${restoreDir} \
+  -D jobmanager.memory.process.size=1g \
+  -D taskmanager.memory.process.size=3g \
+  -D taskmanager.numberOfTaskSlots=2 \
+  -D parallelism.default=1 \
+  -D state.checkpoints.dir=hdfs:///hudi/flink-checkpoints/${folderName} \
+  -D yarn.application.priority=100 \
+  -D yarn.ship-files=${configName} \
+  -D yarn.application.name=HudiTest \
+  -c com.liang.hudi.job.${className} hudi-1.0.jar ${configName}
+
+
+#!/bin/bash
+
+export FLINK_HOME=/home/hive/flink/flink-1.15.4
+export FLINK_CONF_DIR=/home/hive/flink/flink-conf
+export HADOOP_CLASSPATH=`hadoop classpath`
+
+/home/hive/flink/flink-1.15.4/bin/flink run-application -t yarn-application \
+  -D jobmanager.memory.process.size=1g \
+  -D taskmanager.memory.process.size=4g \
+  -D taskmanager.numberOfTaskSlots=8 \
+  -D parallelism.default=1 \
+  -D state.checkpoints.dir=hdfs:///liang/flink-checkpoints/hudi \
+  -D yarn.application.priority=100 \
+  -D yarn.application.name=HudiCompactionTest \
+  -c org.apache.hudi.sink.compact.HoodieFlinkCompactor hudi-1.0.jar --path obs://hadoop-obs/hudi_ods/ratio_path_company007 \
+  --compaction-tasks 128 --compaction-max-memory 256 --service --min-compaction-interval-seconds 30
