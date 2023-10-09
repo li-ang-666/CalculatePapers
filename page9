@@ -76,7 +76,6 @@ create table enterprise(
   'hoodie.bucket.index.num.buckets' = '128',
   -- write
   'write.tasks' = '4',
-  'write.rate.limit' = '10',
   'write.task.max.size' = '512',
   'write.batch.size' = '8',
   'write.log_block.size' = '64',
