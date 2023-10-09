@@ -1,52 +1,74 @@
 CREATE TABLE source_table(
-  id                         DECIMAL(20, 0),
-  company_id                 BIGINT,
-  shareholder_id             STRING,
-  shareholder_entity_type    SMALLINT,
-  shareholder_name_id        BIGINT,
-  investment_ratio_total     DECIMAL(24, 12),
-  is_controller              SMALLINT,
-  is_ultimate                SMALLINT,
-  is_big_shareholder         SMALLINT,
-  is_controlling_shareholder SMALLINT,
-  equity_holding_path        STRING,
-  create_time                TIMESTAMP(3),
-  update_time                TIMESTAMP(3),
-  is_deleted                 SMALLINT,
+  id                DECIMAL(20,0),
+  graph_id          BIGINT,
+  base              STRING,
+  name              STRING,
+  legal_person_id   BIGINT,
+  legal_person_name STRING,
+  legal_person_type INT,
+  code              STRING,
+  reg_number        STRING,
+  company_org_type  STRING,
+  reg_location      STRING,
+  establish_date    DATE,
+  from_date         DATE,
+  to_date           DATE,
+  business_scope    STRING,
+  reg_institute     STRING,
+  approved_date     DATE,
+  reg_status        STRING,
+  reg_capital       STRING,
+  org_number        STRING,
+  source_flag       STRING,
+  crawled_time      TIMESTAMP(3),
+  deleted           TINYINT,
+  create_time       TIMESTAMP(3),
+  update_time       TIMESTAMP(3),
   op_ts as CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'jdbc',
-  'url' = 'jdbc:mysql://10.99.131.246:3306/company_base',
-  'table-name' = 'ratio_path_company',
+  'url' = 'jdbc:mysql://5673658675c84a3ba5ae7577850f1ed2in01.internal.cn-north-4.mysql.rds.myhuaweicloud.com:3306/prism?useSSL=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false',
+  'table-name' = 'enterprise',
   'username' = 'jdhw_d_data_dml',
   'password' = '2s0^tFa4SLrp72',
   'scan.partition.column' = 'id',
-  'scan.partition.num' = '40000',
+  'scan.partition.num' = '300000',
   'scan.partition.lower-bound' = '1',
-  'scan.partition.upper-bound' = '400000000',
+  'scan.partition.upper-bound' = '3000000000',
   'scan.fetch-size' = '1024'
 );
-create table ratio_path_company(
-  id                         DECIMAL(20, 0),
-  company_id                 BIGINT,
-  shareholder_id             STRING,
-  shareholder_entity_type    SMALLINT,
-  shareholder_name_id        BIGINT,
-  investment_ratio_total     DECIMAL(24, 12),
-  is_controller              SMALLINT,
-  is_ultimate                SMALLINT,
-  is_big_shareholder         SMALLINT,
-  is_controlling_shareholder SMALLINT,
-  equity_holding_path        STRING,
-  create_time                TIMESTAMP(3),
-  update_time                TIMESTAMP(3),
-  is_deleted                 SMALLINT,
-  op_ts                      TIMESTAMP(3),
+create table enterprise(
+  id                DECIMAL(20,0),
+  graph_id          BIGINT,
+  base              STRING,
+  name              STRING,
+  legal_person_id   BIGINT,
+  legal_person_name STRING,
+  legal_person_type INT,
+  code              STRING,
+  reg_number        STRING,
+  company_org_type  STRING,
+  reg_location      STRING,
+  establish_date    DATE,
+  from_date         DATE,
+  to_date           DATE,
+  business_scope    STRING,
+  reg_institute     STRING,
+  approved_date     DATE,
+  reg_status        STRING,
+  reg_capital       STRING,
+  org_number        STRING,
+  source_flag       STRING,
+  crawled_time      TIMESTAMP(3),
+  deleted           TINYINT,
+  create_time       TIMESTAMP(3),
+  update_time       TIMESTAMP(3),
+  op_ts             TIMESTAMP(3),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company007',
+  'path' = 'obs://hadoop-obs/hudi_ods/enterprise001',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
@@ -66,48 +88,4 @@ create table ratio_path_company(
   -- clean
   'clean.async.enabled' = 'false'
 );
-insert into ratio_path_company select * from source_table;
-
-
-#!/bin/bash
-####################################
-#                                  #
-#             variable             #
-#                                  #
-####################################
-# 类名
-export className=DemoJob
-# 配置文件名 config.yml or repair.yml
-export configName=hudi.yml
-
-####################################
-#                                  #
-#              ignore              #
-#                                  #
-####################################
-# flink env
-export FLINK_HOME=/home/hive/hudi/flink-1.15.4
-export FLINK_CONF_DIR=/home/hive/hudi/flink-conf
-export HADOOP_CLASSPATH=`hadoop classpath`
-# checkpoint dir
-export folderName=$(echo ${className} | sed -E 's/([A-Z])/-\1/g' | sed -E 's/^-//g' | tr 'A-Z' 'a-z')
-# yarn application name
-export jobName=$(if [[ ${configName} == config* ]] ; then echo ${className} ; else echo ${className}RepairTest ; fi)
-# restore dir
-export restoreDir=$(if [[ $1 == hdfs* ]] ; then echo '-s '$1 ; else echo '' ; fi)
-
-####################################
-#                                  #
-#    maybe change Memory or Slot   #
-#                                  #
-####################################
-/home/hive/hudi/flink-1.15.4/bin/flink run-application -t yarn-application ${restoreDir} \
-  -D jobmanager.memory.process.size=1g \
-  -D taskmanager.memory.process.size=4g \
-  -D taskmanager.numberOfTaskSlots=8 \
-  -D parallelism.default=64 \
-  -D state.checkpoints.dir=hdfs:///hudi/flink-checkpoints/${folderName} \
-  -D yarn.application.priority=100 \
-  -D yarn.ship-files=${configName} \
-  -D yarn.application.name=HudiTest \
-  -c com.liang.hudi.job.${className} hudi-1.0.jar ${configName}
+insert into enterprise select * from source_table;

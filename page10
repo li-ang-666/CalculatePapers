@@ -1,9 +1,45 @@
-
-curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
---header 'Content-Type: application/json' \
---data '{
-    "sshUserName": "hudi",
-    "sshPassWord": "Moka20190520",
-    "yarnName": "zyh_hudi_compaction",
-    "isMonitored": 0
-}'
+CREATE TABLE source_table (
+  id                         DECIMAL(20, 0),
+  op_ts TIMESTAMP(3) METADATA FROM 'value.ingestion-timestamp' VIRTUAL,
+  PRIMARY KEY (id) NOT ENFORCED
+) WITH (
+  'connector' = 'kafka',
+  'topic' = '9349c.json.prism.enterprise',
+  'properties.bootstrap.servers' = '10.99.202.90:9092,10.99.206.80:9092,10.99.199.2:9092',
+  'properties.group.id' = 'hudi-demo-job',
+  'scan.startup.mode' = 'earliest-offset',
+  -- canal
+  'format' = 'canal-json',
+  'canal-json.ignore-parse-errors' = 'true',
+  'canal-json.encode.decimal-as-plain-number' = 'true'
+);
+create table ratio_path_company(
+  id                         DECIMAL(20, 0),
+  op_ts                      TIMESTAMP(3),
+  PRIMARY KEY (id) NOT ENFORCED
+) WITH (
+  'connector' = 'hudi',
+  'path' = 'obs://hadoop-obs/hudi_ods/ab_cd_ef002',
+  'table.type' = 'MERGE_ON_READ',
+  -- cdc
+  'changelog.enabled' = 'true',
+  -- index
+  'index.type' = 'BUCKET', 
+  'hoodie.bucket.index.num.buckets' = '128',
+  -- write
+  'write.tasks' = '4',
+  'write.rate.limit' = '25',
+  'write.task.max.size' = '512',
+  'write.batch.size' = '8',
+  'write.log_block.size' = '64',
+  'write.precombine' = 'true',
+  'write.precombine.field' = 'op_ts',
+  -- compaction
+  'compaction.schedule.enabled' = 'true',
+  'compaction.async.enabled' = 'false',
+  'compaction.delta_commits' = '30',
+  -- clean
+  'clean.async.enabled' = 'true',
+  'clean.retain_commits' = '2880'
+);
+insert into ratio_path_company select * from source_table;

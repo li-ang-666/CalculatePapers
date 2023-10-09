@@ -1,23 +1,34 @@
 CREATE TABLE source_table (
-  id                         DECIMAL(20, 0),
-  company_id                 BIGINT,
-  shareholder_id             STRING,
-  shareholder_entity_type    SMALLINT,
-  shareholder_name_id        BIGINT,
-  investment_ratio_total     DECIMAL(24, 12),
-  is_controller              SMALLINT,
-  is_ultimate                SMALLINT,
-  is_big_shareholder         SMALLINT,
-  is_controlling_shareholder SMALLINT,
-  equity_holding_path        STRING,
-  create_time                TIMESTAMP(3),
-  update_time                TIMESTAMP(3),
-  is_deleted                 SMALLINT,
+  id                DECIMAL(20,0),
+  graph_id          BIGINT,
+  base              STRING,
+  name              STRING,
+  legal_person_id   BIGINT,
+  legal_person_name STRING,
+  legal_person_type INT,
+  code              STRING,
+  reg_number        STRING,
+  company_org_type  STRING,
+  reg_location      STRING,
+  establish_date    DATE,
+  from_date         DATE,
+  to_date           DATE,
+  business_scope    STRING,
+  reg_institute     STRING,
+  approved_date     DATE,
+  reg_status        STRING,
+  reg_capital       STRING,
+  org_number        STRING,
+  source_flag       STRING,
+  crawled_time      TIMESTAMP(3),
+  deleted           TINYINT,
+  create_time       TIMESTAMP(3),
+  update_time       TIMESTAMP(3),
   op_ts TIMESTAMP(3) METADATA FROM 'value.ingestion-timestamp' VIRTUAL,
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'kafka',
-  'topic' = 'e1d4c.json.prism_shareholder_path.ratio_path_company',
+  'topic' = '56736.json.prism.enterprise',
   'properties.bootstrap.servers' = '10.99.202.90:9092,10.99.206.80:9092,10.99.199.2:9092',
   'properties.group.id' = 'hudi-demo-job',
   'scan.startup.mode' = 'earliest-offset',
@@ -26,107 +37,57 @@ CREATE TABLE source_table (
   'canal-json.ignore-parse-errors' = 'true',
   'canal-json.encode.decimal-as-plain-number' = 'true'
 );
-create table ratio_path_company(
-  id                         DECIMAL(20, 0),
-  company_id                 BIGINT,
-  shareholder_id             STRING,
-  shareholder_entity_type    SMALLINT,
-  shareholder_name_id        BIGINT,
-  investment_ratio_total     DECIMAL(24, 12),
-  is_controller              SMALLINT,
-  is_ultimate                SMALLINT,
-  is_big_shareholder         SMALLINT,
-  is_controlling_shareholder SMALLINT,
-  equity_holding_path        STRING,
-  create_time                TIMESTAMP(3),
-  update_time                TIMESTAMP(3),
-  is_deleted                 SMALLINT,
-  op_ts                      TIMESTAMP(3),
+create table enterprise(
+  id                DECIMAL(20,0),
+  graph_id          BIGINT,
+  base              STRING,
+  name              STRING,
+  legal_person_id   BIGINT,
+  legal_person_name STRING,
+  legal_person_type INT,
+  code              STRING,
+  reg_number        STRING,
+  company_org_type  STRING,
+  reg_location      STRING,
+  establish_date    DATE,
+  from_date         DATE,
+  to_date           DATE,
+  business_scope    STRING,
+  reg_institute     STRING,
+  approved_date     DATE,
+  reg_status        STRING,
+  reg_capital       STRING,
+  org_number        STRING,
+  source_flag       STRING,
+  crawled_time      TIMESTAMP(3),
+  deleted           TINYINT,
+  create_time       TIMESTAMP(3),
+  update_time       TIMESTAMP(3),
+  op_ts             TIMESTAMP(3),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company007',
+  'path' = 'obs://hadoop-obs/hudi_ods/enterprise001',
   'table.type' = 'MERGE_ON_READ',
   -- cdc
   'changelog.enabled' = 'true',
   -- index
-  'index.type' = 'BUCKET', 
+  'index.type' = 'BUCKET',
   'hoodie.bucket.index.num.buckets' = '128',
   -- write
-  'write.tasks' = '2',
+  'write.tasks' = '4',
+  'write.rate.limit' = '10',
   'write.task.max.size' = '512',
-  'write.batch.size' = '4',
+  'write.batch.size' = '8',
   'write.log_block.size' = '64',
   'write.precombine' = 'true',
   'write.precombine.field' = 'op_ts',
   -- compaction
   'compaction.schedule.enabled' = 'true',
-  'compaction.async.enabled' = 'false',
+  'compaction.async.enabled' = 'true',
   'compaction.delta_commits' = '30',
   -- clean
   'clean.async.enabled' = 'true',
   'clean.retain_commits' = '2880'
 );
-insert into ratio_path_company select * from source_table;
-
-
-#!/bin/bash
-####################################
-#                                  #
-#             variable             #
-#                                  #
-####################################
-# 类名
-export className=DemoJob
-# 配置文件名 config.yml or repair.yml
-export configName=hudi.yml
-
-####################################
-#                                  #
-#              ignore              #
-#                                  #
-####################################
-# flink env
-export FLINK_HOME=/home/hive/flink/flink-1.15.4
-export FLINK_CONF_DIR=/home/hive/flink/flink-conf
-export HADOOP_CLASSPATH=`hadoop classpath`
-# checkpoint dir
-export folderName=$(echo ${className} | sed -E 's/([A-Z])/-\1/g' | sed -E 's/^-//g' | tr 'A-Z' 'a-z')
-# yarn application name
-export jobName=$(if [[ ${configName} == config* ]] ; then echo ${className} ; else echo ${className}RepairTest ; fi)
-# restore dir
-export restoreDir=$(if [[ $1 == hdfs* ]] ; then echo '-s '$1 ; else echo '' ; fi)
-
-####################################
-#                                  #
-#    maybe change Memory or Slot   #
-#                                  #
-##########u#########################
-/home/hive/flink/flink-1.15.4/bin/flink run-application -t yarn-application ${restoreDir} \
-  -D jobmanager.memory.process.size=1g \
-  -D taskmanager.memory.process.size=3g \
-  -D taskmanager.numberOfTaskSlots=2 \
-  -D parallelism.default=1 \
-  -D state.checkpoints.dir=hdfs:///hudi/flink-checkpoints/${folderName} \
-  -D yarn.application.priority=100 \
-  -D yarn.ship-files=${configName} \
-  -D yarn.application.name=HudiTest \
-  -c com.liang.hudi.job.${className} hudi-1.0.jar ${configName}
-
-
-#!/bin/bash
-
-export FLINK_HOME=/home/hive/flink/flink-1.15.4
-export FLINK_CONF_DIR=/home/hive/flink/flink-conf
-export HADOOP_CLASSPATH=`hadoop classpath`
-
-/home/hive/flink/flink-1.15.4/bin/flink run-application -t yarn-application \
-  -D jobmanager.memory.process.size=1g \
-  -D taskmanager.memory.process.size=4g \
-  -D taskmanager.numberOfTaskSlots=8 \
-  -D parallelism.default=1 \
-  -D state.checkpoints.dir=hdfs:///liang/flink-checkpoints/hudi \
-  -D yarn.application.priority=100 \
-  -D yarn.application.name=HudiCompactionTest \
-  -c org.apache.hudi.sink.compact.HoodieFlinkCompactor hudi-1.0.jar --path obs://hadoop-obs/hudi_ods/ratio_path_company007 \
-  --compaction-tasks 128 --compaction-max-memory 256 --service --min-compaction-interval-seconds 30
+insert into enterprise select * from source_table;
