@@ -1,0 +1,14 @@
+CREATE TABLE source_table(
+  id decimal(20,0),
+  student_id BIGINT,
+  name STRING,
+  age SMALLINT,
+  class_number INT,
+  is_deleted TINYINT,
+  create_time timestamp(0),
+  update_time timestamp(0),
+  enter_date DATE,
+  PRIMARY KEY (id) NOT ENFORCED
+)
+
+
