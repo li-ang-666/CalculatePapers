@@ -10,10 +10,10 @@ CREATE TABLE ods_ratio_path_company (
   is_big_shareholder         SMALLINT,
   is_controlling_shareholder SMALLINT,
   equity_holding_path        STRING,
-  create_time                TIMESTAMP(6),
-  update_time                TIMESTAMP(6),
+  create_time                TIMESTAMP(3),
+  update_time                TIMESTAMP(3),
   is_deleted                 SMALLINT,
-  op_ts TIMESTAMP(6) METADATA FROM 'op_ts' VIRTUAL,
+  op_ts TIMESTAMP(3) METADATA FROM 'op_ts' VIRTUAL,
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'mysql-cdc',
@@ -39,14 +39,14 @@ CREATE TABLE dwd_ratio_path_company(
   is_big_shareholder         SMALLINT,
   is_controlling_shareholder SMALLINT,
   equity_holding_path        STRING,
-  create_time                TIMESTAMP(6),
-  update_time                TIMESTAMP(6),
+  create_time                TIMESTAMP(3),
+  update_time                TIMESTAMP(3),
   is_deleted                 SMALLINT,
-  op_ts                      TIMESTAMP(6),
+  op_ts                      TIMESTAMP(3),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company005',
+  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company010',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'BUCKET',
@@ -60,13 +60,13 @@ CREATE TABLE dwd_ratio_path_company(
   'write.precombine.field' = 'op_ts',
   -- compaction
   'compaction.async.enabled' = 'false',
-  'compaction.delta_commits' = '3',
+  'compaction.delta_commits' = '20',
   -- clean
   'clean.retain_commits' = '1',
   -- hive
   'hive_sync.enabled' = 'true',
   'hive_sync.db' = 'hudi_ods',
-  'hive_sync.table' = 'ratio_path_company005',
+  'hive_sync.table' = 'ratio_path_company010',
   'hive_sync.metastore.uris' = 'thrift://10.99.202.153:9083',
   'hive_sync.mode' = 'hms',
   'hive_sync.support_timestamp' = 'true'
