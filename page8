@@ -1,52 +1,44 @@
-CREATE TABLE ods_ratio_path_company(
-  id                         DECIMAL(20, 0),
-  company_id                 BIGINT,
-  shareholder_id             STRING,
-  shareholder_entity_type    SMALLINT,
-  shareholder_name_id        BIGINT,
-  investment_ratio_total     DECIMAL(24, 12),
-  is_controller              SMALLINT,
-  is_ultimate                SMALLINT,
-  is_big_shareholder         SMALLINT,
-  is_controlling_shareholder SMALLINT,
-  equity_holding_path        STRING,
-  create_time                TIMESTAMP(3),
-  update_time                TIMESTAMP(3),
-  is_deleted                 SMALLINT,
-  op_ts as CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),
+CREATE TABLE ods(
+  `id` decimal(20,0),
+  `tyc_unique_entity_id` string,
+  `entity_type_id` tinyint,
+  `entity_name_valid` string,
+  `control_graph_data_application_type` string,
+  `total_entity_cnt_through_multi_control_path` int,
+  `min_graph_tier_through_multi_control_path` int,
+  `max_graph_tier_through_multi_control_path` int,
+  `create_time` timestamp(3),
+  `update_time` timestamp(3),
+  `op_ts` as CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'jdbc',
-  'url' = 'jdbc:mysql://10.99.131.246:3306/company_base',
-  'table-name' = 'ratio_path_company',
+  'url' = 'jdbc:mysql://48e2e76353e546a7b86c81dd226af952in01.internal.cn-north-4.mysql.rds.myhuaweicloud.com:3306/bdp_equity',
+  'table-name' = 'control_graph_analysis_through_multi_control_path',
   'username' = 'jdhw_d_data_dml',
   'password' = '2s0^tFa4SLrp72',
   'scan.partition.column' = 'id',
-  'scan.partition.num' = '40000',
+  'scan.partition.num' = '21000',
   'scan.partition.lower-bound' = '1',
-  'scan.partition.upper-bound' = '400000000',
+  'scan.partition.upper-bound' = '208872802',
   'scan.fetch-size' = '1024'
 );
-create table dwd_ratio_path_company(
-  id                         DECIMAL(20, 0),
-  company_id                 BIGINT,
-  shareholder_id             STRING,
-  shareholder_entity_type    SMALLINT,
-  shareholder_name_id        BIGINT,
-  investment_ratio_total     DECIMAL(24, 12),
-  is_controller              SMALLINT,
-  is_ultimate                SMALLINT,
-  is_big_shareholder         SMALLINT,
-  is_controlling_shareholder SMALLINT,
-  equity_holding_path        STRING,
-  create_time                TIMESTAMP(3),
-  update_time                TIMESTAMP(3),
-  is_deleted                 SMALLINT,
-  op_ts                      TIMESTAMP(3),
+create table dwd(
+  `id` decimal(20,0),
+  `tyc_unique_entity_id` string,
+  `entity_type_id` tinyint,
+  `entity_name_valid` string,
+  `control_graph_data_application_type` string,
+  `total_entity_cnt_through_multi_control_path` int,
+  `min_graph_tier_through_multi_control_path` int,
+  `max_graph_tier_through_multi_control_path` int,
+  `create_time` timestamp(3),
+  `update_time` timestamp(3),
+  `op_ts` TIMESTAMP(3),
   PRIMARY KEY (id) NOT ENFORCED
 ) WITH (
   'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company030',
+  'path' = 'obs://hadoop-obs/hudi_ods/control_graph_analysis_through_multi_control_path',
   'table.type' = 'MERGE_ON_READ',
   -- index
   'index.type' = 'BUCKET',
@@ -55,7 +47,7 @@ create table dwd_ratio_path_company(
   'write.operation' = 'bulk_insert',
   'write.bulk_insert.shuffle_input' = 'false',
   'write.bulk_insert.sort_input' = 'false',
-  'write.tasks' = '128',
+  'write.tasks' = '64',
   'write.precombine' = 'true',
   'write.precombine.field' = 'op_ts',
   -- compaction
@@ -66,15 +58,15 @@ create table dwd_ratio_path_company(
   -- hive
   'hive_sync.enabled' = 'true',
   'hive_sync.db' = 'hudi_ods',
-  'hive_sync.table' = 'ratio_path_company030',
+  'hive_sync.table' = 'control_graph_analysis_through_multi_control_path',
   'hive_sync.metastore.uris' = 'thrift://10.99.202.153:9083',
-  'hive_sync.mode' = 'hms'
+  'hive_sync.mode' = 'hms',
+  'hive_sync.skip_ro_suffix' = 'true'
 );
-insert into dwd_ratio_path_company
+insert into dwd
 select
-id,company_id,shareholder_id,shareholder_entity_type,shareholder_name_id,investment_ratio_total,is_controller,is_ultimate,is_big_shareholder,is_controlling_shareholder,equity_holding_path,
+id,tyc_unique_entity_id,entity_type_id,entity_name_valid,control_graph_data_application_type,total_entity_cnt_through_multi_control_path,min_graph_tier_through_multi_control_path,max_graph_tier_through_multi_control_path,
 CAST(CONVERT_TZ(CAST(create_time AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) create_time,
 CAST(CONVERT_TZ(CAST(update_time AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) update_time,
-is_deleted,
 CAST(CONVERT_TZ(CAST(op_ts AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) op_ts
-from ods_ratio_path_company;
+from ods;

@@ -1,24 +1,72 @@
-大家下午好,我是李昂,目前就职于信息服务行业相关的一家互联网公司
-非常荣幸可以借此机会向大家分享Doris使用过程中的一些探索与实践
----------------------------------------------------------------------------------
-那么接下来,我将从以下几个方面介绍Doris在司内的一些成果落地,与经验总结
-第一章探索之路,将宏观介绍引入Doris与数据湖后,数仓架构从Lambda架构到Kappa架构的演进过程
-第二章是关于Doris在C端常态并发下的尝试与应用
-第三章主要介绍Doris通过多源catalog打通hudi、rds等存储,以存算分离的形式打破数据孤岛,推动湖仓流批一体建设的实践
-第四章第五章是引入Doris推动架构演进过程中遇到的经验总结与未来发展规划
----------------------------------------------------------------------------------
-第一章,数仓探索之路
-Doris在我们内部的推广主要分为2个阶段:
-一、
-第一个阶段初步引入Doris,在这一阶段,主要看中的是Doris对Bitmap的天然支持,colocate-join与bucket-join可以提供灵活高性能的多表级联olap分析
-这一阶段的核心诉求是 1... 以及 2...
-二、
-第二个阶段的核心诉求,是随着C端多维展示的逐步完善,希望数分团队可以通过对各维度数据的联合分析,挖掘更多隐藏的维度
-同时希望可以配置一部分SQL模版到C端,也就是在C端部分维度下嵌入实时分析看板
-在这一阶段看中的主要是Doris MOW表高效的读取性能与多源catalog带来的数据湖分析能力
---------------------------------------------------------------------------------
-部门成立于2020年,内部很长一段时间内是划分为实时和离线两个小组
-C端比较看重时效性,toB的一些业务防止竞争对手,主要是通过离线的方式调度T+7、14、30的计算
-22年底,引入了Doris,支撑人群包、优惠券、订单、推送等相关OLAP分析能力
-短短四个月时间,Doris完成了第一阶段上线,第一阶段只有10台BE,单表量级在2.8e,scan阶段谓语吓退后,单表也有百万级
-到了第二阶段,结合catalog完成流批一体改造后,BE规模已经达到了30台
+CREATE TABLE ods(
+  `id` decimal(20,0),
+  `tyc_unique_entity_id` string,
+  `entity_type_id` tinyint,
+  `entity_name_valid` string,
+  `beneficiary_graph_data_application_type` string,
+  `total_entity_cnt_through_multi_beneficiary_path` int,
+  `min_graph_tier_through_multi_beneficiary_path` int,
+  `max_graph_tier_through_multi_beneficiary_path` int,
+  `create_time` timestamp(3),
+  `update_time` timestamp(3),
+  `op_ts` as CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),
+  PRIMARY KEY (id) NOT ENFORCED
+) WITH (
+  'connector' = 'jdbc',
+  'url' = 'jdbc:mysql://48e2e76353e546a7b86c81dd226af952in01.internal.cn-north-4.mysql.rds.myhuaweicloud.com:3306/bdp_equity',
+  'table-name' = 'beneficiary_graph_analysis_through_multi_beneficiary_path',
+  'username' = 'jdhw_d_data_dml',
+  'password' = '2s0^tFa4SLrp72',
+  'scan.partition.column' = 'id',
+  'scan.partition.num' = '45000',
+  'scan.partition.lower-bound' = '1',
+  'scan.partition.upper-bound' = '447762800',
+  'scan.fetch-size' = '1024'
+);
+create table dwd(
+  `id` decimal(20,0),
+  `tyc_unique_entity_id` string,
+  `entity_type_id` tinyint,
+  `entity_name_valid` string,
+  `beneficiary_graph_data_application_type` string,
+  `total_entity_cnt_through_multi_beneficiary_path` int,
+  `min_graph_tier_through_multi_beneficiary_path` int,
+  `max_graph_tier_through_multi_beneficiary_path` int,
+  `create_time` timestamp(3),
+  `update_time` timestamp(3),
+  `op_ts` TIMESTAMP(3),
+  PRIMARY KEY (id) NOT ENFORCED
+) WITH (
+  'connector' = 'hudi',
+  'path' = 'obs://hadoop-obs/hudi_ods/beneficiary_graph_analysis_through_multi_beneficiary_path',
+  'table.type' = 'MERGE_ON_READ',
+  -- index
+  'index.type' = 'BUCKET',
+  'hoodie.bucket.index.num.buckets' = '128',
+  -- write
+  'write.operation' = 'bulk_insert',
+  'write.bulk_insert.shuffle_input' = 'false',
+  'write.bulk_insert.sort_input' = 'false',
+  'write.tasks' = '64',
+  'write.precombine' = 'true',
+  'write.precombine.field' = 'op_ts',
+  -- compaction
+  'compaction.schedule.enabled' = 'false',
+  'compaction.async.enabled' = 'false',
+  -- clean
+  'clean.async.enabled' = 'false',
+  -- hive
+  'hive_sync.enabled' = 'true',
+  'hive_sync.db' = 'hudi_ods',
+  'hive_sync.table' = 'beneficiary_graph_analysis_through_multi_beneficiary_path',
+  'hive_sync.metastore.uris' = 'thrift://10.99.202.153:9083',
+  'hive_sync.mode' = 'hms',
+  'hive_sync.skip_ro_suffix' = 'true'
+);
+insert into dwd
+select
+id,tyc_unique_entity_id,entity_type_id,entity_name_valid,beneficiary_graph_data_application_type,total_entity_cnt_through_multi_beneficiary_path,min_graph_tier_through_multi_beneficiary_path,max_graph_tier_through_multi_beneficiary_path,
+CAST(CONVERT_TZ(CAST(create_time AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) create_time,
+CAST(CONVERT_TZ(CAST(update_time AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) update_time,
+CAST(CONVERT_TZ(CAST(op_ts AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) op_ts
+from ods;
