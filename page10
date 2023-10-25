@@ -31,20 +31,3 @@ CREATE TABLE if not exists `beneficiary_graph_analysis_through_multi_beneficiary
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='受益-多源节点及层数明细表';
 
 ----------------------------------------------------------------------------------------------------------------------
-
-drop table if exists control_graph_analysis_through_multi_control_path;
-CREATE TABLE if not exists `control_graph_analysis_through_multi_control_path` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `tyc_unique_entity_id` varchar(50) DEFAULT NULL COMMENT '实体ID',
-  `entity_type_id` tinyint(4) DEFAULT NULL COMMENT '实体类型 1-企业 2-人物 3-非人非公司',
-  `entity_name_valid` varchar(255) DEFAULT NULL COMMENT '实体名称',
-  `control_graph_data_application_type` varchar(50) DEFAULT NULL COMMENT '实控多源应用分类 实际控制人 or 实际控制权',
-  `total_entity_cnt_through_multi_control_path` int(11) DEFAULT NULL COMMENT '实控图谱上多源节点的实体数量',
-  `min_graph_tier_through_multi_control_path` int(11) DEFAULT NULL COMMENT '实控图谱上多源节点的实体出现的最低层数',
-  `max_graph_tier_through_multi_control_path` int(11) DEFAULT NULL COMMENT '实控图谱上多源节点的实体出现的最高层数',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_company` (`tyc_unique_entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='实控-多源节点及层数明细表';
-

@@ -5,7 +5,7 @@ drop table entity_mainland_general_registration_info_details;
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `tyc_unique_entity_id` varchar(50) COMMENT '实体id',
   `entity_name_valid` varchar(255) COMMENT '实体名称',
-  `entity_type_id` tinyint(4) COMMENT '实体类型',
+  `entity_type_id` tinyint(4) not null default '1' COMMENT '实体类型',
   `register_capital_amount` bigint COMMENT '注册资本数额 精确到分',
   `register_capital_currency` varchar(255) COMMENT '注册资本币种',
   `actual_capital_amount` bigint COMMENT '实缴资本数额 精确到分',
@@ -38,7 +38,7 @@ CREATE TABLE `entity_mainland_public_institution_registration_info_details` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `tyc_unique_entity_id` varchar(50) COMMENT '实体id',
   `entity_name_valid` varchar(255) COMMENT '实体名称',
-  `entity_type_id` tinyint(4) COMMENT '实体类型',
+  `entity_type_id` tinyint(4) not null default '1' COMMENT '实体类型',
   `register_capital_amount` bigint COMMENT '注册资本数额 精确到分',
   `register_capital_currency` varchar(255) COMMENT '注册资本币种',
   `entity_registration_status` varchar(255) COMMENT '登记经营状态',
@@ -137,5 +137,16 @@ CREATE TABLE `ads.ads_entity_operation_development_entity_mainland_public_instit
 
 JAVA_OPTS="-Dsun.security.krb5.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Xss4m -Xmx8192m
 -XX:+UseMembar -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=7 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:SoftRefLRUPolicyMSPerMB=0
+
+
+curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
+--header 'Content-Type: application/json' \
+--data '{
+    "sshUserName": "liang",
+    "sshPassWord": "Moka20190520",
+    "yarnName": "CompanyBaseInfoJob",
+    "isMonitored": 0
+}'
+
 
 
