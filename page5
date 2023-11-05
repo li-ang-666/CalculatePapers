@@ -52,5 +52,12 @@ create table ads.ads_bdp_equity_shareholder_identity_type_details
     update_time                                         timestamp comment '更新时间'
 )partitioned by (pt string);
 
+with t as(
+    select tyc_unique_entity_id company_id from ads.ads_bdp_equity_shareholder_identity_type_details where pt in (20231030,20231031,20231101,20231103) group by tyc_unique_entity_id having count(distinct pt) <> 4
+),
+tt as(
+    select distinct company_id_invested company_id from t_investment_relation where '2023-10-30 00:00:00' <= update_time and update_time <= '2023-11-03 23:00:00'
+)
+select t.company_id from t left join tt on t.company_id = tt.company_id where tt.company_id is null
 
 
