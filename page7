@@ -19,7 +19,7 @@ CREATE TABLE `entity_annual_report_ebusiness_details` (
   `entity_name_valid` varchar(255)  COMMENT '实体名称',
   `entity_type_id` tinyint(4)  COMMENT '实体类型',
   `annual_report_is_ebusiness` tinyint(4) default '1' COMMENT '年报登记是否有网上运营',
-  `annual_report_ebusiness_type` varchar(50)  COMMENT '年报登记的网上运营类型(网站、网店、网页)',
+  `annual_report_ebusiness_type` varchar(50)  COMMENT '年报登记的网上运营类型',
   `annual_report_ebusiness_name` varchar(555)  COMMENT '年报登记的网上运营产品名称',
   `annual_report_ebusiness_website` varchar(555)  COMMENT '年报登记的网址',
   `delete_status` tinyint(4) default '0' COMMENT '删除状态',

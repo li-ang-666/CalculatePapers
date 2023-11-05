@@ -35,7 +35,7 @@ CREATE TABLE `entity_annual_report_shareholder_equity_details` (
   `annual_report_shareholder_capital_source` varchar(255) DEFAULT NULL COMMENT '年报公示股东的出资额(原始值)',
   `annual_report_shareholder_equity_amt` bigint COMMENT '年报公示股东的出资额(精确到分)',
   `annual_report_shareholder_equity_currency` varchar(50)  COMMENT '年报公示股东的出资额单位及币种',
-  `annual_report_shareholder_equity_valid_date` date DEFAULT NULL COMMENT '年报公示股东的出资日期',
+  `annual_report_shareholder_equity_valid_date` date COMMENT '年报公示股东的出资日期',
   `annual_report_shareholder_equity_submission_method` varchar(50)  COMMENT '年报公示股东的出资方式',
   `is_display_annual_report_shareholder_equity_details` tinyint(4) default '1' COMMENT '年报公示股东是否公示',
   `delete_status` tinyint(4) default '0' COMMENT '删除状态',

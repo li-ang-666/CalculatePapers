@@ -26,7 +26,7 @@ CREATE TABLE `entity_annual_report_shareholder_equity_change_details` (
   `annual_report_entity_type_id_shareholder` tinyint(4)  COMMENT '年报公示股东实体类型',
   `annual_report_equity_ratio_before_change` decimal(24,12)  COMMENT '年报公示变更前股权比例',
   `annual_report_equity_ratio_after_change` decimal(24,12)  COMMENT '年报公示变更后股权比例',
-  `annual_report_equity_ratio_change_time` date DEFAULT NULL COMMENT '年报公示股权变更日期',
+  `annual_report_equity_ratio_change_time` date COMMENT '年报公示股权变更日期',
   `is_display_annual_report_equity_ratio_change` tinyint(4) default '1' COMMENT '年报股权变更是否公示',
   `delete_status` tinyint(4) default '0' COMMENT '删除状态',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
