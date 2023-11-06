@@ -1,72 +1,36 @@
-CREATE TABLE ods(
-  `id` decimal(20,0),
-  `tyc_unique_entity_id` string,
-  `entity_type_id` tinyint,
-  `entity_name_valid` string,
-  `beneficiary_graph_data_application_type` string,
-  `total_entity_cnt_through_multi_beneficiary_path` int,
-  `min_graph_tier_through_multi_beneficiary_path` int,
-  `max_graph_tier_through_multi_beneficiary_path` int,
-  `create_time` timestamp(3),
-  `update_time` timestamp(3),
-  `op_ts` as CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),
-  PRIMARY KEY (id) NOT ENFORCED
-) WITH (
-  'connector' = 'jdbc',
-  'url' = 'jdbc:mysql://48e2e76353e546a7b86c81dd226af952in01.internal.cn-north-4.mysql.rds.myhuaweicloud.com:3306/bdp_equity',
-  'table-name' = 'beneficiary_graph_analysis_through_multi_beneficiary_path',
-  'username' = 'jdhw_d_data_dml',
-  'password' = '2s0^tFa4SLrp72',
-  'scan.partition.column' = 'id',
-  'scan.partition.num' = '45000',
-  'scan.partition.lower-bound' = '1',
-  'scan.partition.upper-bound' = '447762800',
-  'scan.fetch-size' = '1024'
-);
-create table dwd(
-  `id` decimal(20,0),
-  `tyc_unique_entity_id` string,
-  `entity_type_id` tinyint,
-  `entity_name_valid` string,
-  `beneficiary_graph_data_application_type` string,
-  `total_entity_cnt_through_multi_beneficiary_path` int,
-  `min_graph_tier_through_multi_beneficiary_path` int,
-  `max_graph_tier_through_multi_beneficiary_path` int,
-  `create_time` timestamp(3),
-  `update_time` timestamp(3),
-  `op_ts` TIMESTAMP(3),
-  PRIMARY KEY (id) NOT ENFORCED
-) WITH (
-  'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_ods/beneficiary_graph_analysis_through_multi_beneficiary_path',
-  'table.type' = 'MERGE_ON_READ',
-  -- index
-  'index.type' = 'BUCKET',
-  'hoodie.bucket.index.num.buckets' = '128',
-  -- write
-  'write.operation' = 'bulk_insert',
-  'write.bulk_insert.shuffle_input' = 'false',
-  'write.bulk_insert.sort_input' = 'false',
-  'write.tasks' = '64',
-  'write.precombine' = 'true',
-  'write.precombine.field' = 'op_ts',
-  -- compaction
-  'compaction.schedule.enabled' = 'false',
-  'compaction.async.enabled' = 'false',
-  -- clean
-  'clean.async.enabled' = 'false',
-  -- hive
-  'hive_sync.enabled' = 'true',
-  'hive_sync.db' = 'hudi_ods',
-  'hive_sync.table' = 'beneficiary_graph_analysis_through_multi_beneficiary_path',
-  'hive_sync.metastore.uris' = 'thrift://10.99.202.153:9083',
-  'hive_sync.mode' = 'hms',
-  'hive_sync.skip_ro_suffix' = 'true'
-);1
-insert into dwd
-select
-id,tyc_unique_entity_id,entity_type_id,entity_name_valid,beneficiary_graph_data_application_type,total_entity_cnt_through_multi_beneficiary_path,min_graph_tier_through_multi_beneficiary_path,max_graph_tier_through_multi_beneficiary_path,
-CAST(CONVERT_TZ(CAST(create_time AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) create_time,
-CAST(CONVERT_TZ(CAST(update_time AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) update_time,
-CAST(CONVERT_TZ(CAST(op_ts AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) op_ts
-from ods;
+select count(distinct id) from ods.ods_prism1_report_equity_change_info_df where pt = '20231105';
+25416816
+
+select count(distinct id) from ods.ods_prism1_report_shareholder_df where pt = '20231105';
+427299910
+
+select count(distinct id) from ods.ods_prism1_report_outbound_investment_df where pt = '20231105';
+9824768
+
+select count(distinct id) from ods.ods_prism1_report_webinfo_df where pt = '20231105';
+12348964
+
+
+
+select count(1) from (select id from ods.ods_prism1_report_shareholder_df where pt = '20231105' group by id)t;
+
+
+
+
+----------------------------------------------
+
+select count(1) from ads.ads_company_base_entity_annual_report_shareholder_equity_change_details where pt = '20231105';
+15734348
+
+select count(1) from ads.ads_company_base_entity_annual_report_shareholder_equity_details where pt = '20231105';
+402803170
+
+select count(1) from ads.ads_company_base_entity_annual_report_investment_details where pt = '20231105';
+8477132
+
+select count(1) from ads.ads_company_base_entity_annual_report_ebusiness_details where pt = '20231105';
+10742074
+
+
+
+

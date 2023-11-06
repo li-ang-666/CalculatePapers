@@ -1,3 +1,23 @@
+drop table ads.ads_prism_shareholder_path_ratio_path_company;
+create table ads.ads_prism_shareholder_path_ratio_path_company
+(
+    id                         bigint,
+    company_id                 bigint,
+    shareholder_id             string,
+    shareholder_entity_type    int,
+    shareholder_name_id        bigint,
+    investment_ratio_total     decimal(24, 12),
+    is_controller              int,
+    is_ultimate                int,
+    is_big_shareholder         int,
+    is_controlling_shareholder int,
+    equity_holding_path        string,
+    create_time                timestamp,
+    update_time                timestamp,
+    is_deleted                 int
+)partitioned by (pt string);
+
+
 drop table ads.ads_bdp_equity_entity_controller_details;
 create table ads.ads_bdp_equity_entity_controller_details
 (
