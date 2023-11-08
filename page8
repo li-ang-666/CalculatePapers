@@ -1,81 +1,31 @@
-CREATE TABLE ods(
-  id                         DECIMAL(20, 0),
-  company_id                 BIGINT,
-  shareholder_id             STRING,
-  shareholder_entity_type    SMALLINT,
-  shareholder_name_id        BIGINT,
-  investment_ratio_total     DECIMAL(24, 12),
-  is_controller              SMALLINT,
-  is_ultimate                SMALLINT,
-  is_big_shareholder         SMALLINT,
-  is_controlling_shareholder SMALLINT,
-  equity_holding_path        STRING,
-  create_time                TIMESTAMP(3),
-  update_time                TIMESTAMP(3),
-  is_deleted                 SMALLINT,
-  op_ts as CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),
-  PRIMARY KEY (id) NOT ENFORCED
-) WITH (
-  'connector' = 'jdbc',
-  'url' = 'jdbc:mysql://10.99.131.246:3306/company_base',
-  'table-name' = 'ratio_path_company',
-  'username' = 'jdhw_d_data_dml',
-  'password' = '2s0^tFa4SLrp72',
-  'scan.partition.column' = 'id',
-  'scan.partition.num' = '40000',
-  'scan.partition.lower-bound' = '1',
-  'scan.partition.upper-bound' = '400000000',
-  'scan.fetch-size' = '1024'
-);
-create table dwd(
-  id                         DECIMAL(20, 0),
-  company_id                 BIGINT,
-  shareholder_id             STRING,
-  shareholder_entity_type    SMALLINT,
-  shareholder_name_id        BIGINT,
-  investment_ratio_total     DECIMAL(24, 12),
-  is_controller              SMALLINT,
-  is_ultimate                SMALLINT,
-  is_big_shareholder         SMALLINT,
-  is_controlling_shareholder SMALLINT,
-  equity_holding_path        STRING,
-  create_time                TIMESTAMP(3),
-  update_time                TIMESTAMP(3),
-  is_deleted                 SMALLINT,
-  op_ts                      TIMESTAMP(3),
-  PRIMARY KEY (id) NOT ENFORCED
-) WITH (
-  'connector' = 'hudi',
-  'path' = 'obs://hadoop-obs/hudi_ods/ratio_path_company_tmp',
-  'table.type' = 'MERGE_ON_READ',
-  -- index
-  'index.type' = 'BUCKET',
-  'hoodie.bucket.index.num.buckets' = '128',
-  -- write
-  'write.operation' = 'bulk_insert',
-  'write.bulk_insert.shuffle_input' = 'false',
-  'write.bulk_insert.sort_input' = 'false',
-  'write.tasks' = '64',
-  'write.precombine' = 'true',
-  'write.precombine.field' = 'op_ts',
-  -- compaction
-  'compaction.schedule.enabled' = 'false',
-  'compaction.async.enabled' = 'false',
-  -- clean
-  'clean.async.enabled' = 'false',
-  -- hive
-  'hive_sync.enabled' = 'true',
-  'hive_sync.db' = 'hudi_ods',
-  'hive_sync.table' = 'ratio_path_company_tmp',
-  'hive_sync.metastore.uris' = 'thrift://10.99.202.153:9083',
-  'hive_sync.mode' = 'hms',
-  'hive_sync.skip_ro_suffix' = 'true'
-);
-insert into dwd
-select
-id,company_id,shareholder_id,shareholder_entity_type,shareholder_name_id,investment_ratio_total,is_controller,is_ultimate,is_big_shareholder,is_controlling_shareholder,equity_holding_path,
-CAST(CONVERT_TZ(CAST(create_time AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) create_time,
-CAST(CONVERT_TZ(CAST(update_time AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) update_time,
-is_deleted,
-CAST(CONVERT_TZ(CAST(op_ts AS STRING), 'Asia/Shanghai', 'UTC') AS TIMESTAMP(3)) op_ts
-from ods;
+drop table if exists control_graph_analysis_through_multi_control_path;
+CREATE TABLE if not exists `control_graph_analysis_through_multi_control_path` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tyc_unique_entity_id` varchar(50) DEFAULT NULL COMMENT '实体ID',
+  `entity_type_id` tinyint(4) DEFAULT NULL COMMENT '实体类型 1-企业 2-人物 3-非人非公司',
+  `entity_name_valid` varchar(255) DEFAULT NULL COMMENT '实体名称',
+  `control_graph_data_application_type` varchar(50) DEFAULT NULL COMMENT '实控多源应用分类 实际控制人 or 实际控制权',
+  `total_entity_cnt_through_multi_control_path` int(11) DEFAULT NULL COMMENT '实控图谱上多源节点的实体数量',
+  `min_graph_tier_through_multi_control_path` int(11) DEFAULT NULL COMMENT '实控图谱上多源节点的实体出现的最低层数',
+  `max_graph_tier_through_multi_control_path` int(11) DEFAULT NULL COMMENT '实控图谱上多源节点的实体出现的最高层数',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_company` (`tyc_unique_entity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='实控-多源节点及层数明细表';
+
+drop table if exists beneficiary_graph_analysis_through_multi_beneficiary_path;
+CREATE TABLE if not exists `beneficiary_graph_analysis_through_multi_beneficiary_path` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tyc_unique_entity_id` varchar(50) DEFAULT NULL COMMENT '实体ID',
+  `entity_type_id` tinyint(4) DEFAULT NULL COMMENT '实体类型 1-企业 2-人物 3-非人非公司',
+  `entity_name_valid` varchar(255) DEFAULT NULL COMMENT '实体名称',
+  `beneficiary_graph_data_application_type` varchar(50) DEFAULT NULL COMMENT '受益多源应用分类 受益所有人 or 受益所有权',
+  `total_entity_cnt_through_multi_beneficiary_path` int(11) DEFAULT NULL COMMENT '受益图谱上多源节点的实体数量',
+  `min_graph_tier_through_multi_beneficiary_path` int(11) DEFAULT NULL COMMENT '受益图谱上多源节点的实体出现的最低层数',
+  `max_graph_tier_through_multi_beneficiary_path` int(11) DEFAULT NULL COMMENT '受益图谱上多源节点的实体出现的最高层数',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_company` (`tyc_unique_entity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='受益-多源节点及层数明细表';
