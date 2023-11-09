@@ -142,9 +142,31 @@ curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
 --data '{
     "sshUserName": "liang",
     "sshPassWord": "Moka20190520",
-    "yarnName": "BdpEquityJob",
+    "yarnName": "DimCountJob",
     "isMonitored": 0
 }'
 
+kafka-topics.sh --describe --bootstrap-server 10.99.202.90:9092 -topic e1d4c.proto.prism_shareholder_path.investment_relation
 
+kafka-configs.sh --alter --bootstrap-server 10.99.202.90:9092 --entity-type topics --entity-name e1d4c.proto.prism_shareholder_path.investment_relation --add-config retention.ms=432000000
 
+#!/bin/bash
+expect << EOF
+  set timeout -1
+
+  spawn ssh -l hive 10.99.194.128
+  expect "password:*"
+        
+  send "hive_tyc\n"
+  expect "$ *"
+  
+  send "cd liang/px-check/\n"
+  expect "$ *"
+  
+  send "./spark-submit.sh\n"
+  expect "$ *"
+
+  send "tail -f log\n"
+  expect "state: RUNNING*"
+EOF
+echo 'SUCCESS!'

@@ -3,3 +3,6 @@ union all
 SELECT '注册' as name, TIMESTAMPDIFF(SECOND, max(register_time), now()) time_stamp from dwd.dwd_user_register_details where register_time >= CURDATE()
 union all
 SELECT '订单' as name, TIMESTAMPDIFF(SECOND, max(create_date), now()) time_stamp from dwd.dwd_order_info where create_date >= CURDATE()
+;
+
+
