@@ -14,7 +14,7 @@ CREATE TABLE if not exists `control_graph_analysis_through_multi_control_path` (
   KEY `idx_company` (`tyc_unique_entity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='实控-多源节点及层数明细表';
 
-drop table if exists beneficiary_graph_analysis_through_multi_beneficiary_path;
+drop table if exists beneficiary_graph_analysis_through_multi_beneficiarypath;
 CREATE TABLE if not exists `beneficiary_graph_analysis_through_multi_beneficiary_path` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `tyc_unique_entity_id` varchar(50) DEFAULT NULL COMMENT '实体ID',
@@ -29,3 +29,4 @@ CREATE TABLE if not exists `beneficiary_graph_analysis_through_multi_beneficiary
   PRIMARY KEY (`id`),
   KEY `idx_company` (`tyc_unique_entity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='受益-多源节点及层数明细表';
+
