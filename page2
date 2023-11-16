@@ -81,3 +81,28 @@ CREATE TABLE ods.ods_entity_enforcement_object_evaluate_institution_candidate_de
 hive_tyc
 
 
+
+128k * 8 parallel * 
+
+
+
+create table test_bitmap(
+
+tag_type varchar(200), --标签名
+
+weight varchar(200), --标签值
+
+uid_bitmap bitmap bitmap_union
+
+)ENGINE=OLAP
+
+AGGREGATE KEY(tag_type, weight)
+
+DISTRIBUTED BY HASH(tag_type, weight) BUCKETS 10
+properties(
+
+"replication_num" = "3",
+
+"in_memory"="false",
+
+"storage_format"="default");
