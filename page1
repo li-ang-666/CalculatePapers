@@ -170,3 +170,37 @@ expect << EOF
   expect "state: RUNNING*"
 EOF
 echo 'SUCCESS!'
+
+
+AQS是什么:
+1.Abstract队列式同步器,是java构建锁和同步的一个抽象类
+2.ReentrantLock、ReentrantReadWriteLock、CountDownLatch、Semaphore里面的Sync内部类,都是AQS的实现
+
+AQS核心成员:
+1. 被volatile修饰的state, 保证可见性
+2. 由内部类Node组成的双向链表, 每个Node包含prev,next,thread,waitStatus, waitStatus代表该线程释放资源后的责任
+
+AQS核心思想:
+1. `state 不同的值` 代表 `lock 不同的状态`
+2. 通过对 state 进行CAS原子替换, 实现锁状态的切换
+3. 通过acquire()请求锁, 请求失败后, 把自己包装成Node, CAS到CLH队列的队尾, 调用LockSupport.park()进入WAITTING状态
+4. 通过release()释放锁, 会将CLH队列的第一个waitStatus!=CANCELLED的线程unpark
+
+ReentrantLock:
+0代表锁没有被持有, 1代表锁被持有, 大于1代表锁被重入
+lock()对应acquice(), unlock()对应release()
+
+ReentrantReadWriteLock:
+0代表锁没有被持有, 高16位代表读锁及其重入次数,低16位代表写锁及其重入次数
+lock()对应acquice(), unlock()对应release()
+
+CountDownLatch:
+N代表还有N个线程没有释放锁, 0代表锁被释放, CLH队列的主线程可以执行
+await()对应acquice(), countDown()对应release()
+
+Semaphore:
+N代表当前有N个permit可被抢占
+acquice()对应acquice(), release()对应release()
+
+
+
