@@ -177,8 +177,8 @@ AQS是什么:
 2.ReentrantLock、ReentrantReadWriteLock、CountDownLatch、Semaphore里面的Sync内部类,都是AQS的实现
 
 AQS核心成员:
-1. 被volatile修饰的state, 保证可见性
-2. 由内部类Node组成的双向链表, 每个Node包含prev,next,thread,waitStatus, waitStatus代表该线程释放资源后的责任
+1. 被volatile修饰的int类型的state字段, 保证可见性
+2. 由内部类Node组成的先进先出的双向链表, 每个Node包含prev,next,thread,waitStatus, waitStatus代表该线程释放资源后的责任
 
 AQS核心思想:
 1. `state 不同的值` 代表 `lock 不同的状态`
