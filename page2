@@ -1,108 +1,33 @@
-drop table entity_enforcement_object_evaluate_institution_candidate_middle;
-CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_middle` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `data_source_trace_id` bigint(20) unsigned NOT NULL DEFAULT '1' COMMENT '爬虫表(zhixinginfo_evaluate)主键',
-  `tyc_unique_entity_id_subject_to_enforcement` varchar(50) NOT NULL DEFAULT '' COMMENT '被执行对象实体id',
-  `entity_name_valid_subject_to_enforcement` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行对象实体名称',
-  `entity_type_id_subject_to_enforcement` tinyint(4) NOT NULL DEFAULT '1' COMMENT '被执行对象实体类型',
-  `tyc_unique_entity_id_candidate_evaluation_institution` varchar(50) NOT NULL DEFAULT '' COMMENT '候选机构实体id',
-  `entity_name_valid_selected_evaluation_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '候选机构实体名称',
-  `entity_type_id_candidate_evaluation_institution` tinyint(4) NOT NULL DEFAULT '1' COMMENT '候选机构实体类型',
-  `enforcement_case_number` varchar(255) NOT NULL DEFAULT '' COMMENT '执行案号清洗',
-  `enforcement_case_number_original` varchar(255) NOT NULL DEFAULT '' COMMENT '执行案号原始',
-  `enforcement_case_type` varchar(255) NOT NULL DEFAULT '' COMMENT '案件类型',
-  `enforcement_object_evaluation_court_name` varchar(255) NOT NULL DEFAULT '' COMMENT '委托法院',
-  `enforcement_object_asset_type` varchar(255) NOT NULL DEFAULT '' COMMENT '财产类型',
-  `enforcement_object_name` varchar(255) NOT NULL DEFAULT '' COMMENT '财产名称',
-  `lottery_date_to_candidate_evaluation_institution` date COMMENT '摇号日期',
-  `is_evaluation_institution_candidate` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否最终选定的机构',
-  `is_state_organs` tinyint(4) NOT NULL DEFAULT '0' COMMENT '被执行实体与候选机构实体是不是国家机关',
-  `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_entity` (`tyc_unique_entity_id_subject_to_enforcement`),
-  KEY `idx_agency` (`tyc_unique_entity_id_candidate_evaluation_institution`),
-  KEY `idx_data_source_trace_id` (`data_source_trace_id`),
-  KEY `idx_obs` (`enforcement_case_number`,`entity_name_valid_selected_evaluation_institution`,`enforcement_object_name`),
-  KEY `idx_is_eventual_evaluation_institution` (`is_evaluation_institution_candidate`),
-  KEY `idx_case_number` (`enforcement_case_number`,`entity_type_id_subject_to_enforcement`,`is_state_organs`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构';
-
-drop table entity_enforcement_object_evaluate_institution_candidate_details;
-CREATE TABLE `entity_enforcement_object_evaluate_institution_candidate_details` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `tyc_unique_entity_id_subject_to_enforcement` varchar(50) NOT NULL DEFAULT '' COMMENT '被执行对象实体ID',
-  `entity_name_valid_subject_to_enforcement` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行对象实体名称',
-  `entity_type_id_subject_to_enforcement` tinyint(4) NOT NULL DEFAULT '1' COMMENT '被执行对象实体类型 1-企业 2-人物 3-非人非公司',
-  `tyc_unique_entity_id_candidate_evaluation_institution` varchar(50) NOT NULL DEFAULT '' COMMENT '询价评估候选机构实体ID',
-  `entity_name_valid_selected_evaluation_institution` varchar(255) NOT NULL DEFAULT '' COMMENT '询价评估候选机构实体名称',
-  `entity_type_id_candidate_evaluation_institution` tinyint(4) NOT NULL DEFAULT '1' COMMENT '询价评估候选机构实体类型 1-企业 2-人物 3-非人非公司',
-  `enforcement_case_number` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行的案号',
-  `enforcement_case_number_original` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行的案号(原始)',
-  `enforcement_case_type` varchar(255) NOT NULL DEFAULT '' COMMENT '被执行案件的案件类型',
-  `enforcement_object_evaluation_court_name` varchar(255) NOT NULL DEFAULT '' COMMENT '询价评估委托的法院',
-  `enforcement_object_asset_type` varchar(255) NOT NULL DEFAULT '' COMMENT '标的物类型',
-  `enforcement_object_name` varchar(255) NOT NULL DEFAULT '' COMMENT '标的物名称',
-  `lottery_date_to_candidate_evaluation_institution` date COMMENT '摇号选定候选评估机构日期',
-  `is_evaluation_institution_candidate` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否最终选定的评估机构 0-否 1-是',
-  `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态 0-正常 1-删除 2-屏蔽',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_entity` (`tyc_unique_entity_id_subject_to_enforcement`),
-  KEY `idx_agency` (`tyc_unique_entity_id_candidate_evaluation_institution`),
-  KEY `idx_case_number` (`enforcement_case_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='询价评估候选机构';
-
-################################### hive ###########################################
-
-drop table ods.ods_entity_enforcement_object_evaluate_institution_candidate_details;
-CREATE TABLE ods.ods_entity_enforcement_object_evaluate_institution_candidate_details (
-  `id` bigint COMMENT '主键',
-  `tyc_unique_entity_id_subject_to_enforcement` string COMMENT '被执行对象实体ID',
-  `entity_name_valid_subject_to_enforcement` string COMMENT '被执行对象实体名称',
-  `entity_type_id_subject_to_enforcement` int COMMENT '被执行对象实体类型 1-企业 2-人物 3-非人非公司',
-  `tyc_unique_entity_id_candidate_evaluation_institution` string COMMENT '询价评估候选机构实体ID',
-  `entity_name_valid_selected_evaluation_institution` string COMMENT '询价评估候选机构实体名称',
-  `entity_type_id_candidate_evaluation_institution` int COMMENT '询价评估候选机构实体类型 1-企业 2-人物 3-非人非公司',
-  `enforcement_case_number` string COMMENT '被执行的案号',
-  `enforcement_case_number_original` string COMMENT '被执行的案号(原始)',
-  `enforcement_case_type` string COMMENT '被执行案件的案件类型',
-  `enforcement_object_evaluation_court_name` string COMMENT '询价评估委托的法院',
-  `enforcement_object_asset_type` string COMMENT '标的物类型',
-  `enforcement_object_name` string COMMENT '标的物名称',
-  `lottery_date_to_candidate_evaluation_institution` date COMMENT '摇号选定候选评估机构日期',
-  `is_evaluation_institution_candidate` int COMMENT '是否最终选定的评估机构 0-否 1-是',
-  `delete_status` int COMMENT '删除状态 0-正常 1-删除 2-屏蔽',
-  `create_time` timestamp COMMENT '创建时间',
-  `update_time` timestamp COMMENT '更新时间'
-) partitioned by (pt string);
-hive_tyc
+主要人员
+./flink-run.sh bulk_insert 157.prism_boss company_human_relation
+./flink-run.sh bulk_insert 157.listed_base company_bond_plates
+./flink-run.sh bulk_insert 041.listed_base senior_executive
+./flink-run.sh bulk_insert 435.company_base personnel
+股东
+./flink-run.sh bulk_insert 430.graph_data company_equity_relation_details
+法人
+./flink-run.sh bulk_insert 435.company_base company_legal_person
 
 
 
-128k * 8 parallel * 
+
+主要人员
+./flink-run.sh upsert 157.prism_boss company_human_relation
+./flink-run.sh upsert 157.listed_base company_bond_plates
+./flink-run.sh upsert 041.listed_base senior_executive
+./flink-run.sh upsert 435.company_base personnel
+股东
+./flink-run.sh upsert 430.graph_data company_equity_relation_details
+法人
+./flink-run.sh upsert 435.company_base company_legal_person
 
 
 
-create table test_bitmap(
 
-tag_type varchar(200), --标签名
+./bulk_insert.sh 457.prism_shareholder_path ratio_path_company
+./upsert.sh 457.prism_shareholder_path ratio_path_company
+./compaction.sh ratio_path_company
 
-weight varchar(200), --标签值
 
-uid_bitmap bitmap bitmap_union
 
-)ENGINE=OLAP
-
-AGGREGATE KEY(tag_type, weight)
-
-DISTRIBUTED BY HASH(tag_type, weight) BUCKETS 10
-properties(
-
-"replication_num" = "3",
-
-"in_memory"="false",
-
-"storage_format"="default");
+--clean-async-enabled --clean-retain-commits 1 --archive-min-commits 2 --archive-max-commits 3
