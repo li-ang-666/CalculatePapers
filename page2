@@ -1,22 +1,28 @@
-主要人员
+# 主要人员
 ./bulk_insert.sh 157.prism_boss company_human_relation
 ./bulk_insert.sh 157.listed_base company_bond_plates
 ./bulk_insert.sh 041.listed_base senior_executive
 ./bulk_insert.sh 435.company_base personnel
-股东
+# 股东
 ./bulk_insert.sh 430.graph_data company_equity_relation_details "reference_pt_year >= 2023"
-法人
+# 法人
 ./bulk_insert.sh 435.company_base company_legal_person
+# 维表
+./bulk_insert.sh 464.prism enterprise
+./bulk_insert.sh 116.prism company_clean_info
 ----------------------------------------------------------------------
-主要人员
+# 主要人员
 ./upsert.sh 157.prism_boss company_human_relation
 ./upsert.sh 157.listed_base company_bond_plates
 ./upsert.sh 041.listed_base senior_executive
 ./upsert.sh 435.company_base personnel
-股东
+# 股东
 ./upsert.sh 430.graph_data company_equity_relation_details "reference_pt_year >= 2023"
-法人
+# 法人
 ./upsert.sh 435.company_base company_legal_person
+# 维表
+./upsert.sh 464.prism enterprise
+./upsert.sh 116.prism company_clean_info
 -----------------------------------------------------------------------
 ./bulk_insert.sh 457.prism_shareholder_path ratio_path_company
 ./upsert.sh 457.prism_shareholder_path ratio_path_company
@@ -29,6 +35,8 @@ drop table company_human_relation;
 drop table company_legal_person;
 drop table personnel;
 drop table senior_executive;
+drop table enterprise;
+drop table company_clean_info;
 
 
 set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
@@ -42,7 +50,13 @@ select 'company_legal_person' tb, count(1) cnt from hudi_ods.company_legal_perso
 union all
 select 'personnel' tb, count(1) cnt from hudi_ods.personnel
 union all
-select 'senior_executive' tb, count(1) cnt from hudi_ods.senior_executive;
+select 'senior_executive' tb, count(1) cnt from hudi_ods.senior_executive
+union all
+select 'enterprise' tb, count(1) cnt from hudi_ods.enterprise
+union all
+select 'company_clean_info' tb, count(1) cnt from hudi_ods.company_clean_info;
 
 
 
+
+mvn install -DskipTests -Pflink-bundle-shade-hive3 -Dflink1.17 -Dspark3.1 -T 10
