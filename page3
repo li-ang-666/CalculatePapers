@@ -1,61 +1,171 @@
-0: jdbc:hive2://10.99.202.153:10000/> show create table ratio_path_company;
-INFO  : State: Compiling.
-INFO  : Compiling command(queryId=omm_20231129174726_4561d9b3-ef10-4f90-835d-1deba4ccd60a): show create table ratio_path_company; Current sessionId=37f45ef6-84f3-454f-a732-574fc3638d70
-INFO  : hive.compile.auto.avoid.cbo=true
-INFO  : Concurrency mode is disabled, not creating a lock manager
-INFO  : Semantic Analysis Completed (retrial = false)
-INFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:createtab_stmt, type:string, comment:from deserializer)], properties:null)
-INFO  : Completed compiling command(queryId=omm_20231129174726_4561d9b3-ef10-4f90-835d-1deba4ccd60a); Time taken: 0.012 seconds
-INFO  : Concurrency mode is disabled, not creating a lock manager
-INFO  : State: Executing.
-INFO  : Executing command(queryId=omm_20231129174726_4561d9b3-ef10-4f90-835d-1deba4ccd60a): show create table ratio_path_company; Current sessionId=37f45ef6-84f3-454f-a732-574fc3638d70
-INFO  : Starting task [Stage-0:DDL] in serial mode
-INFO  : Completed executing command(queryId=omm_20231129174726_4561d9b3-ef10-4f90-835d-1deba4ccd60a); Time taken: 0.011 seconds
-INFO  : OK
-INFO  : Concurrency mode is disabled, not creating a lock manager
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|                                                                                                                                                                                                                                                    createtab_stmt                                                                                                                                                                                                                                                    |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| CREATE EXTERNAL TABLE `ratio_path_company`(                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-|   `_hoodie_commit_time` string COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|   `_hoodie_commit_seqno` string COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-|   `_hoodie_record_key` string COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-|   `_hoodie_partition_path` string COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|   `_hoodie_file_name` string COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-|   `_hoodie_operation` string COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-|   `id` decimal(20,0) COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-|   `company_id` bigint COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|   `shareholder_id` string COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|   `shareholder_entity_type` int COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-|   `shareholder_name_id` bigint COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|   `investment_ratio_total` decimal(24,12) COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|   `is_controller` int COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|   `is_ultimate` int COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|   `is_big_shareholder` int COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|   `is_controlling_shareholder` int COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-|   `equity_holding_path` string COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|   `create_time` timestamp COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|   `update_time` timestamp COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|   `is_deleted` int COMMENT '',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-|   `op_ts` timestamp COMMENT '')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ROW FORMAT SERDE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-|   'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| WITH SERDEPROPERTIES (                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|   'hoodie.query.as.ro.table'='true',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-|   'path'='obs://hadoop-obs/hudi_ods/ratio_path_company')                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| STORED AS INPUTFORMAT                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|   'org.apache.hudi.hadoop.HoodieParquetInputFormat'                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| OUTPUTFORMAT                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-|   'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| LOCATION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-|   'obs://hadoop-obs/hudi_ods/ratio_path_company'                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| TBLPROPERTIES (                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|   'last_commit_completion_time_sync'='20231129174700000',                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-|   'last_commit_time_sync'='20231129174443728',                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-|   'spark.sql.sources.provider'='hudi',                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|   'spark.sql.sources.schema.numParts'='1',                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|   'spark.sql.sources.schema.part.0'='{"type":"struct","fields":[{"name":"_hoodie_commit_time","type":"string","nullable":true,"metadata":{}},{"name":"_hoodie_commit_seqno","type":"string","nullable":true,"metadata":{}},{"name":"_hoodie_record_key","type":"string","nullable":true,"metadata":{}},{"name":"_hoodie_partition_path","type":"string","nullable":true,"metadata":{}},{"name":"_hoodie_file_name","type":"string","nullable":true,"metadata":{}},{"name":"_hoodie_operation","type":"string","nullable":true,"metadata":{}},{"name":"id","type":"decimal(20,0)","nullable":false,"metadata":{}},{"name":"company_id","type":"long","nullable":true,"metadata":{}},{"name":"shareholder_id","type":"string","nullable":true,"metadata":{}},{"name":"shareholder_entity_type","type":"integer","nullable":true,"metadata":{}},{"name":"shareholder_name_id","type":"long","nullable":true,"metadata":{}},{"name":"investment_ratio_total","type":"decimal(24,12)","nullable":true,"metadata":{}},{"name":"is_controller","type":"integer","nullable":true,"metadata":{}},{"name":"is_ultimate","type":"integer","nullable":true,"metadata":{}},{"name":"is_big_shareholder","type":"integer","nullable":true,"metadata":{}},{"name":"is_controlling_shareholder","type":"integer","nullable":true,"metadata":{}},{"name":"equity_holding_path","type":"string","nullable":true,"metadata":{}},{"name":"create_time","type":"timestamp","nullable":true,"metadata":{}},{"name":"update_time","type":"timestamp","nullable":true,"metadata":{}},{"name":"is_deleted","type":"integer","nullable":true,"metadata":{}},{"name":"op_ts","type":"timestamp","nullable":true,"metadata":{}}]}',  |
-|   'transient_lastDdlTime'='1701249046')                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-40 rows selected (0.033 seconds)
-0: jdbc:hive2://10.99.202.153:10000/> 
+set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
+use hudi_ods;
+drop table if exists hudi_ods.cooperation_partner;
+create table if not exists hudi_ods.cooperation_partner(
+  boss_human_pid string comment '老板pid',
+  boss_human_name string comment '老板名称',
+  boss_identity string comment '老板身份',
+  boss_shares bigint comment '老板持股(分)',
+  company_gid bigint comment '公司gid',
+  company_name string comment '公司名称',
+  company_registered_status string comment '公司经营状态',
+  company_registered_capital bigint comment '公司注册资本(分)',
+  s int comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
+  partner_human_pid string comment '合作伙伴pid',
+  partner_human_name string comment '合作伙伴名称',
+  partner_identity string comment '合作伙伴身份',
+  partner_shares string comment '合作伙伴持股(分)',
+  single_cooperation_score int comment '单次合作深度',
+  multi_cooperation_score int comment '综合合作深度',
+  single_cooperation_row_number int comment '单次合作深度排序',
+  multi_cooperation_dense_rank int comment '综合合作深度排序'
+);
+with
+-- 上市公司
+listed_company as(
+  select 
+    company_id
+  from company_bond_plates
+  where listed_status not in (3,5,8,9)
+    and company_id is not null and company_id > 0
+  group by company_id
+),
+-- 上市公司主要人员
+listed_boss as(
+  select
+    t1.company_id company_id,
+    t3.human_pid human_id,
+    max(t1.position_name) identity,
+    0 shares
+  from senior_executive t1
+  join listed_company t2 on t1.company_id = t2.company_id
+  join company_human_relation t3 on t1.company_id = t3.company_graph_id and t1.senior_executive_name = t3.human_name and t3.deleted = 0
+  where t1.company_id is not null and t1.company_id > 0
+    and t3.human_pid is not null and length(t3.human_pid) >= 17
+    and t3.deleted = 0
+    and t1.position_name is not null and t1.position_name <> ''
+  group by t1.company_id, t3.human_pid
+),
+-- 非上市公司主要人员
+not_listed_boss as(
+  select
+    t1.company_id company_id,
+    t1.human_id human_id,
+    max(t1.personnel_position) identity,
+    0 shares
+  from personnel t1
+  left join listed_company t2 on t1.company_id = t2.company_id
+  where t1.company_id is not null and t1.company_id > 0
+    and t1.human_id is not null and length(t1.human_id) >= 17
+    and t1.personnel_position is not null and t1.personnel_position <> ''
+    and t2.company_id is null
+  group by t1.company_id, t1.human_id
+),
+-- 股东
+shareholder as(
+  select
+    company_id_invested company_id,
+    tyc_unique_entity_id_investor human_id,
+    concat('股东(', max(equity_ratio), ')') identity,
+    max(equity_amount) shares
+  from company_equity_relation_details t1
+  where company_id_invested is not null and company_id_invested > 0
+    and tyc_unique_entity_id_investor is not null and length(tyc_unique_entity_id_investor) >= 17
+    and investor_identity_type is not null and investor_identity_type = 1
+    and equity_ratio is not null and equity_ratio > 0
+    and equity_amount is not null and equity_amount > 0
+    and reference_pt_year is not null and reference_pt_year = 2023
+  group by company_id_invested, tyc_unique_entity_id_investor
+),
+-- 法人
+legal as(
+  select
+    company_id,
+    legal_rep_human_id human_id,
+    max(legal_rep_display_name) identity,
+    0 shares
+  from company_legal_person
+  where company_id is not null and company_id > 0
+    and legal_rep_human_id is not null and length(legal_rep_human_id) >= 17
+    and legal_rep_type is not null and legal_rep_type = 2
+    and legal_rep_display_name is not null and legal_rep_display_name <> ''
+  group by company_id, legal_rep_human_id
+),
+-- 拼接
+u as(
+  select company_id, human_id, identity, shares from listed_boss
+  union all
+  select company_id, human_id, identity, shares from not_listed_boss
+  union all
+  select company_id, human_id, identity, shares from shareholder
+  union all
+  select company_id, human_id, identity, shares from legal
+),
+-- 聚合
+group_by_company_boss as(
+  select
+    company_id,
+    human_id,
+    collect_list(identity) identity,
+    sum(shares) shares
+  from u
+  group by company_id, human_id
+),
+-- 维度补全
+dimension_fill as(
+  select
+    t1.company_id,
+    t1.human_id,
+    t1.identity,
+    t1.shares,
+    max(t2.company_name) company_name,
+    max(t2.company_registation_status) company_registered_status,
+    max(t2.register_capital_amt) company_registered_capital,
+    max(t3.human_name) human_name,
+    if(locate('注销', max(t2.company_registation_status)) + locate('吊销', max(t2.company_registation_status)) > 0, 0, 1) s
+  from group_by_company_boss t1
+  join company_index t2 on t1.company_id = t2.company_id
+  join company_human_relation t3 on t1.human_id = t3.human_pid and t3.deleted = 0
+  where t3.human_name is not null and t3.human_name <> ''
+  group by t1.company_id, t1.human_id, t1.identity, t1.shares
+),
+-- 全排列 & 单次合作深度
+cross_join as(
+  select
+    -- 公司
+    t1.company_id company_gid,
+    t1.company_name company_name,
+    t1.company_registered_status company_registered_status,
+    t1.company_registered_capital company_registered_capital,
+    t1.s,
+    -- 老板
+    t1.human_id boss_human_pid,
+    t1.human_name boss_human_name,
+    t1.identity boss_identity,
+    t1.shares boss_shares,
+    -- 伙伴
+    t2.human_id partner_human_pid,
+    t2.human_name partner_human_name,
+    t2.identity partner_identity,
+    t2.shares partner_shares,
+    -- 单次合作深度
+    (t1.s * t1.shares / 3 + 1) * size(t1.identity) + (t1.s * t2.shares / 3 + 1) * size(t2.identity) single_cooperation_score
+  from dimension_fill t1
+  join dimension_fill t2 on t1.company_id = t2.company_id and t1.human_id <> t2.human_id
+),
+-- 综合合作深度 & 单次合作深度排序
+cooperation as(
+  select
+    *,
+    count(1)over(partition by boss_human_pid, partner_human_pid) + sum(single_cooperation_score)over(partition by boss_human_pid, partner_human_pid) multi_cooperation_score,
+    row_number()over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, company_registered_capital desc) single_cooperation_row_number
+  from cross_join
+),
+-- 综合合作深度排序
+final as(
+  select
+    *,
+    dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc) multi_cooperation_dense_rank
+  from cooperation
+)
+insert into hudi_ods.cooperation_partner select * from final;

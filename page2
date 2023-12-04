@@ -60,3 +60,31 @@ select 'company_clean_info' tb, count(1) cnt from hudi_ods.company_clean_info;
 
 
 mvn install -DskipTests -Pflink-bundle-shade-hive3 -Dflink1.17 -Dspark3.1 -T 10
+
+
+hdfs dfs -rm -r /user/hive/.flink/application_*
+hdfs dfs -rm -r /user/hive/.Trash/Current/user/hive/.flink/application_*
+
+
+drop table if exists hudi_ods.cooperation_partner;
+create table if not exists hudi_ods.cooperation_partner(
+  boss_human_pid string comment '老板pid',
+  boss_human_name string comment '老板名称',
+  boss_identity string comment '老板身份',
+  boss_shares bigint comment '老板持股(分)',
+  company_gid bigint comment '公司gid',
+  company_name string comment '公司名称',
+  company_registered_status string comment '公司经营状态',
+  company_registered_capital bigint comment '公司注册资本(分)',
+  s int comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
+  partner_human_pid string comment '合作伙伴pid',
+  partner_human_name string comment '合作伙伴名称',
+  partner_identity string comment '合作伙伴身份',
+  partner_shares string comment '合作伙伴持股(分)',
+  single_cooperation_score int comment '单次合作深度',
+  multi_cooperation_score int comment '综合合作深度',
+  single_cooperation_row_number int comment '单次合作深度排序',
+  multi_cooperation_dense_rank int comment '综合合作深度排序'
+);
+
+
