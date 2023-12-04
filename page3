@@ -1,6 +1,5 @@
 set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
 use hudi_ods;
--- truncate table hudi_ods.cooperation_partner;
 with
 -- 上市公司
 listed_company as(
@@ -152,7 +151,7 @@ cooperation as(
   from cross_join
 ),
 -- 综合合作深度排序
-final_t as(
+final as(
   select
     *,
     dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc, company_registered_capital desc) multi_cooperation_dense_rank
@@ -181,4 +180,4 @@ select
   multi_cooperation_score,
   single_cooperation_row_number,
   multi_cooperation_dense_rank
-from final_t;
+from final;
