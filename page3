@@ -6,7 +6,7 @@ listed_company as(
   select 
     company_id
   from company_bond_plates
-  where listed_status not in (3,5,8,9)
+  where listed_status not in (3, 5, 8, 9)
     and company_id is not null and company_id > 0
   group by company_id
 ),
@@ -146,6 +146,7 @@ cross_join as(
 cooperation as(
   select
     *,
+    count(1)over(partition by boss_human_pid, partner_human_pid) cooperation_times,
     count(1)over(partition by boss_human_pid, partner_human_pid) + sum(single_cooperation_score)over(partition by boss_human_pid, partner_human_pid) multi_cooperation_score,
     row_number()over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc) single_cooperation_row_number
   from cross_join
@@ -176,8 +177,9 @@ select
   concat_ws(' | ', partner_identity) partner_identity,
   partner_shares,
   -- 合作深度
+  cooperation_times,
   single_cooperation_score,
   multi_cooperation_score,
   single_cooperation_row_number,
   multi_cooperation_dense_rank
-from final where multi_cooperation_dense_rank <= 30;
+from final where multi_cooperation_dense_rank <= 9999999;

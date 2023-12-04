@@ -68,19 +68,24 @@ hdfs dfs -rm -r /user/hive/.Trash/Current/user/hive/.flink/application_*
 
 drop table if exists hudi_ods.cooperation_partner;
 create table if not exists hudi_ods.cooperation_partner(
+  -- 老板
   boss_human_pid string comment '老板pid',
   boss_human_name string comment '老板名称',
   boss_identity string comment '老板身份',
   boss_shares decimal(20, 0) comment '老板持股(分)',
+  -- 公司
   company_gid decimal(20, 0) comment '公司gid',
   company_name string comment '公司名称',
   company_registered_status string comment '公司经营状态',
   company_registered_capital decimal(20, 0) comment '公司注册资本(分)',
   s int comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
+  -- 伙伴
   partner_human_pid string comment '合作伙伴pid',
   partner_human_name string comment '合作伙伴名称',
   partner_identity string comment '合作伙伴身份',
   partner_shares string comment '合作伙伴持股(分)',
+  -- 合作深度
+  cooperation_times int comment '合作次数',
   single_cooperation_score decimal(20, 0) comment '单次合作深度',
   multi_cooperation_score decimal(20, 0) comment '综合合作深度',
   single_cooperation_row_number int comment '单次合作深度排序',
