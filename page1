@@ -77,4 +77,10 @@ N代表当前有N个permit可被抢占
 acquice()对应acquice(), release()对应release()
 
 
+with t as(select company_gid,count(1) cnt from cooperation_partner group by company_gid) select * from t order by cnt desc limit 111;
+
+with t as(select boss_human_pid,count(1) cnt from cooperation_partner group by boss_human_pid) select * from t order by cnt desc limit 111;
+
+select count(1) from cooperation_partner
+
 
