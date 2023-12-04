@@ -1,25 +1,6 @@
 set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
 use hudi_ods;
-drop table if exists hudi_ods.cooperation_partner;
-create table if not exists hudi_ods.cooperation_partner(
-  boss_human_pid string comment '老板pid',
-  boss_human_name string comment '老板名称',
-  boss_identity string comment '老板身份',
-  boss_shares bigint comment '老板持股(分)',
-  company_gid bigint comment '公司gid',
-  company_name string comment '公司名称',
-  company_registered_status string comment '公司经营状态',
-  company_registered_capital bigint comment '公司注册资本(分)',
-  s int comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
-  partner_human_pid string comment '合作伙伴pid',
-  partner_human_name string comment '合作伙伴名称',
-  partner_identity string comment '合作伙伴身份',
-  partner_shares string comment '合作伙伴持股(分)',
-  single_cooperation_score int comment '单次合作深度',
-  multi_cooperation_score int comment '综合合作深度',
-  single_cooperation_row_number int comment '单次合作深度排序',
-  multi_cooperation_dense_rank int comment '综合合作深度排序'
-);
+-- truncate table hudi_ods.cooperation_partner;
 with
 -- 上市公司
 listed_company as(
@@ -42,7 +23,6 @@ listed_boss as(
   join company_human_relation t3 on t1.company_id = t3.company_graph_id and t1.senior_executive_name = t3.human_name and t3.deleted = 0
   where t1.company_id is not null and t1.company_id > 0
     and t3.human_pid is not null and length(t3.human_pid) >= 17
-    and t3.deleted = 0
     and t1.position_name is not null and t1.position_name <> ''
   group by t1.company_id, t3.human_pid
 ),
@@ -111,6 +91,17 @@ group_by_company_boss as(
   from u
   group by company_id, human_id
 ),
+-- 老板维表
+dimension_boss as(
+  select
+    human_pid,
+    max(human_name) human_name
+  from company_human_relation
+  where human_pid is not null and length(human_pid) >= 17
+    and human_name is not null and human_name <> ''
+    and deleted is not null and deleted = 0
+  group by human_pid
+),
 -- 维度补全
 dimension_fill as(
   select
@@ -125,8 +116,7 @@ dimension_fill as(
     if(locate('注销', max(t2.company_registation_status)) + locate('吊销', max(t2.company_registation_status)) > 0, 0, 1) s
   from group_by_company_boss t1
   join company_index t2 on t1.company_id = t2.company_id
-  join company_human_relation t3 on t1.human_id = t3.human_pid and t3.deleted = 0
-  where t3.human_name is not null and t3.human_name <> ''
+  join dimension_boss t3 on t1.human_id = t3.human_pid
   group by t1.company_id, t1.human_id, t1.identity, t1.shares
 ),
 -- 全排列 & 单次合作深度
@@ -162,10 +152,33 @@ cooperation as(
   from cross_join
 ),
 -- 综合合作深度排序
-final as(
+final_t as(
   select
     *,
-    dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc) multi_cooperation_dense_rank
+    dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc, company_registered_capital desc) multi_cooperation_dense_rank
   from cooperation
 )
-insert into hudi_ods.cooperation_partner select * from final;
+insert overwrite table hudi_ods.cooperation_partner
+select
+  -- 老板
+  boss_human_pid,
+  boss_human_name,
+  concat_ws(' | ', boss_identity) boss_identity,
+  boss_shares,
+  -- 公司
+  company_gid,
+  company_name,
+  company_registered_status,
+  company_registered_capital,
+  s,
+  -- 伙伴
+  partner_human_pid,
+  partner_human_name,
+  concat_ws(' | ', partner_identity) partner_identity,
+  partner_shares,
+  -- 合作深度
+  single_cooperation_score,
+  multi_cooperation_score,
+  single_cooperation_row_number,
+  multi_cooperation_dense_rank
+from final_t;
