@@ -156,7 +156,7 @@ final as(
   select
     *,
     dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc) multi_cooperation_dense_rank,
-    count(distinct partner_human_pid)over(partition by boss_human_pid) total_partners,
+    count_distinct(partner_human_pid)over(partition by boss_human_pid) total_partners,
     count(1)over(partition by boss_human_pid) cooperation_times_with_all_partner
   from cooperation
 )
@@ -187,4 +187,4 @@ select
   cooperation_times_with_this_partner,
   cooperation_times_with_all_partner,
   total_partners
-from final where multi_cooperation_dense_rank > 0;
+from final;
