@@ -1,0 +1,6 @@
+INSERT INTO dispatch_user_bitmap WITH LABEL label456
+select 456,456,bitmap_count(bitmap_union(user_id_bitmap)),bitmap_union(user_id_bitmap) from dispatch_sub_user_bitmap;
+
+
+
+SHOW TRANSACTION FROM test_db WHERE LABEL = 'label456'\G
