@@ -156,7 +156,7 @@ final as(
   select
     *,
     dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc, cooperation_times_with_this_partner desc, parner_human_name asc) multi_cooperation_dense_rank,
-    count_distinct(partner_human_pid)over(partition by boss_human_pid) total_partners,
+    count(distinct partner_human_pid)over(partition by boss_human_pid) total_partners,
     count(1)over(partition by boss_human_pid) cooperation_times_with_all_partner
   from cooperation
 )
