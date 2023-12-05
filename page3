@@ -182,4 +182,4 @@ select
   multi_cooperation_score,
   single_cooperation_row_number,
   multi_cooperation_dense_rank
-from final where multi_cooperation_dense_rank <= 9999999;
+from final where multi_cooperation_dense_rank > 0;
