@@ -49,7 +49,7 @@ select 'personnel' tb, count(1) cnt from hudi_ods.personnel
 union all
 select 'senior_executive' tb, count(1) cnt from hudi_ods.senior_executive
 union all
-select 'company_index' tb, count(1) cnt from hudi_ods.company_index
+select 'company_index' tb, count(1) cnt from hudi_ods.company_index;
 
 
 
