@@ -22,7 +22,7 @@ listed_boss as(
   join company_human_relation t3 on t1.company_id = t3.company_graph_id and t1.senior_executive_name = t3.human_name and t3.deleted = 0
   where t1.company_id is not null and t1.company_id > 0
     and t3.human_pid is not null and length(t3.human_pid) >= 17
-    and t1.position_name is not null and t1.position_name <> ''
+    and t1.position_name is not null and trim(t1.position_name) <> ''
   group by t1.company_id, t3.human_pid
 ),
 -- 非上市公司主要人员
@@ -36,7 +36,7 @@ not_listed_boss as(
   left join listed_company t2 on t1.company_id = t2.company_id
   where t1.company_id is not null and t1.company_id > 0
     and t1.human_id is not null and length(t1.human_id) >= 17
-    and t1.personnel_position is not null and t1.personnel_position <> ''
+    and t1.personnel_position is not null and trim(t1.personnel_position) <> ''
     and t2.company_id is null
   group by t1.company_id, t1.human_id
 ),
@@ -67,7 +67,7 @@ legal as(
   where company_id is not null and company_id > 0
     and legal_rep_human_id is not null and length(legal_rep_human_id) >= 17
     and legal_rep_type is not null and legal_rep_type = 2
-    and legal_rep_display_name is not null and legal_rep_display_name <> ''
+    and legal_rep_display_name is not null and trim(legal_rep_display_name) <> ''
   group by company_id, legal_rep_human_id
 ),
 -- 拼接
@@ -97,7 +97,7 @@ dimension_boss as(
     max(human_name) human_name
   from company_human_relation
   where human_pid is not null and length(human_pid) >= 17
-    and human_name is not null and human_name <> ''
+    and human_name is not null and trim(human_name) <> ''
     and deleted is not null and deleted = 0
   group by human_pid
 ),
@@ -112,7 +112,7 @@ dimension_fill as(
     max(t2.company_registation_status) company_registered_status,
     max(t2.register_capital_amt) company_registered_capital,
     max(t3.human_name) human_name,
-    if(locate('注销', max(t2.company_registation_status)) + locate('吊销', max(t2.company_registation_status)) > 0, 0, 1) s
+    if(instr(max(t2.company_registation_status), '注销') + instr(max(t2.company_registation_status), '吊销') > 0, 0, 1) s
   from group_by_company_boss t1
   join company_index t2 on t1.company_id = t2.company_id
   join dimension_boss t3 on t1.human_id = t3.human_pid
