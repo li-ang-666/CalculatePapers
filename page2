@@ -76,7 +76,7 @@ create table if not exists hudi_ods.cooperation_partner(
   s int comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
   -- 伙伴
   partner_human_pid string comment '合作伙伴pid',
-  partner_human_name string comment '合作伙伴名称',1
+  partner_human_name string comment '合作伙伴名称',
   partner_identity string comment '合作伙伴身份',
   partner_shares decimal(20, 0) comment '合作伙伴持股(分)',
   -- 合作深度
