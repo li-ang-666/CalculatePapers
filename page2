@@ -8,8 +8,7 @@
 # 法人
 ./bulk_insert.sh 435.company_base company_legal_person
 # 维表
-./bulk_insert.sh 464.prism enterprise
-./bulk_insert.sh 116.prism company_clean_info
+./bulk_insert.sh 435.company_base company_index
 ----------------------------------------------------------------------
 # 主要人员
 ./upsert.sh 157.prism_boss company_human_relation
@@ -21,8 +20,7 @@
 # 法人
 ./upsert.sh 435.company_base company_legal_person
 # 维表
-./upsert.sh 464.prism enterprise
-./upsert.sh 116.prism company_clean_info
+./upsert.sh 435.company_base company_index
 -----------------------------------------------------------------------
 ./bulk_insert.sh 457.prism_shareholder_path ratio_path_company
 ./upsert.sh 457.prism_shareholder_path ratio_path_company
@@ -35,8 +33,7 @@ drop table company_human_relation;
 drop table company_legal_person;
 drop table personnel;
 drop table senior_executive;
-drop table enterprise;
-drop table company_clean_info;
+drop table company_index;
 
 
 set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
@@ -52,9 +49,7 @@ select 'personnel' tb, count(1) cnt from hudi_ods.personnel
 union all
 select 'senior_executive' tb, count(1) cnt from hudi_ods.senior_executive
 union all
-select 'enterprise' tb, count(1) cnt from hudi_ods.enterprise
-union all
-select 'company_clean_info' tb, count(1) cnt from hudi_ods.company_clean_info;
+select 'company_index' tb, count(1) cnt from hudi_ods.company_index
 
 
 
