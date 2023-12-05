@@ -95,7 +95,7 @@ dimension_boss as(
   select
     human_pid,
     max(human_name) human_name,
-    row_number()over(partition by 1) human_dictionary
+    min(id) human_dictionary
   from company_human_relation
   where human_pid is not null and length(human_pid) >= 17
     and human_name is not null and trim(human_name) <> ''
@@ -139,7 +139,7 @@ cross_join as(
     t2.human_name partner_human_name,
     t2.identity partner_identity,
     t2.shares partner_shares,
-    t2.human_dictionary parner_human_dictionary,
+    t2.human_dictionary partner_human_dictionary,
     -- 单次合作深度
     (t1.s * t1.shares / 3 + 1) * size(t1.identity) + (t1.s * t2.shares / 3 + 1) * size(t2.identity) single_cooperation_score
   from dimension_fill t1
@@ -159,7 +159,7 @@ final as(
   select
     *,
     dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc, cooperation_times_with_this_partner desc, partner_human_name asc) multi_cooperation_dense_rank,
-    count_distinct(parner_human_dictionary)over(partition by boss_human_pid) total_partners,
+    count_distinct(partner_human_dictionary)over(partition by boss_human_pid) total_partners,
     count(1)over(partition by boss_human_pid) cooperation_times_with_all_partner
   from cooperation
 )
