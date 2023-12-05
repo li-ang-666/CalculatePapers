@@ -4,3 +4,22 @@ select 456,456,bitmap_count(bitmap_union(user_id_bitmap)),bitmap_union(user_id_b
 
 
 SHOW TRANSACTION FROM test_db WHERE LABEL = 'label456'\G
+
+
+
+
+
+insert into test_db.dispatch_user_bitmap with label `label987` (dispatch_id, create_timestamp, user_id_count, user_id_bitmap)
+select dispatch_id, create_timestamp, bitmap_count(user_id_bitmap), user_id_bitmap
+from ( select 888 as dispatch_id, 1701619200000 as create_timestamp, bitmap_not(ft.user_id_bitmap, st.user_id_bitmap) as user_id_bitmap from ( select bitmap_union(t1.user_id_bitmap) as user_id_bitmap from ( select crowd_id, user_id_bitmap from test_db.crowd_user_bitmap cud where crowd_id in ( 452 ) and create_timestamp = ( select max(create_timestamp) from test_db.crowd_user_bitmap cubz where crowd_id = cud.crowd_id ) order by crowd_id ) t1 ) ft, ( select bitmap_union(t1.user_id_bitmap) as user_id_bitmap from ( select crowd_id, user_id_bitmap from test_db.crowd_user_bitmap cud where 1 != 1 order by crowd_id ) t1 ) st ) tmp
+
+
+
+
+
+
+
+
+
+
+

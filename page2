@@ -27,13 +27,13 @@
 ./compaction.sh ratio_path_company
 
 
-drop table company_bond_plates;
-drop table company_equity_relation_details;
-drop table company_human_relation;
-drop table company_legal_person;
-drop table personnel;
-drop table senior_executive;
-drop table company_index;
+drop table hudi_ods.company_bond_plates;
+drop table hudi_ods.company_equity_relation_details;
+drop table hudi_ods.company_human_relation;
+drop table hudi_ods.company_legal_person;
+drop table hudi_ods.personnel;
+drop table hudi_ods.senior_executive;
+drop table hudi_ods.company_index;
 
 
 set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
