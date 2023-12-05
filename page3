@@ -142,20 +142,22 @@ cross_join as(
   from dimension_fill t1
   join dimension_fill t2 on t1.company_id = t2.company_id and t1.human_id <> t2.human_id
 ),
--- 综合合作深度 & 单次合作深度排序
+-- 合作次数 & 综合合作深度 & 单次合作深度排序
 cooperation as(
   select
     *,
-    count(1)over(partition by boss_human_pid, partner_human_pid) cooperation_times,
+    count(1)over(partition by boss_human_pid, partner_human_pid) cooperation_times_with_this_partner,
     count(1)over(partition by boss_human_pid, partner_human_pid) + sum(single_cooperation_score)over(partition by boss_human_pid, partner_human_pid) multi_cooperation_score,
     row_number()over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc) single_cooperation_row_number
   from cross_join
 ),
--- 综合合作深度排序
+-- 综合合作深度排序 & 总伙伴数 & 总合作次数
 final as(
   select
     *,
-    dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc) multi_cooperation_dense_rank
+    dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc) multi_cooperation_dense_rank,
+    count(distinct partner_human_pid)over(partition by boss_human_pid) total_partners,
+    count(1)over(partition by boss_human_pid) cooperation_times_with_all_partner
   from cooperation
 )
 insert overwrite table hudi_ods.cooperation_partner
@@ -177,9 +179,12 @@ select
   concat_ws(' | ', partner_identity) partner_identity,
   partner_shares,
   -- 合作深度
-  cooperation_times,
   single_cooperation_score,
   multi_cooperation_score,
   single_cooperation_row_number,
-  multi_cooperation_dense_rank
+  multi_cooperation_dense_rank,
+  -- 补加
+  cooperation_times_with_this_partner,
+  cooperation_times_with_all_partner,
+  total_partners
 from final where multi_cooperation_dense_rank > 0;
