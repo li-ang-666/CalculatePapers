@@ -76,7 +76,7 @@ create table if not exists hudi_ods.cooperation_partner(
   s int comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
   -- 伙伴
   partner_human_pid string comment '合作伙伴pid',
-  partner_human_name string comment '合作伙伴名称',
+  partner_human_name string comment '合作伙伴名称',1
   partner_identity string comment '合作伙伴身份',
   partner_shares decimal(20, 0) comment '合作伙伴持股(分)',
   -- 合作深度
@@ -89,12 +89,3 @@ create table if not exists hudi_ods.cooperation_partner(
   cooperation_times_with_all_partner int comment '老板与所有伙伴合作次数',
   total_partners int comment '老板所有合作伙伴数'
 );
-
-
-
-insert into test_db.dispatch_user_bitmap with label `llllaaalll` (dispatch_id, create_timestamp, user_id_count, user_id_bitmap)
-select dispatch_id, create_timestamp, bitmap_count(user_id_bitmap), user_id_bitmap
-from ( select 888 as dispatch_id, 1701619200000 as create_timestamp, bitmap_not(ft.user_id_bitmap, st.user_id_bitmap) as user_id_bitmap from ( select bitmap_union(t1.user_id_bitmap) as user_id_bitmap from ( select crowd_id, user_id_bitmap from test_db.crowd_user_bitmap cud where crowd_id in ( 452 ) and create_timestamp = ( select max(create_timestamp) from test_db.crowd_user_bitmap cubz where crowd_id = cud.crowd_id ) order by crowd_id ) t1 ) ft, ( select bitmap_union(t1.user_id_bitmap) as user_id_bitmap from ( select crowd_id, user_id_bitmap from test_db.crowd_user_bitmap cud where 1 != 1 order by crowd_id ) t1 ) st ) tmp
-
-
-
