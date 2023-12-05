@@ -1,5 +1,3 @@
-set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
-use hudi_ods;
 with
 -- 上市公司
 listed_company as(
@@ -163,7 +161,7 @@ final as(
     count(1)over(partition by boss_human_pid) cooperation_times_with_all_partner
   from cooperation
 )
-insert overwrite table hudi_ods.cooperation_partner
+insert overwrite table hudi_ads.cooperation_partner
 select
   -- 老板
   boss_human_pid,

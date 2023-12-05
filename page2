@@ -61,8 +61,8 @@ hdfs dfs -rm -r /user/hive/.flink/application_*
 hdfs dfs -rm -r /user/hive/.Trash/Current/user/hive/.flink/application_*
 
 
-drop table if exists hudi_ods.cooperation_partner;
-create table if not exists hudi_ods.cooperation_partner(
+drop table if exists hudi_ads.cooperation_partner;
+create table if not exists hudi_ads.cooperation_partner(
   -- 老板
   boss_human_pid string comment '老板pid',
   boss_human_name string comment '老板名称',
