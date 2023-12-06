@@ -127,6 +127,8 @@ create table if not exists company_base.cooperation_partner(
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create_time',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update_time',
   PRIMARY KEY (`id`),
-  KEY `idx_list` (`boss_human_pid`,`multi_cooperation_dense_rank`,`single_cooperation_row_number`),
+  KEY `idx_list` (`boss_human_pid`,`single_cooperation_row_number`),
   KEY `idx_detail` (`boss_human_pid`,`partner_human_pid`)
 );
+
+
