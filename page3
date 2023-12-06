@@ -147,18 +147,19 @@ cross_join as(
 cooperation as(
   select
     *,
-    count(1)over(partition by boss_human_pid, partner_human_pid) cooperation_times_with_this_partner,
-    count(1)over(partition by boss_human_pid, partner_human_pid) + sum(single_cooperation_score)over(partition by boss_human_pid, partner_human_pid) multi_cooperation_score,
-    row_number()over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, s desc, company_registered_capital desc) single_cooperation_row_number
+    count(1)                      over(partition by boss_human_pid, partner_human_pid) cooperation_times_with_this_partner,
+    count(1)                      over(partition by boss_human_pid, partner_human_pid) +
+    sum(single_cooperation_score) over(partition by boss_human_pid, partner_human_pid) multi_cooperation_score,
+    row_number()                  over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, s desc, company_registered_capital desc) single_cooperation_row_number
   from cross_join
 ),
 -- 综合合作深度排序 & 总伙伴数 & 总合作次数
 final as(
   select
     *,
-    dense_rank()over(partition by boss_human_pid order by multi_cooperation_score desc, cooperation_times_with_this_partner desc, partner_human_name asc) multi_cooperation_dense_rank,
-    count_distinct(partner_human_dictionary)over(partition by boss_human_pid) total_partners,
-    count(1)over(partition by boss_human_pid) cooperation_times_with_all_partner
+    dense_rank()                             over(partition by boss_human_pid order by multi_cooperation_score desc, cooperation_times_with_this_partner desc, partner_human_name asc) multi_cooperation_dense_rank,
+    count_distinct(partner_human_dictionary) over(partition by boss_human_pid) total_partners,
+    count(1)                                 over(partition by boss_human_pid) cooperation_times_with_all_partner
   from cooperation
 )
 insert overwrite table hudi_ads.cooperation_partner
