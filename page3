@@ -93,9 +93,11 @@ dimension_boss as(
   select
     human_pid,
     max(human_name) human_name,
+    max(human_graph_id) human_gid,
     min(id) human_dictionary
   from company_human_relation
   where human_pid is not null and length(human_pid) >= 17
+    and human_graph_id is not null and human_graph_id > 0
     and human_name is not null and trim(human_name) <> ''
     and deleted is not null and deleted = 0
   group by human_pid
@@ -111,7 +113,8 @@ dimension_fill as(
     max(t2.company_registation_status) company_registered_status,
     max(t2.register_capital_amt) company_registered_capital,
     max(t3.human_name) human_name,
-    max(t3.human_dictionary) human_dictionary,
+    max(t3.human_gid) human_gid,
+    min(t3.human_dictionary) human_dictionary,
     if(instr(max(t2.company_registation_status), '注销') + instr(max(t2.company_registation_status), '吊销') > 0, 0, 1) s
   from group_by_company_boss t1
   join company_index t2 on t1.company_id = t2.company_id
@@ -128,11 +131,13 @@ cross_join as(
     t1.company_registered_capital company_registered_capital,
     t1.s,
     -- 老板
+    t1.human_gid boss_human_gid,
     t1.human_id boss_human_pid,
     t1.human_name boss_human_name,
     t1.identity boss_identity,
     t1.shares boss_shares,
     -- 伙伴
+    t2.human_gid partner_human_gid,
     t2.human_id partner_human_pid,
     t2.human_name partner_human_name,
     t2.identity partner_identity,
@@ -165,6 +170,7 @@ final as(
 insert overwrite table hudi_ads.cooperation_partner
 select
   -- 老板
+  boss_human_gid,
   boss_human_pid,
   boss_human_name,
   fmt(concat_ws('、', boss_identity)) boss_identity,
@@ -176,6 +182,7 @@ select
   company_registered_capital,
   s,
   -- 伙伴
+  partner_human_gid,
   partner_human_pid,
   partner_human_name,
   fmt(concat_ws('、', partner_identity)) partner_identity,
