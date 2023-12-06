@@ -62,6 +62,7 @@ hdfs dfs -rm -r /user/hive/.Trash/Current/user/hive/.flink/application_*
 
 
 drop table if exists hudi_ads.cooperation_partner;
+drop table if exists hudi_ads.cooperation_partner_tmp;
 create table if not exists hudi_ads.cooperation_partner(
   -- 老板
   boss_human_gid decimal(20, 0) comment '老板gid',
@@ -95,6 +96,7 @@ create table if not exists hudi_ads.cooperation_partner(
 
 
 drop table if exists company_base.cooperation_partner;
+drop table if exists company_base.cooperation_partner_tmp;
 create table if not exists company_base.cooperation_partner(
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
   -- 老板
