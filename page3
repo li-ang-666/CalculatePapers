@@ -150,7 +150,7 @@ cooperation as(
     count(1)                      over(partition by boss_human_pid, partner_human_pid) cooperation_times_with_this_partner,
     count(1)                      over(partition by boss_human_pid, partner_human_pid) +
     sum(single_cooperation_score) over(partition by boss_human_pid, partner_human_pid) multi_cooperation_score,
-    row_number()                  over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, s desc, company_registered_capital desc) single_cooperation_row_number
+    row_number()                  over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, s desc, company_registered_capital desc, company_name asc) single_cooperation_row_number
   from cross_join
 ),
 -- 综合合作深度排序 & 总伙伴数 & 总合作次数
