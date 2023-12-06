@@ -139,7 +139,7 @@ cross_join as(
     t2.shares partner_shares,
     t2.human_dictionary partner_human_dictionary,
     -- 单次合作深度
-    (t1.s * t1.shares / 3 + 1) * size(t1.identity) + (t1.s * t2.shares / 3 + 1) * size(t2.identity) single_cooperation_score
+    (t1.s * if(log10(t1.shares) > 0, log10(t1.shares), 0) / 3 + 1) * size(t1.identity) + (t1.s * if(log10(t2.shares) > 0, log10(t2.shares), 0) / 3 + 1) * size(t2.identity) single_cooperation_score
   from dimension_fill t1
   join dimension_fill t2 on t1.company_id = t2.company_id and t1.human_id <> t2.human_id
 ),
