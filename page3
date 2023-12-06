@@ -84,7 +84,7 @@ group_by_company_boss as(
     company_id,
     human_id,
     collect_list(identity) identity,
-    sum(shares) shares
+    max(shares) shares
   from u
   group by company_id, human_id
 ),
