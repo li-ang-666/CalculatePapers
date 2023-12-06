@@ -167,7 +167,7 @@ select
   -- 老板
   boss_human_pid,
   boss_human_name,
-  regexp_replace(concat_ws('、', boss_identity), ',|和|以及|兼任|兼顾|兼', '、') boss_identity,
+  fmt(concat_ws('、', boss_identity)) boss_identity
   boss_shares,
   -- 公司
   company_gid,
@@ -178,7 +178,7 @@ select
   -- 伙伴
   partner_human_pid,
   partner_human_name,
-  regexp_replace(concat_ws('、', partner_identity), ',|和|以及|兼任|兼顾|兼', '、') partner_identity,
+  fmt(concat_ws('、', partner_identity)) partner_identity
   partner_shares,
   -- 合作深度
   single_cooperation_score,
