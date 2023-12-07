@@ -1,0 +1,18 @@
+select 
+boss_human_gid human_name_id,
+boss_human_pid human_id,
+boss_human_name human_name,
+sum(cooperation_times_with_this_partner) total_cooperation_times,
+count(1) total_partners,
+concat('[',group_concat(json_object(
+    "hid",             partner_human_gid,
+    "hpid",            partner_human_pid,
+    "hname",           partner_human_name,
+    "cid",             company_gid,
+    "cname",           company_name,
+    "cooperation_num", cooperation_times_with_this_partner
+)),']') neighbor
+from cooperation_partner_tmp where boss_human_pid = '509R39600C16V2ZZH' and single_cooperation_row_number = 1
+group by boss_human_gid,boss_human_pid,boss_human_name\G
+
+
