@@ -1,4 +1,5 @@
 
+explain
 select 
   boss_human_gid human_name_id,
   boss_human_pid human_id,
@@ -19,6 +20,8 @@ group by boss_human_gid,boss_human_pid,boss_human_name
 \G
 
 
+
+explain
 select 
   *
 from cooperation_partner_tmp
