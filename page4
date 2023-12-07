@@ -12,7 +12,15 @@ concat('[',group_concat(json_object(
     "cname",           company_name,
     "cooperation_num", cooperation_times_with_this_partner
 )),']') neighbor
-from cooperation_partner_tmp where boss_human_pid = '509R39600C16V2ZZH' and single_cooperation_row_number = 1
+from cooperation_partner_tmp
+where boss_human_pid = '509R39600C16V2ZZH' and single_cooperation_row_number = 1
 group by boss_human_gid,boss_human_pid,boss_human_name\G
+
+
+select 
+*
+from cooperation_partner_tmp
+where boss_human_pid = '509R39600C16V2ZZH' and partner_human_pid = 'P00Y1M100C2HL7LET'
+order by single_cooperation_row_number\G
 
 
