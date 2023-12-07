@@ -90,7 +90,7 @@ create table if not exists hudi_ads.cooperation_partner(
   cooperation_times_with_this_partner int comment '老板与该伙伴合作次数',
   cooperation_times_with_all_partner int comment '老板与所有伙伴合作次数',
   total_partners int comment '老板所有合作伙伴数'
-)partitioned by (pt string comment 'yyyyMMdd');
+)partitioned by (pt int comment 'yyyyMMdd');
 
 
 
@@ -99,7 +99,7 @@ create table if not exists company_base.cooperation_partner(
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
   -- 老板
   boss_human_gid bigint unsigned comment '老板gid',
-  boss_human_pid varchar(255) comment '老板pid',
+  boss_human_pid varchar(50) comment '老板pid',
   boss_human_name varchar(255) comment '老板名称',
   boss_identity varchar(255) comment '老板身份',
   boss_shares bigint unsigned comment '老板持股(分)',
@@ -111,7 +111,7 @@ create table if not exists company_base.cooperation_partner(
   s int comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
   -- 伙伴
   partner_human_gid bigint unsigned comment '合作伙伴gid',
-  partner_human_pid varchar(255) comment '合作伙伴pid',
+  partner_human_pid varchar(50) comment '合作伙伴pid',
   partner_human_name varchar(255) comment '合作伙伴名称',
   partner_identity varchar(255) comment '合作伙伴身份',
   partner_shares bigint unsigned comment '合作伙伴持股(分)',
@@ -124,8 +124,7 @@ create table if not exists company_base.cooperation_partner(
   cooperation_times_with_this_partner int comment '老板与该伙伴合作次数',
   cooperation_times_with_all_partner int comment '老板与所有伙伴合作次数',
   total_partners int comment '老板所有合作伙伴数',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create_time',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update_time',
+  pt int comment 'yyyyMMdd',
   PRIMARY KEY (`id`),
   KEY `idx_list` (`boss_human_pid`,`single_cooperation_row_number`),
   KEY `idx_detail` (`boss_human_pid`,`partner_human_pid`)

@@ -16,7 +16,7 @@ curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
 --data '{
     "sshUserName": "liang",
     "sshPassWord": "Moka20190520",
-    "yarnName": "MultiNodeJob",
+    "yarnName": "AnnualReportJob",
     "isMonitored": 0
 }'
 
