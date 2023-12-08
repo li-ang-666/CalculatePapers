@@ -1,31 +1,3 @@
-# 主要人员
-./bulk_insert.sh 157.prism_boss company_human_relation
-./bulk_insert.sh 157.listed_base company_bond_plates
-./bulk_insert.sh 041.listed_base senior_executive
-./bulk_insert.sh 435.company_base personnel
-# 股东
-./bulk_insert.sh 430.graph_data company_equity_relation_details "reference_pt_year >= 2023"
-# 法人
-./bulk_insert.sh 435.company_base company_legal_person
-# 维表
-./bulk_insert.sh 435.company_base company_index
-----------------------------------------------------------------------
-# 主要人员
-./upsert.sh 157.prism_boss company_human_relation
-./upsert.sh 157.listed_base company_bond_plates
-./upsert.sh 041.listed_base senior_executive
-./upsert.sh 435.company_base personnel
-# 股东
-./upsert.sh 430.graph_data company_equity_relation_details "reference_pt_year >= 2023"
-# 法人
-./upsert.sh 435.company_base company_legal_person
-# 维表
-./upsert.sh 435.company_base company_index
------------------------------------------------------------------------
-./bulk_insert.sh 457.prism_shareholder_path ratio_path_company
-./upsert.sh 457.prism_shareholder_path ratio_path_company
-./compaction.sh ratio_path_company
-
 
 drop table hudi_ods.company_bond_plates;
 drop table hudi_ods.company_equity_relation_details;
@@ -34,7 +6,6 @@ drop table hudi_ods.company_legal_person;
 drop table hudi_ods.personnel;
 drop table hudi_ods.senior_executive;
 drop table hudi_ods.company_index;
-
 
 set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
 select 'company_bond_plates' tb, count(1) cnt from hudi_ods.company_bond_plates
