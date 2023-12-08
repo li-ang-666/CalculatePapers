@@ -50,7 +50,8 @@ create table if not exists hudi_ads.cooperation_partner(
   -- 补加
   cooperation_times_with_this_partner int comment '老板与该伙伴合作次数',
   cooperation_times_with_all_partner int comment '老板与所有伙伴合作次数',
-  total_partners int comment '老板所有合作伙伴数'
+  total_partners int comment '老板所有合作伙伴数',
+  table_id int comment '分表尾缀'
 )partitioned by (pt int comment 'yyyyMMdd');
 
 drop table if exists company_base.cooperation_partner_0;
@@ -84,7 +85,8 @@ create table if not exists company_base.cooperation_partner_0(
   cooperation_times_with_this_partner int comment '老板与该伙伴合作次数',
   cooperation_times_with_all_partner int comment '老板与所有伙伴合作次数',
   total_partners int comment '老板所有合作伙伴数',
-  pt int comment 'yyyyMMdd',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_list` (`boss_human_pid`,`single_cooperation_row_number`),
   KEY `idx_detail` (`boss_human_pid`,`partner_human_pid`)

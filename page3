@@ -194,5 +194,6 @@ select
   -- 补加
   cooperation_times_with_this_partner,
   cooperation_times_with_all_partner,
-  total_partners
+  total_partners,
+  crc32(boss_human_pid) % 2 table_id
 from final
