@@ -31,11 +31,10 @@ not_listed_boss as(
     max(t1.personnel_position) identity,
     0 shares
   from personnel t1
-  left join listed_company t2 on t1.company_id = t2.company_id
+  left anti join listed_company t2 on t1.company_id = t2.company_id
   where t1.company_id is not null and t1.company_id > 0
     and t1.human_id is not null and length(t1.human_id) >= 17
     and t1.personnel_position is not null and trim(t1.personnel_position) <> ''
-    and t2.company_id is null
   group by t1.company_id, t1.human_id
 ),
 -- 股东
