@@ -14,12 +14,9 @@ select
       "cname",           company_name,
       "cooperation_num", cooperation_times_with_this_partner
   ) order by multi_cooperation_dense_rank), ']') neighbor
-from cooperation_partner_tmp
-where boss_human_pid = '509R39600C16V2ZZH' and single_cooperation_row_number = 1
+from (select * from cooperation_partner_tmp where boss_human_pid = '509R39600C16V2ZZH' and single_cooperation_row_number = 1 order by multi_cooperation_dense_rank limit 0,100)t
 group by boss_human_gid,boss_human_pid,boss_human_name
 \G
-
-
 
 explain
 select 
