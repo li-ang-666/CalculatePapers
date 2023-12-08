@@ -1,0 +1,5 @@
+while [[ `cat log | grep 'Shutdown hook called'` == 202* ]] 
+do
+   echo 1
+   sleep 1
+done
