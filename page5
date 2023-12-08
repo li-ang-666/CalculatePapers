@@ -1,5 +1,20 @@
-while [[ `cat log | grep 'Shutdown hook called'` == 202* ]] 
-do
-   echo 1
-   sleep 1
-done
+select max(id) from cooperation_partner_0_tmp
+union all
+select max(id) from cooperation_partner_1_tmp
+union all
+select max(id) from cooperation_partner_2_tmp
+union all
+select max(id) from cooperation_partner_3_tmp
+union all
+select max(id) from cooperation_partner_4_tmp
+union all
+select max(id) from cooperation_partner_5_tmp
+union all
+select max(id) from cooperation_partner_6_tmp
+union all
+select max(id) from cooperation_partner_7_tmp
+union all
+select max(id) from cooperation_partner_8_tmp
+union all
+select max(id) from cooperation_partner_9_tmp
+;
