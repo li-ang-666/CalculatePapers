@@ -195,5 +195,5 @@ select
   cooperation_times_with_this_partner,
   cooperation_times_with_all_partner,
   total_partners,
-  crc32(boss_human_pid)%2 as table_id
+  crc32(boss_human_pid) % 10 table_id
 from final

@@ -56,6 +56,14 @@ create table if not exists hudi_ads.cooperation_partner(
 
 drop table if exists company_base.cooperation_partner_0;
 drop table if exists company_base.cooperation_partner_1;
+drop table if exists company_base.cooperation_partner_2;
+drop table if exists company_base.cooperation_partner_3;
+drop table if exists company_base.cooperation_partner_4;
+drop table if exists company_base.cooperation_partner_5;
+drop table if exists company_base.cooperation_partner_6;
+drop table if exists company_base.cooperation_partner_7;
+drop table if exists company_base.cooperation_partner_8;
+drop table if exists company_base.cooperation_partner_9;
 create table if not exists company_base.cooperation_partner_0(
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
   -- 老板
@@ -92,5 +100,14 @@ create table if not exists company_base.cooperation_partner_0(
   KEY `idx_detail` (`boss_human_pid`,`partner_human_pid`)
 );
 create table if not exists company_base.cooperation_partner_1 like company_base.cooperation_partner_0;
+create table if not exists company_base.cooperation_partner_2 like company_base.cooperation_partner_0;
+create table if not exists company_base.cooperation_partner_3 like company_base.cooperation_partner_0;
+create table if not exists company_base.cooperation_partner_4 like company_base.cooperation_partner_0;
+create table if not exists company_base.cooperation_partner_5 like company_base.cooperation_partner_0;
+create table if not exists company_base.cooperation_partner_6 like company_base.cooperation_partner_0;
+create table if not exists company_base.cooperation_partner_7 like company_base.cooperation_partner_0;
+create table if not exists company_base.cooperation_partner_8 like company_base.cooperation_partner_0;
+create table if not exists company_base.cooperation_partner_9 like company_base.cooperation_partner_0;
+
 
 nohup sh ./spark-submit.sh &
