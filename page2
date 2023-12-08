@@ -89,3 +89,4 @@ create table if not exists company_base.cooperation_partner(
   KEY `idx_detail` (`boss_human_pid`,`partner_human_pid`)
 );
 
+nohup sh ./spark-submit.sh &
