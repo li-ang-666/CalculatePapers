@@ -108,7 +108,7 @@ create table if not exists company_base.cooperation_partner(
   company_name varchar(255) comment '公司名称',
   company_registered_status varchar(255) comment '公司经营状态',
   company_registered_capital bigint unsigned comment '公司注册资本(分)',
-  s int comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
+  s tinyint comment '计算公式中的S, 公司为注吊销, 则为0, 否则为1',
   -- 伙伴
   partner_human_gid bigint unsigned comment '合作伙伴gid',
   partner_human_pid varchar(50) comment '合作伙伴pid',
