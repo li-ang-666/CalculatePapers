@@ -51,16 +51,6 @@ select 'senior_executive' tb, count(1) cnt from hudi_ods.senior_executive
 union all
 select 'company_index' tb, count(1) cnt from hudi_ods.company_index;
 
-
-
-
-mvn clean install -DskipTests -Pflink-bundle-shade-hive3 -Dflink1.17 -Dspark3.1 -T 10
-
-
-hdfs dfs -rm -r /user/hive/.flink/application_*
-hdfs dfs -rm -r /user/hive/.Trash/Current/user/hive/.flink/application_*
-
-
 drop table if exists hudi_ads.cooperation_partner;
 create table if not exists hudi_ads.cooperation_partner(
   -- 老板
@@ -91,8 +81,6 @@ create table if not exists hudi_ads.cooperation_partner(
   cooperation_times_with_all_partner int comment '老板与所有伙伴合作次数',
   total_partners int comment '老板所有合作伙伴数'
 )partitioned by (pt int comment 'yyyyMMdd');
-
-
 
 drop table if exists company_base.cooperation_partner;
 create table if not exists company_base.cooperation_partner(
