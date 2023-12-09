@@ -17,7 +17,7 @@ listed_boss as(
     0 shares
   from senior_executive t1
   join listed_company t2 on t1.company_id = t2.company_id
-  join company_human_relation t3 on t1.company_id = t3.company_graph_id and t1.senior_executive_name = t3.human_name and t3.deleted = 0
+  join company_human_relation t3 on t1.company_id = t3.company_graph_id and t1.senior_executive_name = t3.human_name
   where t1.company_id is not null and t1.company_id > 0
     and t3.human_pid is not null and length(t3.human_pid) >= 17
     and t1.position_name is not null and trim(t1.position_name) <> ''
@@ -98,7 +98,6 @@ dimension_boss as(
   where human_pid is not null and length(human_pid) >= 17
     and human_graph_id is not null and human_graph_id > 0
     and human_name is not null and trim(human_name) <> ''
-    and deleted is not null and deleted = 0
   group by human_pid
 ),
 -- 维度补全
