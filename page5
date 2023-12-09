@@ -18,3 +18,25 @@ select max(id) from cooperation_partner_8_tmp
 union all
 select max(id) from cooperation_partner_9_tmp
 ;
+
+
+select max(id) from cooperation_partner_0
+union all
+select max(id) from cooperation_partner_1
+union all
+select max(id) from cooperation_partner_2
+union all
+select max(id) from cooperation_partner_3
+union all
+select max(id) from cooperation_partner_4
+union all
+select max(id) from cooperation_partner_5
+union all
+select max(id) from cooperation_partner_6
+union all
+select max(id) from cooperation_partner_7
+union all
+select max(id) from cooperation_partner_8
+union all
+select max(id) from cooperation_partner_9
+;
