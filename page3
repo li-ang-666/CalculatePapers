@@ -43,7 +43,7 @@ shareholder as(
     company_id_invested company_id,
     tyc_unique_entity_id_investor human_id,
     concat('股东(持股', max(equity_ratio), ')') identity,
-    max(equity_amount) shares
+    if(max(equity_amount) >= 1, max(equity_amount), 1) shares
   from company_equity_relation_details t1
   where company_id_invested is not null and company_id_invested > 0
     and tyc_unique_entity_id_investor is not null and length(tyc_unique_entity_id_investor) >= 17
