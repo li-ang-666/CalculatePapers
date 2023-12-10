@@ -142,7 +142,10 @@ cross_join as(
     t2.shares partner_shares,
     t2.human_dictionary partner_human_dictionary,
     -- 单次合作深度
-    (t1.s * if(log10(t1.shares) > 0, log10(t1.shares), 0) / 3 + 1) * size(t1.identity) + (t1.s * if(log10(t2.shares) > 0, log10(t2.shares), 0) / 3 + 1) * size(t2.identity) single_cooperation_score
+    cast(
+      (t1.s * if(log10(t1.shares) > 0, log10(t1.shares), 0) / 3 + 1) * size(t1.identity) +
+      (t1.s * if(log10(t2.shares) > 0, log10(t2.shares), 0) / 3 + 1) * size(t2.identity)
+    as decimal(12,4)) single_cooperation_score
   from dimension_fill t1
   join dimension_fill t2 on t1.company_id = t2.company_id and t1.human_id <> t2.human_id
 ),
@@ -150,9 +153,9 @@ cross_join as(
 cooperation as(
   select
     *,
-    count(1)                      over(partition by boss_human_pid, partner_human_pid) cooperation_times_with_this_partner,
-    count(1)                      over(partition by boss_human_pid, partner_human_pid) +
-    sum(single_cooperation_score) over(partition by boss_human_pid, partner_human_pid) multi_cooperation_score,
+    count(1)                      over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, s desc, company_registered_capital desc, company_name asc, company_gid asc) cooperation_times_with_this_partner,
+    count(1)                      over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, s desc, company_registered_capital desc, company_name asc, company_gid asc) +
+    sum(single_cooperation_score) over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, s desc, company_registered_capital desc, company_name asc, company_gid asc) multi_cooperation_score,
     row_number()                  over(partition by boss_human_pid, partner_human_pid order by single_cooperation_score desc, s desc, company_registered_capital desc, company_name asc, company_gid asc) single_cooperation_row_number
   from cross_join
 ),
@@ -161,8 +164,8 @@ final as(
   select
     *,
     dense_rank()                             over(partition by boss_human_pid order by multi_cooperation_score desc, cooperation_times_with_this_partner desc, partner_human_name asc, partner_human_pid asc) multi_cooperation_dense_rank,
-    count_distinct(partner_human_dictionary) over(partition by boss_human_pid) total_partners,
-    count(1)                                 over(partition by boss_human_pid) cooperation_times_with_all_partner
+    count_distinct(partner_human_dictionary) over(partition by boss_human_pid order by multi_cooperation_score desc, cooperation_times_with_this_partner desc, partner_human_name asc, partner_human_pid asc) total_partners,
+    count(1)                                 over(partition by boss_human_pid order by multi_cooperation_score desc, cooperation_times_with_this_partner desc, partner_human_name asc, partner_human_pid asc) cooperation_times_with_all_partner
   from cooperation
 )
 insert overwrite table hudi_ads.cooperation_partner partition(pt = ${pt})
@@ -172,7 +175,7 @@ select
   boss_human_pid,
   boss_human_name,
   fmt(concat_ws('、', boss_identity)) boss_identity,
-  boss_shares,
+  if(boss_shares > 0, boss_shares, NULL),
   -- 公司
   company_gid,
   company_name,
@@ -184,7 +187,7 @@ select
   partner_human_pid,
   partner_human_name,
   fmt(concat_ws('、', partner_identity)) partner_identity,
-  partner_shares,
+  if(partner_shares > 0, partner_shares, NULL),
   -- 合作深度
   single_cooperation_score,
   multi_cooperation_score,
