@@ -43,8 +43,8 @@ create table if not exists hudi_ads.cooperation_partner(
   partner_identity string comment '合作伙伴身份',
   partner_shares decimal(20, 0) comment '合作伙伴持股(分)',
   -- 合作深度
-  single_cooperation_score decimal(24, 4) comment '单次合作深度',
-  multi_cooperation_score decimal(24, 4) comment '综合合作深度',
+  single_cooperation_score decimal(32, 12) comment '单次合作深度',
+  multi_cooperation_score decimal(32, 12) comment '综合合作深度',
   single_cooperation_row_number int comment '单次合作深度排序',
   multi_cooperation_dense_rank int comment '综合合作深度排序',
   -- 补加
@@ -85,8 +85,8 @@ create table if not exists company_base.cooperation_partner_0(
   partner_identity varchar(255) comment '合作伙伴身份',
   partner_shares bigint unsigned comment '合作伙伴持股(分)',
   -- 合作深度
-  single_cooperation_score decimal(24, 4) comment '单次合作深度',
-  multi_cooperation_score decimal(24, 4) comment '综合合作深度',
+  single_cooperation_score decimal(32, 12) comment '单次合作深度',
+  multi_cooperation_score decimal(32, 12) comment '综合合作深度',
   single_cooperation_row_number int comment '单次合作深度排序',
   multi_cooperation_dense_rank int comment '综合合作深度排序',
   -- 补加
