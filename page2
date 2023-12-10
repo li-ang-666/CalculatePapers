@@ -29,7 +29,7 @@ create table if not exists hudi_ads.cooperation_partner(
   boss_human_pid string comment '老板pid',
   boss_human_name string comment '老板名称',
   boss_identity string comment '老板身份',
-  boss_shares decimal(20, 0) comment '老板持股(分)',
+  boss_shares decimal(32, 12) comment '老板持股(分)',
   -- 公司
   company_gid decimal(20, 0) comment '公司gid',
   company_name string comment '公司名称',
@@ -41,7 +41,7 @@ create table if not exists hudi_ads.cooperation_partner(
   partner_human_pid string comment '合作伙伴pid',
   partner_human_name string comment '合作伙伴名称',
   partner_identity string comment '合作伙伴身份',
-  partner_shares decimal(20, 0) comment '合作伙伴持股(分)',
+  partner_shares decimal(32, 12) comment '合作伙伴持股(分)',
   -- 合作深度
   single_cooperation_score decimal(32, 12) comment '单次合作深度',
   multi_cooperation_score decimal(32, 12) comment '综合合作深度',
@@ -71,7 +71,7 @@ create table if not exists company_base.cooperation_partner_0(
   boss_human_pid varchar(50) comment '老板pid',
   boss_human_name varchar(255) comment '老板名称',
   boss_identity varchar(255) comment '老板身份',
-  boss_shares bigint unsigned comment '老板持股(分)',
+  boss_shares decimal(32, 12) comment '老板持股(分)',
   -- 公司
   company_gid bigint unsigned comment '公司gid',
   company_name varchar(255) comment '公司名称',
@@ -83,7 +83,7 @@ create table if not exists company_base.cooperation_partner_0(
   partner_human_pid varchar(50) comment '合作伙伴pid',
   partner_human_name varchar(255) comment '合作伙伴名称',
   partner_identity varchar(255) comment '合作伙伴身份',
-  partner_shares bigint unsigned comment '合作伙伴持股(分)',
+  partner_shares decimal(32, 12) comment '合作伙伴持股(分)',
   -- 合作深度
   single_cooperation_score decimal(32, 12) comment '单次合作深度',
   multi_cooperation_score decimal(32, 12) comment '综合合作深度',
