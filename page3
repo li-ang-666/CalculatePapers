@@ -179,7 +179,7 @@ select
   -- 公司
   company_gid,
   company_name,
-  company_registered_status,
+  if(company_registered_status > 0, company_registered_status, NULL) company_registered_status,
   company_registered_capital,
   s,
   -- 伙伴
