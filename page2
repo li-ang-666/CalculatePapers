@@ -6,6 +6,7 @@ drop table hudi_ods.company_legal_person;
 drop table hudi_ods.personnel;
 drop table hudi_ods.senior_executive;
 drop table hudi_ods.company_index;
+drop table hudi_ods.company_clean_info;
 
 set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
 select 'company_bond_plates' tb, count(1) cnt from hudi_ods.company_bond_plates
@@ -20,7 +21,9 @@ select 'personnel' tb, count(1) cnt from hudi_ods.personnel
 union all
 select 'senior_executive' tb, count(1) cnt from hudi_ods.senior_executive
 union all
-select 'company_index' tb, count(1) cnt from hudi_ods.company_index;
+select 'company_index' tb, count(1) cnt from hudi_ods.company_index
+union all
+select 'company_clean_info' tb, count(1) cnt from hudi_ods.company_clean_info;
 
 drop table if exists hudi_ads.cooperation_partner;
 create table if not exists hudi_ads.cooperation_partner(
