@@ -17,8 +17,7 @@ from (select * from cooperation_partner_9 where boss_human_pid = '509R39600C16V2
 group by boss_human_gid,boss_human_pid,boss_human_name\G
 
 
-select 
-  *
-from cooperation_partner_tmp
+select *
+from cooperation_partner_9
 where boss_human_pid = '509R39600C16V2ZZH' and partner_human_pid = 'P00Y1M100C2HL7LET'
 order by single_cooperation_row_number\G
