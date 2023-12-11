@@ -13,7 +13,7 @@ listed_boss as(
   select
     t1.company_id company_id,
     t3.human_pid human_id,
-    max(t1.position_name) identity,
+    trim(max(t1.position_name)) identity,
     0 shares
   from senior_executive t1
   join listed_company t2 on t1.company_id = t2.company_id
@@ -28,7 +28,7 @@ not_listed_boss as(
   select
     t1.company_id company_id,
     t1.human_id human_id,
-    max(t1.personnel_position) identity,
+    trim(max(t1.personnel_position)) identity,
     0 shares
   from personnel t1
   left anti join listed_company t2 on t1.company_id = t2.company_id
@@ -58,7 +58,7 @@ legal as(
   select
     company_id,
     legal_rep_human_id human_id,
-    max(legal_rep_display_name) identity,
+    trim(max(legal_rep_display_name)) identity,
     0 shares
   from company_legal_person
   where company_id is not null and company_id > 0
@@ -91,7 +91,7 @@ group_by_company_boss as(
 dimension_boss as(
   select
     human_pid,
-    max(human_name) human_name,
+    trim(max(human_name)) human_name,
     max(human_graph_id) human_gid,
     min(id) human_dictionary
   from company_human_relation
@@ -108,12 +108,16 @@ dimension_fill as(
     t1.identity,
     t1.shares,
     max(t2.company_name) company_name,
-    if(max(t4.reg_status) is not null and max(t4.reg_status) <> '', max(t4.reg_status), max(t2.company_registation_status)) company_registered_status,
+    if(max(t4.reg_status) is not null and trim(max(t4.reg_status)) <> '', trim(max(t4.reg_status)),
+      if(max(t2.company_registation_status) is not null and trim(max(t2.company_registation_status)) <> '', trim(max(t2.company_registation_status)), '其他')) company_registered_status,
     max(t2.register_capital_amt) company_registered_capital,
     max(t3.human_name) human_name,
     max(t3.human_gid) human_gid,
     min(t3.human_dictionary) human_dictionary,
-    format_reg_st(if(max(t4.reg_status) is not null and max(t4.reg_status) <> '', max(t4.reg_status), max(t2.company_registation_status))) s
+    format_reg_st(
+      if(max(t4.reg_status) is not null and trim(max(t4.reg_status)) <> '', trim(max(t4.reg_status)),
+        if(max(t2.company_registation_status) is not null and trim(max(t2.company_registation_status)) <> '', trim(max(t2.company_registation_status)), '其他'))
+    ) s
   from group_by_company_boss t1
   join company_index t2 on t1.company_id = t2.company_id
   join company_clean_info t4 on t2.id = t4.id
@@ -175,7 +179,7 @@ select
   boss_human_gid,
   boss_human_pid,
   boss_human_name,
-  fmt(concat_ws('、', boss_identity)) boss_identity,
+  format_identity(concat_ws('、', boss_identity)) boss_identity,
   if(boss_shares > 0, boss_shares, NULL) boss_shares,
   -- 公司
   company_gid,
