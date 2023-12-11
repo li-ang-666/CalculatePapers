@@ -108,14 +108,15 @@ dimension_fill as(
     t1.identity,
     t1.shares,
     max(t2.company_name) company_name,
-    max(t2.company_registation_status) company_registered_status,
+    if(max(t4.reg_status) is not null and max(t4.reg_status) <> '', max(t4.reg_status), max(t2.company_registation_status)) company_registered_status,
     max(t2.register_capital_amt) company_registered_capital,
     max(t3.human_name) human_name,
     max(t3.human_gid) human_gid,
     min(t3.human_dictionary) human_dictionary,
-    if(instr(max(t2.company_registation_status), '注销') + instr(max(t2.company_registation_status), '吊销') > 0, 0, 1) s
+    format_reg_st(if(max(t4.reg_status) is not null and max(t4.reg_status) <> '', max(t4.reg_status), max(t2.company_registation_status))) s
   from group_by_company_boss t1
   join company_index t2 on t1.company_id = t2.company_id
+  join company_clean_info t4 on t2.id = t4.id
   join dimension_boss t3 on t1.human_id = t3.human_pid
   group by t1.company_id, t1.human_id, t1.identity, t1.shares
 ),
@@ -186,7 +187,7 @@ select
   partner_human_gid,
   partner_human_pid,
   partner_human_name,
-  fmt(concat_ws('、', partner_identity)) partner_identity,
+  format_identity(concat_ws('、', partner_identity)) partner_identity,
   if(partner_shares > 0, partner_shares, NULL) partner_shares,
   -- 合作深度
   single_cooperation_score,

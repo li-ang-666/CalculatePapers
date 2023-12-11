@@ -1,5 +1,4 @@
 
-explain
 select 
   boss_human_gid human_name_id,
   boss_human_pid human_id,
@@ -14,14 +13,12 @@ select
       "cname",           company_name,
       "cooperation_num", cooperation_times_with_this_partner
   ) order by multi_cooperation_dense_rank), ']') neighbor
-from (select * from cooperation_partner_tmp where boss_human_pid = '509R39600C16V2ZZH' and single_cooperation_row_number = 1 order by multi_cooperation_dense_rank limit 0,100)t
-group by boss_human_gid,boss_human_pid,boss_human_name
-\G
+from (select * from cooperation_partner_9 where boss_human_pid = '509R39600C16V2ZZH' and single_cooperation_row_number = 1 order by multi_cooperation_dense_rank limit 0,100)t
+group by boss_human_gid,boss_human_pid,boss_human_name\G
 
-explain
+
 select 
   *
 from cooperation_partner_tmp
 where boss_human_pid = '509R39600C16V2ZZH' and partner_human_pid = 'P00Y1M100C2HL7LET'
-order by single_cooperation_row_number
-\G
+order by single_cooperation_row_number\G
