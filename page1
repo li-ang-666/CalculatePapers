@@ -1,0 +1,211 @@
+set state.retention.time.min=24h;
+set state.retention.time.max=36h;
+set execution.checkpointing.interval=180000;
+set execution.checkpointing.timeout=30minute;
+set execution.checkpointing.mode=EXACTLY_ONCE;
+set table.exec.mini-batch.enabled=true;
+set table.exec.mini-batch.allow-latency=10s;
+set table.exec.mini-batch.size=50000;
+-- set table.exec.source.cdc-events-duplicate=true;
+set table.exec.hive.fallback-mapred-reader=true;
+set table.exec.hive.infer-source-parallelism.max=1;
+set table.optimizer.simplify-operator-name-enabled=true;
+set table.optimizer.agg-phase-strategy=TWO_PHASE;
+set table.optimizer.distinct-agg.split.enable=true;
+
+
+
+create table talos_dwm_inv_network_stock_df (
+    node_id int,
+    node_type int,
+    channel string,
+    mihome int,
+    org_code string,
+    org_group_id int,
+    org_level int,
+    org_level_path string,
+    goods_id int,
+    stock_cnt bigint,
+    stock_type string,
+    create_tm string,
+    create_ts bigint,
+    update_tm string,
+    update_ts bigint,
+    etl_tm string,
+    `offset` bigint METADATA FROM 'talos_offset',
+    `changelog` boolean
+-- PRIMARY KEY (node_id, goods_id, stock_type) NOT ENFORCED
+) with (
+    'galaxy.talos.service.endpoint' = 'http://cnbj4-talos.api.xiaomi.net',
+    'topic' = 'talos_dwm_inv_network_stock_df',
+    'connector'='talos',
+    'format'='changelog-json',
+    'sink.partitioner' = 'fixed',
+    'scan.startup.mode' = 'latest-offset',
+    'secret-key-id'='AKIWNUO2PJNE775JW6',
+    'secret-key'='igmoyUy8wv/RSAeQG92ww7O/OLaVJiQZXisfmdf6'
+);
+
+create table talos_dwm_inv_network_stock_offline_df (
+    node_id int,
+    node_type int,
+    channel string,
+    mihome int,
+    org_code string,
+    org_group_id int,
+    org_level int,
+    org_level_path string,
+    goods_id int,
+    stock_cnt bigint,
+    stock_type string,
+    create_tm string,
+    create_ts bigint,
+    update_tm string,
+    update_ts bigint,
+    etl_tm string,
+    `offline_offset` BIGINT METADATA FROM 'talos_offset'
+-- PRIMARY KEY (node_id, goods_id, stock_type) NOT ENFORCED
+) with (
+    'galaxy.talos.service.endpoint' = 'http://cnbj4-talos.api.xiaomi.net',
+    'topic' = 'talos_dwm_inv_network_stock_offline_sink',
+    'connector'='talos',
+    'format'='json',
+    'sink.partitioner' = 'fixed',
+    'scan.startup.mode' = 'latest-offset',
+    'secret-key-id'='AKIWNUO2PJNE775JW6',
+    'secret-key'='igmoyUy8wv/RSAeQG92ww7O/OLaVJiQZXisfmdf6'
+);
+
+CREATE VIEW tmp_dwm_inv_network_stock_df AS (
+    SELECT *, PROCTIME() AS proctime
+    FROM (
+        SELECT *, row_number() OVER(PARTITION BY node_id, goods_id, stock_type ORDER BY update_ts DESC, `offset` DESC, offline_offset DESC) rnk
+        FROM (
+            SELECT 
+                node_id, node_type, channel, mihome, org_code, org_group_id, org_level, org_level_path, goods_id, stock_cnt, stock_type,update_ts,
+                1 AS flg, etl_tm
+                ,'real' AS source, changelog, `offset`, 0 as offline_offset
+            FROM talos_dwm_inv_network_stock_df
+
+            UNION ALL
+            SELECT 
+                node_id, node_type, channel, mihome, org_code, org_group_id, org_level, org_level_path, goods_id, stock_cnt, stock_type,update_ts,
+                2 AS flg, etl_tm
+                ,'offline' AS source, true as  changelog,  9223372036854775807 as `offset`, offline_offset
+            FROM talos_dwm_inv_network_stock_offline_df
+        )
+    )
+    WHERE rnk < 2 
+);
+
+SELECT * from tmp_dwm_inv_network_stock_df;
+
+
+CREATE VIEW tmp_dm_inv_org_stock_df AS (
+    SELECT *, PROCTIME() AS proctime
+    FROM (
+        SELECT
+            channel,
+            org_code,
+            mihome,
+            goods_id,
+            stock_type,
+            sum(stock_cnt) AS stock_cnt,
+            'zjy' AS from_cluster
+        FROM tmp_dwm_inv_network_stock_df
+        GROUP BY 
+            channel,
+            org_code,
+            mihome,
+            goods_id,
+            stock_type
+        )
+);
+
+CREATE VIEW tmp_dm_inv_org_stock_gl_df AS (
+    SELECT
+        channel,
+        mihome,
+        org_code,
+        goods_id,
+        stock_type,
+        stock_cnt,
+        from_cluster,
+        proctime
+    FROM tmp_dm_inv_org_stock_df
+    WHERE stock_type NOT IN ('sale-stock-o',  'over-stock-o', 'adjust-stock-o', 'sale-stock-xmss', 'adjust-stock-xmss')
+);
+
+
+CREATE VIEW dm_inv_pss_org_stock_end_hf AS (
+    SELECT
+        coalesce(t1.channel, '') AS channel,
+        coalesce(t1.mihome, -1) AS mihome,
+        coalesce(t1.org_code, '') AS org_code,
+        coalesce(t1.goods_id, -1) AS goods_id,
+        coalesce(t4.goods_name, '') as goods_name,
+        coalesce(t4.sku, '') as sku,
+        coalesce(t4.project, '') as project,
+        coalesce(t4.project_desc, '') as project_desc,
+        coalesce(t4.ddr_cap, '') as ddr_cap,
+        coalesce(t4.emmc_cap, '') as emmc_cap,
+        coalesce(t4.cat_lvl1_id, -1) as cat_lvl1_id,
+        coalesce(t4.cat_lvl1_name, '') as cat_lvl1_name,
+        coalesce(t4.cat_lvl2_id, -1) as cat_lvl2_id,
+        coalesce(t4.cat_lvl2_name, '') as cat_lvl2_name,
+        coalesce(t4.cat_lvl3_id, -1) as cat_lvl3_id,
+        coalesce(t4.cat_lvl3_name, '') as cat_lvl3_name,
+        coalesce(t4.cat_lvl4_id, -1) as cat_lvl4_id,
+        coalesce(t4.cat_lvl4_name, '') as cat_lvl4_name,
+        coalesce(t1.stock_type, '') as stock_type,
+        coalesce(t1.stock_cnt, 0) as stock_cnt,
+        coalesce(t1.from_cluster, '') AS source,
+        cast(from_unixtime(unix_timestamp(),'yyyyMMddHH') as int) AS add_hour,
+        from_unixtime(unix_timestamp(),'yyyy-MM-dd HH:mm:ss') AS etl_tm
+    FROM tmp_dm_inv_org_stock_gl_df t1
+    LEFT JOIN hive_zjyprc_hadoop.dw.dim_itm_sku_df /*+ OPTIONS(
+    'streaming-source.enable'='false',
+    'streaming-source.partition.include'='all',
+    'streaming-source.monitor-interval'='2h')*/ FOR SYSTEM_TIME AS OF t1.proctime as t4 ON t1.goods_id = t4.goods_id
+);
+
+create table talos_dm_inv_pss_org_stock_end_hf_sink (
+    `channel` STRING ,
+    `mihome` BIGINT ,
+    `org_code` STRING ,
+    `goods_id` BIGINT ,
+    `goods_name` STRING,
+    `sku` STRING,
+    `project` STRING,
+    `project_desc` STRING,
+    `ddr_cap` STRING,
+    `emmc_cap` STRING,
+    `cat_lvl1_id` INT,
+    `cat_lvl1_name` STRING,
+    `cat_lvl2_id` INT,
+    `cat_lvl2_name` STRING,
+    `cat_lvl3_id` INT,
+    `cat_lvl3_name` STRING,
+    `cat_lvl4_id` INT,
+    `cat_lvl4_name` STRING,
+    `stock_type` STRING,
+    `stock_cnt` BIGINT,
+    `source` STRING,
+    `add_hour` INT,
+    `etl_tm` string
+)  with (
+    'galaxy.talos.service.endpoint'='http://cnbj4-talos.api.xiaomi.net',
+    'topic'='talos_dm_inv_pss_org_stock_end_hf_network',
+    'secret-key'='czEg2HTL3WcpPFqpV9F9Z4wI5D+mmQO1bOmqNFcx',
+    'secret-key-id'='AKQ7P43CFJPN2RSU4D',
+    'connector'='talos',
+    'scan.startup.mode'='latest-offset',
+    'format'='changelog-json',
+    'sink.partitioner'='fixed'
+);
+
+insert into talos_dm_inv_pss_org_stock_end_hf_sink
+select * from dm_inv_pss_org_stock_end_hf;
+
+insert into iceberg_zjyprc_hadoop.dm.dm_inv_pss_org_stock_end_hf_test
+select * from dm_inv_pss_org_stock_end_hf;
