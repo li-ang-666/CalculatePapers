@@ -1,8 +1,4 @@
 CREATE CATALOG hive PROPERTIES (
     "type"="hms",
-    "hive.metastore.uris" = "thrift://10.99.202.153:9083",
-    "fs.obs.impl" = "org.apache.hadoop.fs.obs.OBSFileSystem",
-    "obs.endpoint" = "obs.cn-north-4.myhuaweicloud.com",
-    "obs.access_key" = "NT5EWZ4FRH54R2R2CB8G",
-    "obs.secret_key" = "BJok3jQFTmFYUS68lFWegazYggw5anKsOFUb65bS"
+    "hive.metastore.uris" = "thrift://10.99.202.153:9083"
 );
