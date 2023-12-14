@@ -1,4 +1,0 @@
-CREATE CATALOG hive PROPERTIES (
-    "type"="hms",
-    "hive.metastore.uris" = "thrift://10.99.202.153:9083"
-);
