@@ -1,0 +1,50 @@
+CREATE TABLE `company_bid_parsed_info` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID自增长',
+  `main_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '源表id',
+  `bid_uuid` varchar(50) NOT NULL DEFAULT '' COMMENT 'uuid',
+  `bid_title` varchar(256) NOT NULL DEFAULT '' COMMENT '标题',
+  `bid_content` varchar(255) NOT NULL DEFAULT '' COMMENT '正文信息',
+  `bid_link` varchar(128) NOT NULL DEFAULT '' COMMENT '详细信息链接',
+  `bid_province` varchar(8) NOT NULL DEFAULT '' COMMENT '地区-省',
+  `bid_city` varchar(8) NOT NULL DEFAULT '' COMMENT '地区-市',
+  `public_info_lv1` varchar(64) NOT NULL DEFAULT '' COMMENT '一级信息类型',
+  `public_info_lv2` varchar(64) NOT NULL DEFAULT '' COMMENT '二级信息类型',
+  `bid_type` varchar(64) NOT NULL DEFAULT '' COMMENT '招标方式',
+  `bid_publish_time` datetime DEFAULT NULL COMMENT '信息发布时间',
+  `bid_item_num` varchar(128) NOT NULL DEFAULT '' COMMENT '项目编号',
+  `bid_contract_num` varchar(500) NOT NULL DEFAULT '' COMMENT '合同编号',
+  `purchaser` varchar(2048) NOT NULL DEFAULT '' COMMENT '业主单位',
+  `proxy_unit` varchar(256) NOT NULL DEFAULT '' COMMENT '代理单位',
+  `bid_winner_info_json` text NOT NULL COMMENT '中标候选人信息（包括候选人单位，投标金额）json形式',
+  `bid_winner` text NOT NULL COMMENT '中标单位',
+  `winning_bid_amt_json` varchar(2048) NOT NULL DEFAULT '' COMMENT '未处理原始中标金额json形式',
+  `winning_bid_amt_json_clean` varchar(2048) NOT NULL DEFAULT '' COMMENT '以元为单位中标金额json形式',
+  `budget_amt_json` varchar(1025) NOT NULL DEFAULT '' COMMENT '未处理原始预算金额json形式',
+  `budget_amt_json_clean` varchar(1025) NOT NULL DEFAULT '' COMMENT '以元为单位预算金额json形式',
+  `bid_announcement_type` varchar(128) NOT NULL DEFAULT '' COMMENT '公告类型',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_dirty` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否为垃圾数据',
+  `is_deleted` int(2) NOT NULL DEFAULT '0' COMMENT '是否删除，0 非删除，1 删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_bid_uuid` (`bid_uuid`),
+  UNIQUE KEY `uniq_link` (`bid_link`),
+  KEY `idx_title_index` (`bid_title`),
+  KEY `idx_publish_time` (`bid_publish_time`),
+  KEY `idx_createtime` (`create_time`),
+  KEY `idx_main_id` (`main_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=238060220 DEFAULT CHARSET=utf8 COMMENT='招投标融合表'
+
+drop table if exists `company_bid_parsed_info_patch`;
+CREATE TABLE if not exists `company_bid_parsed_info_patch` like `operating_info`.`company_bid_parsed_info`;
+alter table  company_bid_parsed_info_patch add column `owner` text not null default '[]' comment '招标方';
+alter table  company_bid_parsed_info_patch add column `agent` text not null default '[]' comment '代理方';
+alter table  company_bid_parsed_info_patch add column `tenderer` text not null default '[]' comment '投标方';
+alter table  company_bid_parsed_info_patch add column `candidate` text not null default '[]' comment '候选方';
+alter table  company_bid_parsed_info_patch add column `winner` text not null default '[]' comment '中标方';
+alter table  company_bid_parsed_info_patch add column `winner_amt` text not null default '[]' comment '中标金额';
+alter table  company_bid_parsed_info_patch add column `item_no` varchar(255) not null default '[]' comment '项目编号';
+alter table  company_bid_parsed_info_patch add column `bid_deadline` datetime comment '投标截止时间';
+alter table  company_bid_parsed_info_patch add column `bid_download_deadline` datetime comment '标书获取截止时间';
+
+select * from company_bid_parsed_info_patch order by id\G

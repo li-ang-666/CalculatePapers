@@ -2,7 +2,7 @@
 curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
 --header 'Content-Type: application/json' \
 --data '{
-    "sshUserName": "omm",
+    "sshUserName": "hive",
     "sshPassWord": "Moka20190520",
     "yarnName": "hudi_upsert_company_index",
     "isMonitored": 0
