@@ -7,4 +7,3 @@ curl --location --request POST 'http://10.99.205.87:8990/flink/cancelMonitor' \
     "yarnName": "hudi_upsert_company_index",
     "isMonitored": 0
 }'
-123
