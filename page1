@@ -20,7 +20,14 @@ select distinct bid_city from company_bid_parsed_info;
 CREATE TABLE `bid` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `uuid` varchar(255) COMMENT 'uuid',
-  `entities` longtext COMMENT 'ai解析entities'
+  `entities` longtext COMMENT 'ai解析entities',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='招投标融合表'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ai离线解析表';
+
+
+
+
+
+532128
+530000
