@@ -1,0 +1,26 @@
+
+
+
+
+
+
+select get_json_object('{"result":{"bid_uuid":"123","entities":[{"clean_word":"一米八海洋科技（浙江）有限公司","company_gid":6331569380,"end":10,"start":5,"type":"tender_unit","word":"一米八科技"}],"text":"马云投资了一米八科技么"}}','$.result.entities');
+select get_json_object('[]','$.result.entities');
+
+
+
+
+
+set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
+select distinct bid_province from company_bid_parsed_info
+union all
+select distinct bid_city from company_bid_parsed_info;
+
+
+CREATE TABLE `bid` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `uuid` varchar(255) COMMENT 'uuid',
+  `entities` longtext COMMENT 'ai解析entities'
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='招投标融合表'

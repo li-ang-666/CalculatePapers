@@ -37,14 +37,14 @@ CREATE TABLE `company_bid_parsed_info` (
 
 drop table if exists `company_bid_parsed_info_patch`;
 CREATE TABLE if not exists `company_bid_parsed_info_patch` like `operating_info`.`company_bid_parsed_info`;
-alter table  company_bid_parsed_info_patch add column `owner` longtext not null default '' comment '招标方';
-alter table  company_bid_parsed_info_patch add column `agent` longtext not null default '' comment '代理方';
-alter table  company_bid_parsed_info_patch add column `tenderer` longtext not null default '' comment '投标方';
-alter table  company_bid_parsed_info_patch add column `candidate` longtext not null default '' comment '候选方';
-alter table  company_bid_parsed_info_patch add column `winner` longtext not null default '' comment '中标方';
-alter table  company_bid_parsed_info_patch add column `winner_amt` longtext not null default '' comment '中标金额';
-alter table  company_bid_parsed_info_patch add column `item_no` varchar(255) not null default '' comment '项目编号';
-alter table  company_bid_parsed_info_patch add column `bid_deadline` datetime comment '投标截止时间';
-alter table  company_bid_parsed_info_patch add column `bid_download_deadline` datetime comment '标书获取截止时间';
+alter table  company_bid_parsed_info_patch add column `party_a` longtext comment '招标方',
+add column `agent` longtext comment '代理方',
+add column `tenderer` longtext comment '投标方',
+add column `candidate` longtext comment '候选方',
+add column `winner` longtext comment '中标方',
+add column `winner_amt` longtext comment '中标金额',
+add column `item_no` varchar(255) not null default '' comment '项目编号',
+add column `bid_deadline` datetime comment '投标截止时间',
+add column `bid_download_deadline` datetime comment '标书获取截止时间';
 
 select * from company_bid_parsed_info_patch order by id\G
