@@ -29,7 +29,6 @@ create table if not exists hudi_ads.cooperation_partner_new(
   total_partners int comment '老板所有合作伙伴数'
 )partitioned by (pt int comment 'yyyyMMdd');
 
-
 drop table if exists hudi_ads.cooperation_partner_diff;
 create table if not exists hudi_ads.cooperation_partner_diff(
   -- 老板
@@ -41,9 +40,3 @@ create table if not exists hudi_ads.cooperation_partner_diff(
   -- 其他
   json string comment 'columnMap'
 )partitioned by (pt int comment 'yyyyMMdd');
-
-
-
-
-
-
