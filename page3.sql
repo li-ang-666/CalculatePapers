@@ -28,7 +28,7 @@ t1 as(
       'cooperation_times_with_this_partner', cooperation_times_with_this_partner,
       'cooperation_times_with_all_partner', cooperation_times_with_all_partner,
       'total_partners', total_partners
-    ) json,
+    ) column_map,
     sha2(concat(
       nvl(boss_human_gid, 'NULL'),
       nvl(boss_human_pid, 'NULL'),
@@ -84,7 +84,7 @@ t2 as(
       'cooperation_times_with_this_partner', cooperation_times_with_this_partner,
       'cooperation_times_with_all_partner', cooperation_times_with_all_partner,
       'total_partners', total_partners
-    ) json,
+    ) column_map,
     sha2(concat(
       nvl(boss_human_gid, 'NULL'),
       nvl(boss_human_pid, 'NULL'),
@@ -118,7 +118,10 @@ select
   if(t2.company_gid is not null, t2.company_gid, t1.company_gid) company_gid,
   if(t2.partner_human_pid is not null, t2.partner_human_pid, t1.partner_human_pid) partner_human_pid,
   -- values 恒取新
-  to_json(t2.json) json
+  to_json(t2.column_map) column_map,
+  -- cipher
+  t1.cipher cipher_old,
+  t2.cipher cipher_new
 from t1
 full join t2 on t1.boss_human_pid = t2.boss_human_pid and t1.company_gid = t2.company_gid and t1.partner_human_pid = t2.partner_human_pid
-where t1.cipher <> t2.cipher
+where t1.cipher = t2.cipher

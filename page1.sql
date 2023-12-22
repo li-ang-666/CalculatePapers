@@ -38,5 +38,7 @@ create table if not exists hudi_ads.cooperation_partner_diff(
   -- 伙伴
   partner_human_gid decimal(20, 0) comment '合作伙伴gid',
   -- 其他
-  json string comment 'columnMap'
+  column_map string comment 'columnMap',
+  old_cipher string comment '旧表的cipher',
+  new_cipher string comment '新表的cipher'
 )partitioned by (pt int comment 'yyyyMMdd');
