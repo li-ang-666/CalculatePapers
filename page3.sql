@@ -53,7 +53,7 @@ t1 as(
       nvl(cooperation_times_with_all_partner, 'NULL'),
       nvl(total_partners, 'NULL')
     ), 512) cipher
-  from hudi_ads.cooperation_partner_new where pt = '20231221'
+  from hudi_ads.cooperation_partner_new where pt = ${last_pt}
 ),
 -- 新数据
 t2 as(
@@ -109,19 +109,19 @@ t2 as(
       nvl(cooperation_times_with_all_partner, 'NULL'),
       nvl(total_partners, 'NULL')
     ), 512) cipher
-  from hudi_ads.cooperation_partner_new where pt = '20231221'
+  from hudi_ads.cooperation_partner_new where pt = ${pt}
 )
-insert overwrite table hudi_ads.cooperation_partner_diff partition(pt = '20231221')
+insert overwrite table hudi_ads.cooperation_partner_diff partition(pt = ${pt})
 select
   -- unique key 有新取新, 无新取旧
   if(t2.boss_human_pid is not null, t2.boss_human_pid, t1.boss_human_pid) boss_human_pid,
   if(t2.company_gid is not null, t2.company_gid, t1.company_gid) company_gid,
   if(t2.partner_human_pid is not null, t2.partner_human_pid, t1.partner_human_pid) partner_human_pid,
-  -- values 恒取新
+  -- values 恒取最新
   to_json(t2.column_map) column_map,
   -- cipher
   t1.cipher cipher_old,
   t2.cipher cipher_new
 from t1
 full join t2 on t1.boss_human_pid = t2.boss_human_pid and t1.company_gid = t2.company_gid and t1.partner_human_pid = t2.partner_human_pid
-where t1.cipher = t2.cipher
+where t1.cipher <> t2.cipher
