@@ -114,5 +114,4 @@ t2 as(
 select
   count(1)
 from t1
-full join t2 on t1.boss_human_pid = t2.boss_human_pid and t1.company_gid = t2.company_gid and t1.partner_human_pid = t2.partner_human_pid
-where t1.cipher <> t2.cipher
+full outer join t2 on t1.boss_human_pid = t2.boss_human_pid and t1.company_gid = t2.company_gid and t1.partner_human_pid = t2.partner_human_pid
