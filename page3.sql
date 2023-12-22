@@ -53,7 +53,7 @@ t1 as(
       nvl(cooperation_times_with_all_partner, 'NULL'),
       nvl(total_partners, 'NULL')
     ), 512) cipher
-  from hudi_ads.cooperation_partner_new where pt = ${last_pt}
+  from hudi_ads.cooperation_partner_new where pt = $last_pt
 ),
 -- 新数据
 t2 as(
@@ -109,9 +109,9 @@ t2 as(
       nvl(cooperation_times_with_all_partner, 'NULL'),
       nvl(total_partners, 'NULL')
     ), 512) cipher
-  from hudi_ads.cooperation_partner_new where pt = ${pt}
+  from hudi_ads.cooperation_partner_new where pt = $pt
 )
-insert overwrite table hudi_ads.cooperation_partner_diff partition(pt = ${pt})
+insert overwrite table hudi_ads.cooperation_partner_diff partition(pt = $pt)
 select
   -- unique key 有新取新, 无新取旧
   if(t2.boss_human_pid is not null, t2.boss_human_pid, t1.boss_human_pid) boss_human_pid,
