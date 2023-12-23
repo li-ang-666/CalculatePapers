@@ -114,14 +114,11 @@ t2 as(
 insert overwrite table hudi_ads.cooperation_partner_diff partition(pt = $pt)
 select
   -- unique key 有新取新, 无新取旧
-  if(t2.boss_human_pid is not null, t2.boss_human_pid, t1.boss_human_pid) boss_human_pid,
-  if(t2.company_gid is not null, t2.company_gid, t1.company_gid) company_gid,
-  if(t2.partner_human_pid is not null, t2.partner_human_pid, t1.partner_human_pid) partner_human_pid,
+  nvl(t2.boss_human_pid, t1.boss_human_pid) boss_human_pid,
+  nvl(t2.company_gid, t1.company_gid) company_gid,
+  nvl(t2.partner_human_pid, t1.partner_human_pid) partner_human_pid,
   -- values 恒取最新
-  to_json(t2.column_map) column_map,
-  -- cipher
-  t1.cipher cipher_old,
-  t2.cipher cipher_new
+  to_json(t2.column_map) column_map
 from t1
 full outer join t2 on t1.boss_human_pid = t2.boss_human_pid and t1.company_gid = t2.company_gid and t1.partner_human_pid = t2.partner_human_pid
 where nvl(t1.cipher, 'NULL') <> nvl(t2.cipher, 'NULL')
