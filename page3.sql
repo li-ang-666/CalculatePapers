@@ -53,7 +53,7 @@ t1 as(
       nvl(cooperation_times_with_all_partner, 'NULL'),
       nvl(total_partners, 'NULL')
     ), 512) cipher
-  from hudi_ads.cooperation_partner_new where pt = $last_pt
+  from hudi_ads.cooperation_partner_new where pt = 1
 ),
 -- 新数据
 t2 as(
