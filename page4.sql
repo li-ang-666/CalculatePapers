@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS `company_base`.`cooperation_partner_new`;
 CREATE TABLE `company_base`.`cooperation_partner_new`(
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `boss_human_gid` bigint unsigned DEFAULT NULL COMMENT '老板gid',
   `boss_human_pid` varchar(50) DEFAULT NULL COMMENT '老板pid',
   `boss_human_name` varchar(255) DEFAULT NULL COMMENT '老板名称',
@@ -24,7 +25,8 @@ CREATE TABLE `company_base`.`cooperation_partner_new`(
   `total_partners` int DEFAULT NULL COMMENT '老板所有合作伙伴数',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  UNIQUE KEY `unique_key` (`boss_human_pid`,`partner_human_pid`,`company_gid`),
-  KEY `idx_list` (`boss_human_pid`,`single_cooperation_row_number`)
+  PRIMARY KEY (`id`)
+  -- ,UNIQUE KEY `unique_key` (`boss_human_pid`,`partner_human_pid`,`company_gid`)
+  -- ,KEY `idx_list` (`boss_human_pid`,`single_cooperation_row_number`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
