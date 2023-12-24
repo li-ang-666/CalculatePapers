@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `company_base`.`cooperation_partner_new`;
-CREATE TABLE `company_base`.`cooperation_partner_new` (
+CREATE TABLE `company_base`.`cooperation_partner_new`(
   `boss_human_gid` bigint unsigned DEFAULT NULL COMMENT '老板gid',
   `boss_human_pid` varchar(50) DEFAULT NULL COMMENT '老板pid',
   `boss_human_name` varchar(255) DEFAULT NULL COMMENT '老板名称',
