@@ -32,7 +32,7 @@ create table if not exists hudi_ads.cooperation_partner_new(
 drop table if exists hudi_ads.cooperation_partner_diff;
 create table if not exists hudi_ads.cooperation_partner_diff(
   -- unique key
-  unique_key string comment '拼接老板pid,伙伴pid,公司gid',
+  unique_key string comment '拼接 老板pid-伙伴pid-公司gid',
   -- 老板
   boss_human_pid string comment '老板pid',
   -- 伙伴
