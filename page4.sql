@@ -26,7 +26,7 @@ CREATE TABLE `company_base`.`cooperation_partner_new`(
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq` (`unique_key`)
+  UNIQUE KEY `uniq` (`unique_key`),
   KEY `idx_list` (`boss_human_pid`,`single_cooperation_row_number`),
   KEY `idx_detail` (`boss_human_pid`,`partner_human_pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
