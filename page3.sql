@@ -120,5 +120,8 @@ select
   -- values 恒取最新
   to_json(t2.column_map) column_map
 from t1
-full outer join t2 on t1.boss_human_pid = t2.boss_human_pid and t1.company_gid = t2.company_gid and t1.partner_human_pid = t2.partner_human_pid
+full outer join t2
+  on t1.boss_human_pid = t2.boss_human_pid
+  and t1.partner_human_pid = t2.partner_human_pid
+  and t1.company_gid = t2.company_gid
 where nvl(t1.cipher, 'NULL') <> nvl(t2.cipher, 'NULL')

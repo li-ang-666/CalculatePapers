@@ -26,5 +26,5 @@ CREATE TABLE `company_base`.`cooperation_partner_new` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   UNIQUE KEY `unique_key` (`boss_human_pid`,`partner_human_pid`,`company_gid`),
   KEY `idx_list` (`boss_human_pid`,`single_cooperation_row_number`)
-)ENGINE=InnoDB;
+);
 
