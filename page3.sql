@@ -116,7 +116,9 @@ select
   -- unique key 有新取新, 无新取旧
   concat(
     nvl(t2.boss_human_pid, t1.boss_human_pid),
+    '-',
     nvl(t2.partner_human_pid, t1.partner_human_pid),
+    '-',
     nvl(t2.company_gid, t1.company_gid)
   ) unique_key,
   nvl(t2.boss_human_pid, t1.boss_human_pid) boss_human_pid,
