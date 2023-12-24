@@ -31,12 +31,14 @@ create table if not exists hudi_ads.cooperation_partner_new(
 
 drop table if exists hudi_ads.cooperation_partner_diff;
 create table if not exists hudi_ads.cooperation_partner_diff(
+  -- unique key
+  unique_key string comment '拼接老板pid,伙伴pid,公司gid',
   -- 老板
   boss_human_pid string comment '老板pid',
-  -- 公司
-  company_gid decimal(20, 0) comment '公司gid',
   -- 伙伴
   partner_human_pid string comment '合作伙伴pid',
+  -- 公司
+  company_gid decimal(20, 0) comment '公司gid',
   -- 其他
   column_map string comment 'columnMap'
 )partitioned by (pt int comment 'yyyyMMdd');
