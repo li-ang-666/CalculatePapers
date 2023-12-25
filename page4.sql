@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS `company_base`.`cooperation_partner_new`;
-CREATE TABLE `company_base`.`cooperation_partner_new`(
+DROP TABLE IF EXISTS `company_base`.`cooperation_partner`;
+CREATE TABLE `company_base`.`cooperation_partner`(
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `boss_human_gid` bigint unsigned DEFAULT NULL COMMENT '老板gid',
   `boss_human_pid` varchar(50) DEFAULT NULL COMMENT '老板pid',
@@ -30,6 +30,6 @@ CREATE TABLE `company_base`.`cooperation_partner_new`(
   -- ,KEY `idx_list` (`boss_human_pid`,`single_cooperation_row_number`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-alter table cooperation_partner_new
+alter table cooperation_partner
 add unique key `uniq_detail` (`boss_human_pid`,`partner_human_pid`,`company_gid`),
 add key `idx_list` (`boss_human_pid`,`single_cooperation_row_number`);

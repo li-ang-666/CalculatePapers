@@ -29,7 +29,7 @@ t1 as(
       nvl(cooperation_times_with_all_partner, 'NULL'),
       nvl(total_partners, 'NULL')
     ), 512) cipher
-  from hudi_ads.cooperation_partner_new where pt = 1
+  from hudi_ads.cooperation_partner where pt = 0
 ),
 -- 新数据
 t2 as(
@@ -85,7 +85,7 @@ t2 as(
       'cooperation_times_with_all_partner', cooperation_times_with_all_partner,
       'total_partners', total_partners
     )) column_map
-  from hudi_ads.cooperation_partner_new where pt = $pt
+  from hudi_ads.cooperation_partner where pt = $pt
 )
 insert overwrite table hudi_ads.cooperation_partner_diff partition(pt = $pt)
 select

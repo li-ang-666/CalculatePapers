@@ -192,7 +192,7 @@ final as(
     count(1)                                 over(partition by boss_human_pid) cooperation_times_with_all_partner
   from cooperation
 )
-insert overwrite table hudi_ads.cooperation_partner_new partition(pt = $pt)
+insert overwrite table hudi_ads.cooperation_partner partition(pt = $pt)
 select
   -- 老板
   boss_human_gid,

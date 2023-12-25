@@ -1,5 +1,5 @@
-drop table if exists hudi_ads.cooperation_partner_new;
-create table if not exists hudi_ads.cooperation_partner_new(
+drop table if exists hudi_ads.cooperation_partner;
+create table if not exists hudi_ads.cooperation_partner(
   -- 老板
   boss_human_gid decimal(20, 0) comment '老板gid',
   boss_human_pid string comment '老板pid',
