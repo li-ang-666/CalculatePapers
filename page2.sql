@@ -38,3 +38,13 @@ select count(1) from graph_export;
 3. count
 合作伙伴列表页以及count相关 v3.0(get_human_pid_with_neighbor_list_by_human_id) -> 合作伙伴count v1.0(get_cooperation_partner_cnt)
 
+
+admin set frontend config("disable_balance" = "true");
+admin set frontend config("disable_colocate_balance" = "true");
+admin set frontend config("disable_tablet_scheduler" = "true");
+
+admin set frontend config("disable_balance" = "false");
+admin set frontend config("disable_colocate_balance" = "false");
+admin set frontend config("disable_tablet_scheduler" = "false");
+
+
