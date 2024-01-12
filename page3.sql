@@ -6,13 +6,15 @@ create table if not exists unique_test(
   name STRING
 )
 UNIQUE KEY (`id`, `pt`)
-PARTITION BY RANGE (`pt`) ()
+PARTITION BY RANGE (`pt`) (
+  PARTITION p20240111 VALUES [("20240111"), ("20240112"))
+)
 DISTRIBUTED BY HASH (`id`) BUCKETS 6
 PROPERTIES(
   "replication_allocation" = "tag.location.default: 3",
   "dynamic_partition.enable" = "true",
   "dynamic_partition.time_unit" = "DAY",
-  "dynamic_partition.start" = "-1",
+  "dynamic_partition.start" = "-2",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
   "dynamic_partition.buckets" = "6",
