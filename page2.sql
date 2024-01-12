@@ -48,3 +48,4 @@ admin set frontend config("disable_colocate_balance" = "false");
 admin set frontend config("disable_tablet_scheduler" = "false");
 
 ./spark-submit.sh --sql "insert into test_db.unique_test select id, company_name name from hudi_ods.company_index" --parallelism 32
+select date_format(date_add(current_date(),-1),'yyyyMMdd');
