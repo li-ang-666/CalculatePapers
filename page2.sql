@@ -47,4 +47,4 @@ admin set frontend config("disable_balance" = "false");
 admin set frontend config("disable_colocate_balance" = "false");
 admin set frontend config("disable_tablet_scheduler" = "false");
 
-
+./spark-
