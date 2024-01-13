@@ -77,7 +77,7 @@ PROPERTIES (
   "dynamic_partition.create_history_partition" = "true",
   "dynamic_partition.history_partition_num" = "30",
   "dynamic_partition.start" = "-30",
-  "dynamic_partition.end" = "1",
+  "dynamic_partition.end" = "0",
   "dynamic_partition.prefix" = "p",
   -- partition 分桶数
   "dynamic_partition.buckets" = "6",
