@@ -23,7 +23,7 @@ PROPERTIES (
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `test_db`.`dwd_coupon_info`;
 CREATE TABLE `test_db`.`dwd_coupon_info` (
-  `promotion_code` varchar(65530) COMMENT '优惠码',
+  `promotion_code` varchar(255) COMMENT '优惠码',
   `unique_user_id` largeint COMMENT '天眼查用户ID',
   `promotion_id` largeint COMMENT '优惠ID',
   `use_status` largeint COMMENT '使用状态',
@@ -47,7 +47,7 @@ PROPERTIES (
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `test_db`.`dwd_app_active`;
 CREATE TABLE `test_db`.`dwd_app_active` (
-  `app_id2` varchar(65530) COMMENT 'app_id2唯一键',
+  `app_id2` varchar(255) COMMENT 'app_id2唯一键',
   `pt` datev2 COMMENT '分区',
   `android_id` string COMMENT '安卓用户设备标识,不唯一',
   `imei` string COMMENT '安卓用户设备唯一标识,安卓10及以上,无法获取',
