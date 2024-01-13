@@ -10,7 +10,7 @@ CREATE TABLE `test_db`.`dwd_user_register_details` (
   `update_time` datetime COMMENT '更新doris时间'
 ) ENGINE=OLAP
 UNIQUE KEY(`tyc_user_id`)
-COMMENT '用户注册'
+COMMENT '注册'
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 6
 PROPERTIES (
   -- 副本数
