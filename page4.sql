@@ -16,9 +16,9 @@ PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
   -- MOW
-  "enable_unique_key_merge_on_write" = "true",
+  "enable_unique_key_merge_on_write" = "false",
   -- schema change
-  "light_schema_change" = "true"
+  "light_schema_change" = "false"
 );
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `test_db`.`dwd_coupon_info`;
