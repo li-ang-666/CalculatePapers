@@ -95,8 +95,41 @@ CREATE TABLE `test_db`.`dim_user_comparison` (
   `update_time` datetimev2(6) COMMENT '更新doris时间'
 ) ENGINE=OLAP
 UNIQUE KEY(`uid`)
-COMMENT '新老用户映射维度'
+COMMENT '新老用户映射'
 DISTRIBUTED BY HASH(`uid`) BUCKETS 6
+PROPERTIES (
+  -- 副本数
+  "replication_allocation" = "tag.location.default: 3",
+  -- MOW
+  "enable_unique_key_merge_on_write" = "true",
+  -- schema change
+  "light_schema_change" = "true"
+);
+-----------------------------------------------------------------------------------------------------
+DROP TABLE `test_db`.`dwd_order_info`;
+CREATE TABLE `test_db`.`dwd_order_info` (
+  `order_id` varchar(255) COMMENT '订单ID',
+  `order_code` string COMMENT '新交易订单ID',
+  `tyc_user_id` largeint COMMENT '天眼查用户ID',
+  `mobile` largeint COMMENT '手机号',
+  `sku_id` largeint COMMENT '商品ID',
+  `vip_from_time` datetimev2(6) COMMENT 'VIP开始时间',
+  `vip_to_time` datetimev2(6) COMMENT 'VIP结束日期',
+  `order_status` largeint COMMENT '订单状态',
+  `amount` largeint COMMENT '总金额',
+  `actual_amount` largeint COMMENT '实收金额',
+  `invite_code` string COMMENT '邀请码',
+  `pay_date` datetimev2(6) COMMENT '支付时间',
+  `create_date` datetimev2(6) COMMENT '下单时间',
+  `platform_name` string COMMENT '平台名称 ',
+  `pay_way` string COMMENT '支付方式',
+  `pay_point_id` string COMMENT '痒点ID',
+  `create_time` datetimev2(6) COMMENT '写入doris时间',
+  `update_time` datetimev2(6) COMMENT '更新doris时间'
+) ENGINE=OLAP
+UNIQUE KEY(`order_id`)
+COMMENT '订单'
+DISTRIBUTED BY HASH(`order_id`) BUCKETS 6
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
