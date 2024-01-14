@@ -14,11 +14,7 @@ COMMENT '注册'
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 6
 PROPERTIES (
   -- 副本数
-  "replication_allocation" = "tag.location.default: 3",
-  -- MOW
-  "enable_unique_key_merge_on_write" = "false",
-  -- schema change
-  "light_schema_change" = "false"
+  "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `test_db`.`dwd_coupon_info`;
@@ -38,11 +34,7 @@ COMMENT '优惠券'
 DISTRIBUTED BY HASH(`promotion_code`) BUCKETS 6
 PROPERTIES (
   -- 副本数
-  "replication_allocation" = "tag.location.default: 3",
-  -- MOW
-  "enable_unique_key_merge_on_write" = "true",
-  -- schema change
-  "light_schema_change" = "true"
+  "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `test_db`.`dwd_app_active`;
@@ -67,10 +59,6 @@ DISTRIBUTED BY HASH(`app_id2`) BUCKETS 6
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
-  -- MOW
-  "enable_unique_key_merge_on_write" = "true",
-  -- schema change
-  "light_schema_change" = "true",
   -- partition
   "dynamic_partition.enable" = "true",
   "dynamic_partition.time_unit" = "DAY",
@@ -99,11 +87,7 @@ COMMENT '新老用户映射'
 DISTRIBUTED BY HASH(`uid`) BUCKETS 6
 PROPERTIES (
   -- 副本数
-  "replication_allocation" = "tag.location.default: 3",
-  -- MOW
-  "enable_unique_key_merge_on_write" = "true",
-  -- schema change
-  "light_schema_change" = "true"
+  "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `test_db`.`dwd_order_info`;
@@ -132,9 +116,5 @@ COMMENT '订单'
 DISTRIBUTED BY HASH(`order_id`) BUCKETS 6
 PROPERTIES (
   -- 副本数
-  "replication_allocation" = "tag.location.default: 3",
-  -- MOW
-  "enable_unique_key_merge_on_write" = "true",
-  -- schema change
-  "light_schema_change" = "true"
+  "replication_allocation" = "tag.location.default: 3"
 );
