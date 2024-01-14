@@ -84,3 +84,24 @@ PROPERTIES (
   -- partition 副本数
   "dynamic_partition.replication_allocation" = "tag.location.default: 3"
 );
+-----------------------------------------------------------------------------------------------------
+DROP TABLE `test_db`.`dim_user_comparison`;
+CREATE TABLE `test_db`.`dim_user_comparison` (
+  `uid` largeint COMMENT '用户关联',
+  `tyc_user_id` largeint COMMENT '老用户ID',
+  `tyc_user_id_new` largeint COMMENT '新用户ID',
+  `mobile` largeint COMMENT '手机号',
+  `create_time` datetimev2(6) COMMENT '写入doris时间',
+  `update_time` datetimev2(6) COMMENT '更新doris时间'
+) ENGINE=OLAP
+UNIQUE KEY(`uid`)
+COMMENT '新老用户映射维度'
+DISTRIBUTED BY HASH(`uid`) BUCKETS 6
+PROPERTIES (
+  -- 副本数
+  "replication_allocation" = "tag.location.default: 3",
+  -- MOW
+  "enable_unique_key_merge_on_write" = "true",
+  -- schema change
+  "light_schema_change" = "true"
+);
