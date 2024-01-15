@@ -1,5 +1,5 @@
-DROP TABLE `dwd`.`dwd_user_register_details`;
-CREATE TABLE `dwd`.`dwd_user_register_details` (
+DROP TABLE `test_db`.`dwd_user_register_details`;
+CREATE TABLE `test_db`.`dwd_user_register_details` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
   `mobile` largeint COMMENT '手机号',
   `register_time` datetimev2(6) COMMENT '注册时间',
@@ -17,8 +17,8 @@ PROPERTIES (
   "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `dwd`.`dwd_coupon_info`;
-CREATE TABLE `dwd`.`dwd_coupon_info` (
+DROP TABLE `test_db`.`dwd_coupon_info`;
+CREATE TABLE `test_db`.`dwd_coupon_info` (
   `promotion_code` varchar(255) COMMENT '优惠码',
   `unique_user_id` largeint COMMENT '天眼查用户ID',
   `promotion_id` largeint COMMENT '优惠ID',
@@ -37,8 +37,8 @@ PROPERTIES (
   "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `dwd`.`dwd_app_active`;
-CREATE TABLE `dwd`.`dwd_app_active` (
+DROP TABLE `test_db`.`dwd_app_active`;
+CREATE TABLE `test_db`.`dwd_app_active` (
   `app_id2` varchar(255) COMMENT 'app_id2唯一键',
   `pt` datev2 COMMENT '分区',
   `android_id` string COMMENT '安卓用户设备标识,不唯一',
@@ -69,8 +69,8 @@ PROPERTIES (
   "dynamic_partition.prefix" = "p"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `dim`.`dim_user_comparison`;
-CREATE TABLE `dim`.`dim_user_comparison` (
+DROP TABLE `test_db`.`dim_user_comparison`;
+CREATE TABLE `test_db`.`dim_user_comparison` (
   `uid` largeint COMMENT '用户关联',
   `tyc_user_id` largeint COMMENT '老用户ID',
   `tyc_user_id_new` largeint COMMENT '新用户ID',
@@ -86,8 +86,8 @@ PROPERTIES (
   "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `dwd`.`dwd_order_info`;
-CREATE TABLE `dwd`.`dwd_order_info` (
+DROP TABLE `test_db`.`dwd_order_info`;
+CREATE TABLE `test_db`.`dwd_order_info` (
   `order_id` varchar(255) COMMENT '订单ID',
   `order_code` string COMMENT '新交易订单ID',
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
