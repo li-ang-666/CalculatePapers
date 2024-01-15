@@ -10,7 +10,7 @@ from
 where
   pt = 20240114
 "
-sinkParallelism="128"
+sinkParallelism="256"
 sinkDatabase="ads"
 sinkTable="ads_user_dispatch_log_tag_df"
 doris \
