@@ -8,9 +8,8 @@ CREATE TABLE `dwd`.`dwd_user_register_details` (
   `user_type` largeint COMMENT '用户类型 0:普通,1:vvip,2:媒体用户,3:3个月vip,4:6个月vip,5:12个月以上vip,6:24个月vip,7:26个月以上vip,-1:删除,-2:黑名单',
   `create_time` datetimev2(6) COMMENT '写入doris时间',
   `update_time` datetimev2(6) COMMENT '更新doris时间'
-) ENGINE=OLAP
+)
 UNIQUE KEY(`tyc_user_id`)
-COMMENT '注册'
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
 PROPERTIES (
   -- 副本数
@@ -28,9 +27,8 @@ CREATE TABLE `dwd`.`dwd_coupon_info` (
   `expiration_time` datetimev2(6) COMMENT '有效结束日期',
   `create_time` datetimev2(6) COMMENT '写入doris时间',
   `update_time` datetimev2(6) COMMENT '更新doris时间'
-) ENGINE=OLAP
+)
 UNIQUE KEY(`promotion_code`)
-COMMENT '优惠券'
 DISTRIBUTED BY HASH(`promotion_code`) BUCKETS 30
 PROPERTIES (
   -- 副本数
@@ -51,9 +49,8 @@ CREATE TABLE `dwd`.`dwd_app_active` (
   `create_time` datetimev2(6) COMMENT '激活时间',
   `app_version` string COMMENT 'app版本',
   `update_time` datetimev2(6) COMMENT '更新doris时间'
-) ENGINE=OLAP
+)
 UNIQUE KEY(`app_id2`, `pt`)
-COMMENT '激活'
 PARTITION BY RANGE(`pt`) ()
 DISTRIBUTED BY HASH(`app_id2`) BUCKETS 5
 PROPERTIES (
@@ -66,7 +63,8 @@ PROPERTIES (
   "dynamic_partition.history_partition_num" = "30",
   "dynamic_partition.start" = "-30",
   "dynamic_partition.end" = "1",
-  "dynamic_partition.prefix" = "p"
+  "dynamic_partition.prefix" = "p",
+  "dynamic_partition.buckets" = "5"
 );
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `dim`.`dim_user_comparison`;
@@ -77,9 +75,8 @@ CREATE TABLE `dim`.`dim_user_comparison` (
   `mobile` largeint COMMENT '手机号',
   `create_time` datetimev2(6) COMMENT '写入doris时间',
   `update_time` datetimev2(6) COMMENT '更新doris时间'
-) ENGINE=OLAP
+)
 UNIQUE KEY(`uid`)
-COMMENT '新老用户映射'
 DISTRIBUTED BY HASH(`uid`) BUCKETS 30
 PROPERTIES (
   -- 副本数
@@ -106,9 +103,8 @@ CREATE TABLE `dwd`.`dwd_order_info` (
   `pay_point_id` string COMMENT '痒点ID',
   `create_time` datetimev2(6) COMMENT '写入doris时间',
   `update_time` datetimev2(6) COMMENT '更新doris时间'
-) ENGINE=OLAP
+)
 UNIQUE KEY(`order_id`)
-COMMENT '订单'
 DISTRIBUTED BY HASH(`order_id`) BUCKETS 30
 PROPERTIES (
   -- 副本数
