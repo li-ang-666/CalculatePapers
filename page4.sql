@@ -1,5 +1,5 @@
-DROP TABLE `test_db`.`ads_user_dispatch_log_tag_df`;
-CREATE TABLE `test_db`.`ads_user_dispatch_log_tag_df` (
+DROP TABLE `ads`.`ads_user_dispatch_log_tag_df`;
+CREATE TABLE `ads`.`ads_user_dispatch_log_tag_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
   `dispatch_id` largeint COMMENT '分发ID',
   `pt` datev2 COMMENT '分区',
