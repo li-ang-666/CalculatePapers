@@ -1,4 +1,4 @@
-DROP TABLE `ads`.`ads_user_dispatch_log_tag_df`;
+DROP TABLE `ads`.`ads_user_dispatch_log_tag_df` FORCE;
 CREATE TABLE `ads`.`ads_user_dispatch_log_tag_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
   `dispatch_id` largeint COMMENT '分发ID',
@@ -23,7 +23,7 @@ PROPERTIES (
   "dynamic_partition.buckets" = "30"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `ads`.`ads_user_distribution_user_tag_df`;
+DROP TABLE `ads`.`ads_user_distribution_user_tag_df` FORCE;
 CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户id',
   `pt` datev2 COMMENT '分区',
@@ -101,7 +101,7 @@ PROPERTIES (
   "dynamic_partition.buckets" = "30"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `ads`.`ads_user_tag_commercial_df`;
+DROP TABLE `ads`.`ads_user_tag_commercial_df` FORCE;
 CREATE TABLE `ads`.`ads_user_tag_commercial_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户id',
   `pt` datev2 COMMENT '分区',

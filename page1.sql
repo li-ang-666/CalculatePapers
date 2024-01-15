@@ -1,4 +1,4 @@
-DROP TABLE `dwd`.`dwd_user_register_details`;
+DROP TABLE `dwd`.`dwd_user_register_details` FORCE;
 CREATE TABLE `dwd`.`dwd_user_register_details` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
   `mobile` largeint COMMENT '手机号',
@@ -16,7 +16,7 @@ PROPERTIES (
   "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `dwd`.`dwd_coupon_info`;
+DROP TABLE `dwd`.`dwd_coupon_info` FORCE;
 CREATE TABLE `dwd`.`dwd_coupon_info` (
   `promotion_code` varchar(255) COMMENT '优惠码',
   `unique_user_id` largeint COMMENT '天眼查用户ID',
@@ -35,7 +35,7 @@ PROPERTIES (
   "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `dwd`.`dwd_app_active`;
+DROP TABLE `dwd`.`dwd_app_active` FORCE;
 CREATE TABLE `dwd`.`dwd_app_active` (
   `app_id2` varchar(255) COMMENT 'app_id2唯一键',
   `pt` datev2 COMMENT '分区',
@@ -67,7 +67,7 @@ PROPERTIES (
   "dynamic_partition.buckets" = "5"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `dim`.`dim_user_comparison`;
+DROP TABLE `dim`.`dim_user_comparison` FORCE;
 CREATE TABLE `dim`.`dim_user_comparison` (
   `uid` largeint COMMENT '用户关联',
   `tyc_user_id` largeint COMMENT '老用户ID',
@@ -83,7 +83,7 @@ PROPERTIES (
   "replication_allocation" = "tag.location.default: 3"
 );
 -----------------------------------------------------------------------------------------------------
-DROP TABLE `dwd`.`dwd_order_info`;
+DROP TABLE `dwd`.`dwd_order_info` FORCE;
 CREATE TABLE `dwd`.`dwd_order_info` (
   `order_id` varchar(255) COMMENT '订单ID',
   `order_code` string COMMENT '新交易订单ID',
