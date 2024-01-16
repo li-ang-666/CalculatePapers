@@ -23,7 +23,6 @@ create table bak.dwd_order_info as
 select cast(order_id as string) order_id,cast(order_code as string) order_code,cast(tyc_user_id as string) tyc_user_id,cast(mobile as string) mobile,cast(sku_id as string) sku_id,cast(vip_from_time as string) vip_from_time,cast(vip_to_time as string) vip_to_time,cast(order_status as string) order_status,cast(amount as string) amount,cast(actual_amount as string) actual_amount,cast(invite_code as string) invite_code,cast(pay_date as string) pay_date,cast(create_date as string) create_date,cast(platform_name as string) platform_name,cast(pay_way as string) pay_way,cast(pay_point_id as string) pay_point_id,cast(create_time as string) create_time,cast(update_time as string) update_time
 from dwd.dwd_order_info;
 
-
 admin set frontend config("max_running_txn_num_per_db"="10240");
 admin set frontend config("min_replication_num_per_tablet"="3");
 
@@ -44,10 +43,3 @@ curl -X POST http://10.99.197.74:8040/api/update_config?streaming_load_json_max_
 curl -X POST http://10.99.194.79:8040/api/update_config?streaming_load_json_max_mb=1024\&persist=true
 curl -X POST http://10.99.200.146:8040/api/update_config?streaming_load_json_max_mb=1024\&persist=true
 curl -X POST http://10.99.204.175:8040/api/update_config?streaming_load_json_max_mb=1024\&persist=true
-
-http://10.99.201.177:8040/varz
-http://10.99.197.74:8040/varz
-http://10.99.194.79:8040/varz
-
-
-
