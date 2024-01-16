@@ -25,7 +25,7 @@ PROPERTIES (
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `ads`.`ads_user_distribution_user_tag_df` FORCE;
 CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
-  `tyc_user_id` largeint COMMENT '天眼查用户id',
+  `tyc_user_id` largeint COMMENT '天眼查用户ID',
   `pt` datev2 COMMENT '分区',
   `mobile` string COMMENT '手机号',
   `regist_date` datev2 COMMENT '注册日期',
@@ -103,7 +103,7 @@ PROPERTIES (
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `ads`.`ads_user_tag_commercial_df` FORCE;
 CREATE TABLE `ads`.`ads_user_tag_commercial_df` (
-  `tyc_user_id` largeint COMMENT '天眼查用户id',
+  `tyc_user_id` largeint COMMENT '天眼查用户ID',
   `pt` datev2 COMMENT '分区',
   `mobile` string COMMENT '用户手机号-未加密',
   `user_state` string COMMENT '用户状态（全量）',
