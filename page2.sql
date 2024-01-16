@@ -143,7 +143,6 @@ CREATE TABLE `ads`.`ads_user_tag_commercial_df` (
   `tyc_user_id_last_number` string COMMENT '用户id尾号'
 ) ENGINE=OLAP
 UNIQUE KEY(`tyc_user_id`, `pt`)
-COMMENT '用户画像标签表_离线'
 PARTITION BY RANGE(`pt`) ()
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 40
 PROPERTIES (
