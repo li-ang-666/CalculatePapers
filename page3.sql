@@ -1,6 +1,6 @@
 sparkSql="
 select
-  date_add(current_date(),-1) pt,
+  '2024-01-16' pt,
   tyc_user_id,
   dispatch_id,
   dispatch_date,
