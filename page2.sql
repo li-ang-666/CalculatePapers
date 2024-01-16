@@ -20,7 +20,7 @@ PROPERTIES (
   "dynamic_partition.start" = "-1",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "30"
+  "dynamic_partition.buckets" = "40"
 );
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `ads`.`ads_user_distribution_user_tag_df` FORCE;
@@ -98,7 +98,7 @@ PROPERTIES (
   "dynamic_partition.start" = "-1",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "30"
+  "dynamic_partition.buckets" = "40"
 );
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `ads`.`ads_user_tag_commercial_df` FORCE;
@@ -157,5 +157,5 @@ PROPERTIES (
   "dynamic_partition.start" = "-1",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "30"
+  "dynamic_partition.buckets" = "40"
 );

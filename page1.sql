@@ -64,7 +64,7 @@ PROPERTIES (
   "dynamic_partition.start" = "-30",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "5"
+  "dynamic_partition.buckets" = "8"
 );
 -----------------------------------------------------------------------------------------------------
 DROP TABLE `dim`.`dim_user_comparison` FORCE;
