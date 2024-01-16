@@ -8,13 +8,11 @@ select
 from
   ads.ads_user_dispatch_log_tag_df
 where
-  pt = 20240114
+  pt = 20240115
 "
-sinkParallelism="256"
 sinkDatabase="ads"
 sinkTable="ads_user_dispatch_log_tag_df"
 doris \
   -sparkSql "${sparkSql}" \
-  -sinkParallelism "${sinkParallelism}" \
   -sinkDatabase "${sinkDatabase}" \
   -sinkTable "${sinkTable}"
