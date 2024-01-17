@@ -15,7 +15,9 @@ PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
 );
+
 -----------------------------------------------------------------------------------------------------
+
 DROP TABLE `dwd`.`dwd_coupon_info` FORCE;
 CREATE TABLE `dwd`.`dwd_coupon_info` (
   `promotion_code` varchar(255) COMMENT '优惠码',
@@ -34,7 +36,9 @@ PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
 );
+
 -----------------------------------------------------------------------------------------------------
+
 DROP TABLE `dwd`.`dwd_app_active` FORCE;
 CREATE TABLE `dwd`.`dwd_app_active` (
   `app_id2` varchar(255) COMMENT 'app_id2唯一键',
@@ -66,7 +70,9 @@ PROPERTIES (
   "dynamic_partition.prefix" = "p",
   "dynamic_partition.buckets" = "8"
 );
+
 -----------------------------------------------------------------------------------------------------
+
 DROP TABLE `dim`.`dim_user_comparison` FORCE;
 CREATE TABLE `dim`.`dim_user_comparison` (
   `uid` largeint COMMENT '用户关联',
@@ -82,7 +88,9 @@ PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
 );
+
 -----------------------------------------------------------------------------------------------------
+
 DROP TABLE `dwd`.`dwd_order_info` FORCE;
 CREATE TABLE `dwd`.`dwd_order_info` (
   `order_id` varchar(255) COMMENT '订单ID',

@@ -24,6 +24,7 @@ PROPERTIES (
 );
 
 -----------------------------------------------------------------------------------------------------
+
 DROP TABLE `ads`.`ads_user_distribution_user_tag_df` FORCE;
 CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
@@ -101,7 +102,9 @@ PROPERTIES (
   "dynamic_partition.prefix" = "p",
   "dynamic_partition.buckets" = "40"
 );
+
 -----------------------------------------------------------------------------------------------------
+
 DROP TABLE `ads`.`ads_user_tag_commercial_df` FORCE;
 CREATE TABLE `ads`.`ads_user_tag_commercial_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
