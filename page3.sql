@@ -16,7 +16,9 @@ doris \
   -sparkSql "${sparkSql}" \
   -sinkDatabase "${sinkDatabase}" \
   -sinkTable "${sinkTable}"
+
 ----------------------------------------------
+
 sparkSql="
 select
   '2024-01-16' pt,
@@ -84,6 +86,60 @@ where
 "
 sinkDatabase="ads"
 sinkTable="ads_user_distribution_user_tag_df"
+doris \
+  -sparkSql "${sparkSql}" \
+  -sinkDatabase "${sinkDatabase}" \
+  -sinkTable "${sinkTable}"
+
+-------------------------------------------------
+
+sparkSql="
+select
+  '2024-01-16' pt,
+  tyc_user_id,
+  mobile,
+  user_state,
+  paypoint_show_30day,
+  is_unpay_180day,
+  is_discount_last,
+  vip_order_sku_last,
+  vip_overdue_day,
+  vip_expiration_day,
+  active_days_30day,
+  active_days_90day,
+  active_days_365day,
+  svip_paypoint_show_pv_30day,
+  svip_paypoint_show_pv_7day,
+  vip_paypoint_show_pv_7day,
+  svip_unpay_order_cnt_30day,
+  is_boss_user,
+  is_stuff_user,
+  is_test_user,
+  is_vvip_media_user,
+  is_ga_user,
+  svip_expiration_day,
+  red_expiration_day,
+  svip_overdue_day,
+  red_overdue_day,
+  regist_days,
+  paypoint_show_60day,
+  is_unpay_1day,
+  is_unpay_15day,
+  is_unpay_90day,
+  svip_unpay_order_cnt_180day,
+  active_days_by_month,
+  last_vip_order_goods_type,
+  svip_unpay_order_cnt_7day,
+  vip_paypoint_show_pv_14day,
+  vip_paypoint_show_pv_30day,
+  tyc_user_id_last_number
+from
+  ads.ads_user_tag_commercial_df
+where
+  pt = 20240116
+"
+sinkDatabase="ads"
+sinkTable="ads_user_tag_commercial_df"
 doris \
   -sparkSql "${sparkSql}" \
   -sinkDatabase "${sinkDatabase}" \
