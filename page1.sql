@@ -10,7 +10,7 @@ CREATE TABLE `dwd`.`dwd_user_register_details` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`tyc_user_id`)
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 40
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
@@ -31,7 +31,7 @@ CREATE TABLE `dwd`.`dwd_coupon_info` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`promotion_code`)
-DISTRIBUTED BY HASH(`promotion_code`) BUCKETS 40
+DISTRIBUTED BY HASH(`promotion_code`) BUCKETS 30
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
@@ -56,7 +56,7 @@ CREATE TABLE `dwd`.`dwd_app_active` (
 )
 UNIQUE KEY(`app_id2`, `pt`)
 PARTITION BY RANGE(`pt`) ()
-DISTRIBUTED BY HASH(`app_id2`) BUCKETS 8
+DISTRIBUTED BY HASH(`app_id2`) BUCKETS 5
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
@@ -68,7 +68,7 @@ PROPERTIES (
   "dynamic_partition.start" = "-30",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "8"
+  "dynamic_partition.buckets" = "5"
 );
 
 -----------------------------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ CREATE TABLE `dim`.`dim_user_comparison` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`uid`)
-DISTRIBUTED BY HASH(`uid`) BUCKETS 40
+DISTRIBUTED BY HASH(`uid`) BUCKETS 30
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
@@ -113,7 +113,7 @@ CREATE TABLE `dwd`.`dwd_order_info` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`order_id`)
-DISTRIBUTED BY HASH(`order_id`) BUCKETS 40
+DISTRIBUTED BY HASH(`order_id`) BUCKETS 30
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
