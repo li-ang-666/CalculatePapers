@@ -8,7 +8,7 @@ select
 from
   ads.ads_user_dispatch_log_tag_df
 where
-  pt = 20240115
+  pt = 20240116
 "
 sinkDatabase="ads"
 sinkTable="ads_user_dispatch_log_tag_df"
