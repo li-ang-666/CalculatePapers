@@ -38,8 +38,8 @@ curl -X POST http://10.99.194.79:8040/api/update_config?enable_stream_load_recor
 curl -X POST http://10.99.200.146:8040/api/update_config?enable_stream_load_record=true\&persist=true
 curl -X POST http://10.99.204.175:8040/api/update_config?enable_stream_load_record=true\&persist=true
 
-curl -X POST http://10.99.201.177:8040/api/update_config?streaming_load_json_max_mb=1024\&persist=true
-curl -X POST http://10.99.197.74:8040/api/update_config?streaming_load_json_max_mb=1024\&persist=true
-curl -X POST http://10.99.194.79:8040/api/update_config?streaming_load_json_max_mb=1024\&persist=true
-curl -X POST http://10.99.200.146:8040/api/update_config?streaming_load_json_max_mb=1024\&persist=true
-curl -X POST http://10.99.204.175:8040/api/update_config?streaming_load_json_max_mb=1024\&persist=true
+curl -X POST http://10.99.201.177:8040/api/update_config?streaming_load_json_max_mb=2048\&persist=true
+curl -X POST http://10.99.197.74:8040/api/update_config?streaming_load_json_max_mb=2048\&persist=true
+curl -X POST http://10.99.194.79:8040/api/update_config?streaming_load_json_max_mb=2048\&persist=true
+curl -X POST http://10.99.200.146:8040/api/update_config?streaming_load_json_max_mb=2048\&persist=true
+curl -X POST http://10.99.204.175:8040/api/update_config?streaming_load_json_max_mb=2048\&persist=true
