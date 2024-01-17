@@ -2,8 +2,8 @@ DROP TABLE `ads`.`ads_user_dispatch_log_tag_df` FORCE;
 CREATE TABLE `ads`.`ads_user_dispatch_log_tag_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
   `dispatch_id` largeint COMMENT '分发ID',
-  `pt` date COMMENT '分区',
-  `dispatch_date` date COMMENT '分发日期',
+  `pt` datev2 COMMENT '分区',
+  `dispatch_date` datev2 COMMENT '分发日期',
   `mobile` string COMMENT '手机号'
 )
 DUPLICATE KEY(`tyc_user_id`, `dispatch_id`, `pt`)
@@ -28,12 +28,12 @@ PROPERTIES (
 DROP TABLE `ads`.`ads_user_distribution_user_tag_df` FORCE;
 CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
-  `pt` date COMMENT '分区',
+  `pt` datev2 COMMENT '分区',
   `mobile` string COMMENT '手机号',
-  `regist_date` date COMMENT '注册日期',
+  `regist_date` datev2 COMMENT '注册日期',
   `regist_days` largeint COMMENT '注册时长（天）',
   `regist_months` largeint COMMENT '注册时长（月）',
-  `last_active_date` date COMMENT '最近一次活跃日期（近一年）',
+  `last_active_date` datev2 COMMENT '最近一次活跃日期（近一年）',
   `active_days_by_month` largeint COMMENT '当月活跃天数',
   `is_active_latest_7_day` string COMMENT '近7天是否活跃',
   `active_days_latest_7_day` largeint COMMENT '近7天活跃天数',
@@ -61,21 +61,21 @@ CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
   `vip_paypoint_cnt_latest_28_day` largeint COMMENT '近28天触发VIP痒点次数',
   `is_vip_paypoint_latest_90_day` string COMMENT '近90天是否触发VIP痒点',
   `vip_paypoint_cnt_latest_90_day` largeint COMMENT '近90天触发VIP痒点次数',
-  `last_vip_order_unpay_date` date COMMENT '最后一次下单VIP未支付时间',
-  `last_svip_order_unpay_date` date COMMENT '最后一次下单SVIP未支付时间',
+  `last_vip_order_unpay_date` datev2 COMMENT '最后一次下单VIP未支付时间',
+  `last_svip_order_unpay_date` datev2 COMMENT '最后一次下单SVIP未支付时间',
   `vip_order_unpay_cnt_latest_7_day` largeint COMMENT '近7天下单VIP未支付次数',
   `svip_order_unpay_cnt_latest_7_day` largeint COMMENT '近7天下单SVIP未支付次数',
   `vip_order_unpay_cnt_latest_28_day` largeint COMMENT '近28天下单VIP未支付次数',
   `svip_order_unpay_cnt_latest_28_day` largeint COMMENT '近28天下单SVIP未支付次数',
   `vip_order_unpay_cnt_latest_90_day` largeint COMMENT '近90天下单VIP未支付次数',
   `svip_order_unpay_cnt_latest_90_day` largeint COMMENT '近90天下单SVIP未支付次数',
-  `last_vip_order_pay_date` date COMMENT '最后一次下单VIP支付时间',
-  `last_svip_order_pay_date` date COMMENT '最后一次下单SVIP支付时间',
+  `last_vip_order_pay_date` datev2 COMMENT '最后一次下单VIP支付时间',
+  `last_svip_order_pay_date` datev2 COMMENT '最后一次下单SVIP支付时间',
   `last_vip_order_type` string COMMENT '上笔VIP订单类型',
   `last_svip_order_type` string COMMENT '上笔SVIP订单类型',
   `last_combination_order_type` string COMMENT '上笔企业套餐订单类型',
-  `vip_to_time` date COMMENT 'VIP到期时间',
-  `svip_to_time` date COMMENT 'SVIP到期时间',
+  `vip_to_time` datev2 COMMENT 'VIP到期时间',
+  `svip_to_time` datev2 COMMENT 'SVIP到期时间',
   `user_state` string COMMENT '用户会员状态',
   `is_ga_user` string COMMENT '是否GA用户',
   `is_vvip_media_user` string COMMENT '是否VVIP/媒体用户',
@@ -108,7 +108,7 @@ PROPERTIES (
 DROP TABLE `ads`.`ads_user_tag_commercial_df` FORCE;
 CREATE TABLE `ads`.`ads_user_tag_commercial_df` (
   `tyc_user_id` largeint COMMENT '天眼查用户ID',
-  `pt` date COMMENT '分区',
+  `pt` datev2 COMMENT '分区',
   `mobile` string COMMENT '用户手机号-未加密',
   `user_state` string COMMENT '用户状态（全量）',
   `paypoint_show_30day` largeint COMMENT '近30日触发痒点次数',
