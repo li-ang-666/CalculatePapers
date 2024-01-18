@@ -1,6 +1,6 @@
 sparkSql="
 select
-  '2024-01-16' pt,
+  '2024-01-17' pt,
   tyc_user_id,
   dispatch_id,
   dispatch_date,
@@ -8,7 +8,7 @@ select
 from
   ads.ads_user_dispatch_log_tag_df
 where
-  pt = 20240116
+  pt = 20240117
 "
 sinkDatabase="ads"
 sinkTable="ads_user_dispatch_log_tag_df"
