@@ -195,3 +195,22 @@ PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
 );
+
+-----------------------------------------------------------------------------------------------------
+
+DROP TABLE `ads`.`ads_user_tag` FORCE;
+CREATE TABLE `ads`.`ads_user_tag` (
+  `tyc_user_id` largeint COMMENT '天眼查用户ID',
+  `vip_unpay_time` datetimev2(3) COMMENT '下单VIP未支付时间',
+  `svip_pay_last_time` datetimev2(3) COMMENT '最后一次付费svip时间',
+  `vip_pay_last_time` datetimev2(3) COMMENT '最后一次付费vip时间',
+  `svip_unpay_time` datetimev2(3) COMMENT '下单svip未支付时间',
+  `first_show_vip_paypoint_time` datetimev2(3) COMMENT '当日首次触发VIP痒点时间',
+  `update_time` datetimev2(3) COMMENT '更新doris时间'
+)
+UNIQUE KEY(`tyc_user_id`)
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
+PROPERTIES (
+  -- 副本数
+  "replication_allocation" = "tag.location.default: 3"
+);
