@@ -118,3 +118,80 @@ PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
 );
+
+-----------------------------------------------------------------------------------------------------
+
+DROP TABLE `dwd`.`dwd_pay_point_com_detail` FORCE;
+CREATE TABLE `dwd`.`dwd_pay_point_com_detail` (
+  `tyc_user_id` largeint COMMENT '天眼查用户ID',
+  `request_time` datetimev2(3) COMMENT '请求时间',
+  `pt` datev2 COMMENT '分区',
+  `sensor_event` string COMMENT '神策事件',
+  `mobile` string COMMENT '手机号',
+  `platform_name`string COMMENT '平台',
+  `pay_point_id` string COMMENT '痒点ID',
+  `prepare_order_id` string COMMENT '预下单订单ID',
+  `activity_id` string COMMENT '活动id',
+  `update_time` datetimev2(3) COMMENT '更新时间'
+) ENGINE=OLAP
+UNIQUE KEY(`tyc_user_id`, `request_time`, `pt`)
+PARTITION BY RANGE(`pt`) ()
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 5
+PROPERTIES (
+  -- 副本数
+  "replication_allocation" = "tag.location.default: 3",
+  -- partition
+  "dynamic_partition.enable" = "true",
+  "dynamic_partition.time_unit" = "DAY",
+  "dynamic_partition.create_history_partition" = "true",
+  "dynamic_partition.history_partition_num" = "30",
+  "dynamic_partition.start" = "-30",
+  "dynamic_partition.end" = "1",
+  "dynamic_partition.prefix" = "p",
+  "dynamic_partition.buckets" = "5"
+);
+
+-----------------------------------------------------------------------------------------------------
+
+DROP TABLE `dwd`.`dwd_dispatch_task` FORCE;
+CREATE TABLE `dwd`.`dwd_dispatch_task` (
+  `id` largeint COMMENT '自增id',
+  `dispatch_id` largeint COMMENT '分发id',
+  `dispatch_status` largeint COMMENT '分发策略状态,1:初始,2:运行中,3:已完成,4:已暂停,5:已失败',
+  `retry_times` largeint COMMENT '失败重试次数',
+  `schedule_time` largeint COMMENT '调度时间',
+  `start_time` largeint COMMENT '开始时间',
+  `end_time` largeint COMMENT '结束时间',
+  `remark` string COMMENT '备注',
+  `deleted` largeint COMMENT '是否删除,0:否,1:是',
+  `create_time` largeint COMMENT '创建时间',
+  `update_time` largeint COMMENT '修改时间'
+)
+UNIQUE KEY(`id`)
+DISTRIBUTED BY HASH(`id`) BUCKETS 30
+PROPERTIES (
+  -- 副本数
+  "replication_allocation" = "tag.location.default: 3"
+);
+
+-----------------------------------------------------------------------------------------------------
+
+DROP TABLE `dwd`.`dwd_basic_data_collect_monitor_hours` FORCE;
+CREATE TABLE `dwd`.`dwd_basic_data_collect_monitor_hours` (
+  `id` largeint COMMENT 'id',
+  `create_time` datetimev2(3) COMMENT '创建时间',
+  `dimension` string COMMENT '维度名称',
+  `table_name` string COMMENT '对应表名',
+  `collect_date` datetimev2(3) COMMENT '采集日期',
+  `data_type` largeint COMMENT '类型:0变更1新增2删除',
+  `value` largeint COMMENT '对应的条数',
+  `related_company_count` largeint COMMENT '涉及公司数',
+  `deleted` largeint COMMENT '是否逻辑删除',
+  `update_time` datetimev2(3) COMMENT '更新时间'
+)
+UNIQUE KEY(`id`)
+DISTRIBUTED BY HASH(`id`) BUCKETS 30
+PROPERTIES (
+  -- 副本数
+  "replication_allocation" = "tag.location.default: 3"
+);
