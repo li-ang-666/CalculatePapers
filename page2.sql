@@ -85,7 +85,7 @@ CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
   `is_person_page_with_property_latest_7_day` string COMMENT '近7日是否访问有财产线索人员详情页',
   `is_person_page_with_property_latest_14_day` string COMMENT '近14日是否访问有财产线索人员详情页',
   `is_person_page_with_property_latest_28_day` string COMMENT '近28日是否访问有财产线索人员详情页'
-) ENGINE=OLAP
+)
 UNIQUE KEY(`tyc_user_id`, `pt`)
 PARTITION BY RANGE(`pt`) ()
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
@@ -145,7 +145,7 @@ CREATE TABLE `ads`.`ads_user_tag_commercial_df` (
   `vip_paypoint_show_pv_14day` largeint COMMENT '近14日触发VIP痒点次数',
   `vip_paypoint_show_pv_30day` largeint COMMENT '近30日触发VIP痒点次数',
   `tyc_user_id_last_number` string COMMENT '用户id尾号'
-) ENGINE=OLAP
+)
 UNIQUE KEY(`tyc_user_id`, `pt`)
 PARTITION BY RANGE(`pt`) ()
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30

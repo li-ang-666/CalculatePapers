@@ -133,7 +133,7 @@ CREATE TABLE `dwd`.`dwd_pay_point_com_detail` (
   `prepare_order_id` string COMMENT '预下单订单ID',
   `activity_id` string COMMENT '活动id',
   `update_time` datetimev2(3) COMMENT '更新时间'
-) ENGINE=OLAP
+)
 UNIQUE KEY(`tyc_user_id`, `request_time`, `pt`)
 PARTITION BY RANGE(`pt`) ()
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 5
