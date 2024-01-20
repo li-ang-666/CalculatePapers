@@ -6,7 +6,7 @@ CREATE TABLE `ads`.`ads_user_dispatch_log_tag_df` (
   `dispatch_date` datev2 COMMENT '分发日期',
   `mobile` string COMMENT '手机号'
 )
-DUPLICATE KEY(`tyc_user_id`, `dispatch_id`, `pt`)
+UNIQUE KEY(`tyc_user_id`, `dispatch_id`, `pt`)
 PARTITION BY RANGE(`pt`) ()
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
 PROPERTIES (
