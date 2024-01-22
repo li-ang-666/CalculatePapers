@@ -9,41 +9,20 @@ select count(1) from crowd.crowd_user_bitmap;
 select count(1) from crowd.dispatch_user_bitmap;
 select count(1) from crowd.dispatch_sub_user_bitmap;
 
-
-drop table test.bitmap_test;
-create table test.bitmap_test(id string,bitmap binary);
-
+-- hive
+set spark.executor.memory=8g;
 with t as(
-select 'company_bond_plates' id, doris.to_bitmap(id) bitmap from hudi_ods.company_bond_plates
-union all
-select 'company_clean_info' id, doris.to_bitmap(id) bitmap from hudi_ods.company_clean_info
-union all
-select 'company_equity_relation_details' id, doris.to_bitmap(id) bitmap from hudi_ods.company_equity_relation_details
-union all
-select 'company_human_relation' id, doris.to_bitmap(id) bitmap from hudi_ods.company_human_relation
-union all
-select 'company_index' id, doris.to_bitmap(id) bitmap from hudi_ods.company_index
-union all
-select 'company_legal_person' id, doris.to_bitmap(id) bitmap from hudi_ods.company_legal_person
-union all
-select 'personnel' id, doris.to_bitmap(id) bitmap from hudi_ods.personnel
-union all
-select 'senior_executive' id, doris.to_bitmap(id) bitmap from hudi_ods.senior_executive
-union all
-select 'senior_executive_hk' id, doris.to_bitmap(id) bitmap from hudi_ods.senior_executive_hk
-)insert overwrite table test.bitmap_test select * from t;
+select '-1' crowd_id, '-1' create_timestamp, doris.to_bitmap(id) user_id_bitmap from (select id from ods.ods_company_base_company_index_df where pt = '20240121' limit 12345678)tb
+)insert overwrite table project.crowd_user_bitmap partition(pt = '-1') select * from t;
 
-select id, doris.bitmap_count(bitmap) cnt from test.bitmap_test;
+select pt, crowd_id, create_timestamp, doris.bitmap_count(user_id_bitmap) cnt from project.crowd_user_bitmap where pt = '-1';
+
+-- doris
+insert into crowd.crowd_user_bitmap_tasks(crowd_id,create_timestamp,pt)values(-1,-1,-1);
+
+select * from crowd.crowd_user_bitmap_tasks;
 
 
-drop table test.bitmap_test;
-CREATE TABLE `test`.`bitmap_test` (
-  `id` varchar(65530) COMMENT '人群包id',
-  `user_id_bitmap` bitmap BITMAP_UNION COMMENT '用户id位图'
-)
-AGGREGATE KEY(`id`)
-DISTRIBUTED BY HASH(`id`) BUCKETS 30
-PROPERTIES (
-  -- 副本数
-  "replication_allocation" = "tag.location.default: 3"
-);
+select bitmap_count(user_id_bitmap) from crowd.crowd_user_bitmap where crowd_id = -1;
+
+
