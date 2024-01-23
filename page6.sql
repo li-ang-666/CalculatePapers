@@ -23,7 +23,7 @@ insert into crowd.crowd_user_bitmap_tasks(crowd_id,create_timestamp,pt)values(-1
 select * from crowd.crowd_user_bitmap_tasks;
 
 
-select bitmap_count(user_id_bitmap) from crowd.crowd_user_bitmap where crowd_id = -1;
+select crowd_id, create_timestamp, bitmap_count(user_id_bitmap) from crowd.crowd_user_bitmap where crowd_id = -1;
 
 
 with t0 as(
