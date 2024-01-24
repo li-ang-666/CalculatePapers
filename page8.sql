@@ -27,3 +27,12 @@ select count(1) from dwd.dwd_basic_data_collect_monitor_hours;
 select count(1) from ads.ads_user_tag;
 
 
+spark-beeline \
+--hiveconf spark.driver.memory=2g \
+--hiveconf spark.driver.memoryOverhead=512m \
+--hiveconf spark.executor.memory=8g \
+--hiveconf spark.executor.memoryOverhead=512m \
+--hiveconf spark.executor.cores=4 \
+--hiveconf spark.memory.fraction=0.8 \
+--hiveconf spark.yarn.priority=999 \
+--hiveconf spark.dynamicAllocation.maxExecutors=32
