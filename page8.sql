@@ -16,4 +16,14 @@ PROPERTIES (
 );
 
 
+select count(1) from dwd.dwd_user_register_details;
+select count(1) from dwd.dwd_coupon_info;
+select count(1) from dwd.dwd_app_active;
+select count(1) from dim.dim_user_comparison;
+select count(1) from dwd.dwd_order_info;
+select count(1) from dwd.dwd_pay_point_com_detail;
+select count(1) from dwd.dwd_dispatch_task;
+select count(1) from dwd.dwd_basic_data_collect_monitor_hours;
+select count(1) from ads.ads_user_tag;
+
 
