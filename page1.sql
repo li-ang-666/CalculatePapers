@@ -10,7 +10,7 @@ CREATE TABLE `dwd`.`dwd_user_register_details` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`tyc_user_id`)
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 40
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
@@ -31,44 +31,10 @@ CREATE TABLE `dwd`.`dwd_coupon_info` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`promotion_code`)
-DISTRIBUTED BY HASH(`promotion_code`) BUCKETS 30
+DISTRIBUTED BY HASH(`promotion_code`) BUCKETS 40
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
-);
-
------------------------------------------------------------------------------------------------------
-
-DROP TABLE `dwd`.`dwd_app_active` FORCE;
-CREATE TABLE `dwd`.`dwd_app_active` (
-  `app_id2` varchar(255) COMMENT 'app_id2唯一键',
-  `pt` datev2 COMMENT '分区',
-  `android_id` string COMMENT '安卓用户设备标识,不唯一',
-  `imei` string COMMENT '安卓用户设备唯一标识,安卓10及以上,无法获取',
-  `oaid` string COMMENT '安卓用户设备标识,无需授权,不唯一,可手动重置',
-  `idfa` string COMMENT 'iOS用户设备标识,需授权',
-  `idfv` string COMMENT 'iOS用户设备标识,无需授权,不唯一,卸载重装会重置',
-  `type` largeint COMMENT '设备类型 iOS:1 安卓:0',
-  `umeng_channel` string COMMENT '渠道包,如huawei,iOS1',
-  `create_time` datetimev2(3) COMMENT '激活时间',
-  `app_version` string COMMENT 'app版本',
-  `update_time` datetimev2(3) COMMENT '更新doris时间'
-)
-UNIQUE KEY(`app_id2`, `pt`)
-PARTITION BY RANGE(`pt`) ()
-DISTRIBUTED BY HASH(`app_id2`) BUCKETS 5
-PROPERTIES (
-  -- 副本数
-  "replication_allocation" = "tag.location.default: 3",
-  -- partition
-  "dynamic_partition.enable" = "true",
-  "dynamic_partition.time_unit" = "DAY",
-  "dynamic_partition.create_history_partition" = "true",
-  "dynamic_partition.history_partition_num" = "30",
-  "dynamic_partition.start" = "-30",
-  "dynamic_partition.end" = "1",
-  "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "5"
 );
 
 -----------------------------------------------------------------------------------------------------
@@ -83,7 +49,7 @@ CREATE TABLE `dim`.`dim_user_comparison` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`uid`)
-DISTRIBUTED BY HASH(`uid`) BUCKETS 30
+DISTRIBUTED BY HASH(`uid`) BUCKETS 40
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
@@ -113,7 +79,7 @@ CREATE TABLE `dwd`.`dwd_order_info` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`order_id`)
-DISTRIBUTED BY HASH(`order_id`) BUCKETS 30
+DISTRIBUTED BY HASH(`order_id`) BUCKETS 40
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
@@ -136,7 +102,7 @@ CREATE TABLE `dwd`.`dwd_pay_point_com_detail` (
 )
 UNIQUE KEY(`tyc_user_id`, `request_time`, `pt`)
 PARTITION BY RANGE(`pt`) ()
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 5
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 8
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
@@ -148,7 +114,7 @@ PROPERTIES (
   "dynamic_partition.start" = "-30",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "5"
+  "dynamic_partition.buckets" = "8"
 );
 
 -----------------------------------------------------------------------------------------------------
@@ -168,7 +134,7 @@ CREATE TABLE `dwd`.`dwd_dispatch_task` (
   `update_time` largeint COMMENT '修改时间'
 )
 UNIQUE KEY(`id`)
-DISTRIBUTED BY HASH(`id`) BUCKETS 30
+DISTRIBUTED BY HASH(`id`) BUCKETS 40
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
@@ -190,7 +156,7 @@ CREATE TABLE `dwd`.`dwd_basic_data_collect_monitor_hours` (
   `update_time` datetimev2(3) COMMENT '更新时间'
 )
 UNIQUE KEY(`id`)
-DISTRIBUTED BY HASH(`id`) BUCKETS 30
+DISTRIBUTED BY HASH(`id`) BUCKETS 40
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
@@ -209,7 +175,7 @@ CREATE TABLE `ads`.`ads_user_tag` (
   `update_time` datetimev2(3) COMMENT '更新doris时间'
 )
 UNIQUE KEY(`tyc_user_id`)
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 40
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3"
