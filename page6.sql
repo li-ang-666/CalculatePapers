@@ -18,7 +18,8 @@ select '-1' crowd_id, '-1' create_timestamp, doris.to_bitmap(id) user_id_bitmap 
 select pt, crowd_id, create_timestamp, doris.bitmap_count(user_id_bitmap) cnt from project.crowd_user_bitmap where pt = '-1';
 
 -- doris
-insert into crowd.crowd_user_bitmap_tasks(crowd_id,create_timestamp,pt)values(-1,-1,-1);
+insert into crowd.crowd_user_bitmap_tasks(crowd_id,create_timestamp,pt)values
+(-1,-1,-1);
 
 select * from crowd.crowd_user_bitmap_tasks;
 
