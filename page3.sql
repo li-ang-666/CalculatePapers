@@ -78,7 +78,31 @@ select
   is_boss_user,
   is_person_page_with_property_latest_7_day,
   is_person_page_with_property_latest_14_day,
-  is_person_page_with_property_latest_28_day
+  is_person_page_with_property_latest_28_day,
+  is_paypoint_show_7day_app_persondim_jbxx_ccxs_com,
+  is_paypoint_show_14day_app_persondim_jbxx_ccxs_com,
+  is_paypoint_show_28day_app_persondim_jbxx_ccxs_com,
+  is_paypoint_show_7day_app_busdim_tyfx_tyfx_com,
+  is_paypoint_show_14day_app_busdim_tyfx_tyfx_com,
+  is_paypoint_show_28day_app_busdim_tyfx_tyfx_com,
+  is_paypoint_show_7day_app_persondim_tyfx_tyfx_com,
+  is_paypoint_show_14day_app_persondim_tyfx_tyfx_com,
+  is_paypoint_show_28day_app_persondim_tyfx_tyfx_com,
+  is_paypoint_show_7day_app_busdim_sffx_ssgx_com,
+  is_paypoint_show_14day_app_busdim_sffx_ssgx_com,
+  is_paypoint_show_28day_app_busdim_sffx_ssgx_com,
+  is_paypoint_show_7day_app_busdim_sffx_sfjx_com,
+  is_paypoint_show_14day_app_busdim_sffx_sfjx_com,
+  is_paypoint_show_28day_app_busdim_sffx_sfjx_com,
+  is_paypoint_show_7day_app_businfo_headerinfo_contact_com,
+  is_paypoint_show_14day_app_businfo_headerinfo_contact_com,
+  is_paypoint_show_28day_app_businfo_headerinfo_contact_com,
+  is_paypoint_show_7day_app_businfo_contact_same_company,
+  is_paypoint_show_14day_app_businfo_contact_same_company,
+  is_paypoint_show_28day_app_businfo_contact_same_company,
+  is_paypoint_show_7day_app_busdim_qybj_sjkzq_com,
+  is_paypoint_show_14day_app_busdim_qybj_sjkzq_com,
+  is_paypoint_show_28day_app_busdim_qybj_sjkzq_com
 from
   ads.ads_user_distribution_user_tag_df
 where
