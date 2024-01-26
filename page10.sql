@@ -52,7 +52,7 @@ select /*+ REPARTITION(4) */
  '2' row3,
  t1.company_id row4,
  '0' row5,
- regexp_replace(t2.company_name, "[,\n\r'\"]", "") row6,
+ regexp_replace(t2.company_name, '[,\n\r\'\"]', '') row6,
  '' row7,
  'false' row8,
  '1704038400000' row9
