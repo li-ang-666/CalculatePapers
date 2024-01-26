@@ -102,7 +102,7 @@ CREATE TABLE `dwd`.`dwd_pay_point_com_detail` (
 )
 UNIQUE KEY(`tyc_user_id`, `request_time`, `pt`)
 PARTITION BY RANGE(`pt`) ()
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 8
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 40
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
@@ -114,7 +114,7 @@ PROPERTIES (
   "dynamic_partition.start" = "-30",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "8"
+  "dynamic_partition.buckets" = "40"
 );
 
 -----------------------------------------------------------------------------------------------------
