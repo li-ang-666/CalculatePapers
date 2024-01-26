@@ -84,7 +84,31 @@ CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
   `is_boss_user` string COMMENT '是否老板用户',
   `is_person_page_with_property_latest_7_day` string COMMENT '近7日是否访问有财产线索人员详情页',
   `is_person_page_with_property_latest_14_day` string COMMENT '近14日是否访问有财产线索人员详情页',
-  `is_person_page_with_property_latest_28_day` string COMMENT '近28日是否访问有财产线索人员详情页'
+  `is_person_page_with_property_latest_28_day` string COMMENT '近28日是否访问有财产线索人员详情页',
+  `is_paypoint_show_7day_app_persondim_jbxx_ccxs_com` string COMMENT '是否-近7天触发【人物详情页-财产线索】痒点',
+  `is_paypoint_show_14day_app_persondim_jbxx_ccxs_com` string COMMENT '是否-近14天触发【人物详情页-财产线索】痒点',
+  `is_paypoint_show_28day_app_persondim_jbxx_ccxs_com` string COMMENT '是否-近28天触发【人物详情页-财产线索】痒点',
+  `is_paypoint_show_7day_app_busdim_tyfx_tyfx_com` string COMMENT '是否-近7天触发【企业详情页-天眼风险】痒点',
+  `is_paypoint_show_14day_app_busdim_tyfx_tyfx_com` string COMMENT '是否-近14天触发【企业详情页-天眼风险】痒点',
+  `is_paypoint_show_28day_app_busdim_tyfx_tyfx_com` string COMMENT '是否-近28天触发【企业详情页-天眼风险】痒点',
+  `is_paypoint_show_7day_app_persondim_tyfx_tyfx_com` string COMMENT '是否-近7天触发【人物详情页-天眼风险】痒点',
+  `is_paypoint_show_14day_app_persondim_tyfx_tyfx_com` string COMMENT '是否-近14天触发【人物详情页-天眼风险】痒点',
+  `is_paypoint_show_28day_app_persondim_tyfx_tyfx_com` string COMMENT '是否-近28天触发【人物详情页-天眼风险】痒点',
+  `is_paypoint_show_7day_app_busdim_sffx_ssgx_com` string COMMENT '是否-近7天触发【企业详情页-涉诉关系】痒点',
+  `is_paypoint_show_14day_app_busdim_sffx_ssgx_com` string COMMENT '是否-近14天触发【企业详情页-涉诉关系】痒点',
+  `is_paypoint_show_28day_app_busdim_sffx_ssgx_com` string COMMENT '是否-近28天触发【企业详情页-涉诉关系】痒点',
+  `is_paypoint_show_7day_app_busdim_sffx_sfjx_com` string COMMENT '是否-近7天触发【司法风险-司法案件】痒点',
+  `is_paypoint_show_14day_app_busdim_sffx_sfjx_com` string COMMENT '是否-近14天触发【司法风险-司法案件】痒点',
+  `is_paypoint_show_28day_app_busdim_sffx_sfjx_com` string COMMENT '是否-近28天触发【司法风险-司法案件】痒点',
+  `is_paypoint_show_7day_app_businfo_headerinfo_contact_com` string COMMENT '是否-近7天触发【企业详情页-联系电话】痒点',
+  `is_paypoint_show_14day_app_businfo_headerinfo_contact_com` string COMMENT '是否-近14天触发【企业详情页-联系电话】痒点',
+  `is_paypoint_show_28day_app_businfo_headerinfo_contact_com` string COMMENT '是否-近28天触发【企业详情页-联系电话】痒点',
+  `is_paypoint_show_7day_app_businfo_contact_same_company` string COMMENT '是否-近7天触发【企业详情页-同电话企业】痒点',
+  `is_paypoint_show_14day_app_businfo_contact_same_company` string COMMENT '是否-近14天触发【企业详情页-同电话企业】痒点',
+  `is_paypoint_show_28day_app_businfo_contact_same_company` string COMMENT '是否-近28天触发【企业详情页-同电话企业】痒点',
+  `is_paypoint_show_7day_app_busdim_qybj_sjkzq_com` string COMMENT '是否-近7天触发【人物详情页-实际控制权】痒点',
+  `is_paypoint_show_14day_app_busdim_qybj_sjkzq_com` string COMMENT '是否-近14天触发【人物详情页-实际控制权】痒点',
+  `is_paypoint_show_28day_app_busdim_qybj_sjkzq_com` string COMMENT '是否-近28天触发【人物详情页-实际控制权】痒点'
 )
 UNIQUE KEY(`tyc_user_id`, `pt`)
 PARTITION BY RANGE(`pt`) ()
