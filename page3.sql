@@ -12,7 +12,7 @@ where
 "
 sinkDatabase="ads"
 sinkTable="ads_user_dispatch_log_tag_df"
-doris \
+sh /home/hive/FusionInsight_Cluster_1_Services_ClientConfig/spark/doris/spark-submit.sh \
   -sparkSql "${sparkSql}" \
   -sinkDatabase "${sinkDatabase}" \
   -sinkTable "${sinkTable}"
