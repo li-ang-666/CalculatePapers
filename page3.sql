@@ -110,7 +110,7 @@ where
 "
 sinkDatabase="ads"
 sinkTable="ads_user_distribution_user_tag_df"
-doris \
+sh /home/hive/FusionInsight_Cluster_1_Services_ClientConfig/spark/doris/spark-submit.sh \
   -sparkSql "${sparkSql}" \
   -sinkDatabase "${sinkDatabase}" \
   -sinkTable "${sinkTable}"
@@ -164,7 +164,7 @@ where
 "
 sinkDatabase="ads"
 sinkTable="ads_user_tag_commercial_df"
-doris \
+sh /home/hive/FusionInsight_Cluster_1_Services_ClientConfig/spark/doris/spark-submit.sh \
   -sparkSql "${sparkSql}" \
   -sinkDatabase "${sinkDatabase}" \
   -sinkTable "${sinkTable}"
