@@ -24,4 +24,9 @@ FROM (SELECT 1 c, doris.to_bitmap(t1.old_user_id) uid FROM dim_offline.dim_user_
 
 SELECT count(1) FROM dim_offline.dim_user_comparison_df t1 where t1.pt=20240128 and t1.old_user_id regexp '^\\d+$'
 
-
+select crowd_id,
+       bitmap_count(user_id_bitmap),
+       from_unixtime(create_timestamp / 1000),
+       create_timestamp
+from test.crowd_user_bitmap
+where create_timestamp >= unix_timestamp('2024-01-29 18:00:00') * 1000;
