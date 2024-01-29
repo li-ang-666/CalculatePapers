@@ -8,7 +8,7 @@ CREATE TABLE `ads`.`ads_user_dispatch_log_tag_df` (
 )
 DUPLICATE KEY(`tyc_user_id`, `dispatch_id`, `pt`)
 PARTITION BY RANGE(`pt`) ()
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 40
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
@@ -20,7 +20,7 @@ PROPERTIES (
   "dynamic_partition.start" = "-1",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "40"
+  "dynamic_partition.buckets" = "30"
 );
 
 -----------------------------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
 )
 UNIQUE KEY(`tyc_user_id`, `pt`)
 PARTITION BY RANGE(`pt`) ()
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 40
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
@@ -124,7 +124,7 @@ PROPERTIES (
   "dynamic_partition.start" = "-1",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "40"
+  "dynamic_partition.buckets" = "30"
 );
 
 -----------------------------------------------------------------------------------------------------
@@ -172,7 +172,7 @@ CREATE TABLE `ads`.`ads_user_tag_commercial_df` (
 )
 UNIQUE KEY(`tyc_user_id`, `pt`)
 PARTITION BY RANGE(`pt`) ()
-DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 40
+DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
 PROPERTIES (
   -- 副本数
   "replication_allocation" = "tag.location.default: 3",
@@ -184,5 +184,5 @@ PROPERTIES (
   "dynamic_partition.start" = "-1",
   "dynamic_partition.end" = "1",
   "dynamic_partition.prefix" = "p",
-  "dynamic_partition.buckets" = "40"
+  "dynamic_partition.buckets" = "30"
 );
