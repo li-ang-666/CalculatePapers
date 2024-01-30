@@ -4,9 +4,9 @@ CREATE TABLE `ads`.`ads_user_dispatch_log_tag_df` (
   `dispatch_id` largeint COMMENT '分发ID',
   `pt` datev2 COMMENT '分区',
   `dispatch_date` datev2 COMMENT '分发日期',
-  `mobile` string COMMENT '手机号'
+  `mobile` varchar(65530) COMMENT '手机号'
 )
-DUPLICATE KEY(`tyc_user_id`, `dispatch_id`, `pt`)
+UNIQUE KEY(`tyc_user_id`, `dispatch_id`, `pt`, `dispatch_date`, `mobile`)
 PARTITION BY RANGE(`pt`) ()
 DISTRIBUTED BY HASH(`tyc_user_id`) BUCKETS 30
 PROPERTIES (
