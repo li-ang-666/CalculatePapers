@@ -13,3 +13,12 @@ FROM (SELECT %s c, doris.to_bitmap(t1.old_user_id) uid FROM dim_offline.dim_user
 select crowd_id,create_timestamp,default.bitmap_count(user_id_bitmap)
 from test.crowd_user_bitmap
 where create_timestamp = -5 and pt = 20240129 order by crowd_id;
+
+
+
+
+
+select crowd_id,create_timestamp,doris.bitmap_count(user_id_bitmap)
+from test.crowd_user_bitmap
+where create_timestamp = -13 and pt = 20240129 order by crowd_id;
+
