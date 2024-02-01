@@ -10,9 +10,9 @@ from
 where
   pt = date_format(date_add(current_date(),-1), 'yyyyMMdd')
 "
-sinkDatabase="ads"
+sinkDatabase="test"
 sinkTable="ads_user_dispatch_log_tag_df"
-sh /home/hive/FusionInsight_Cluster_1_Services_ClientConfig/spark/doris/spark-submit.sh \
+doris \
   -sparkSql "${sparkSql}" \
   -sinkDatabase "${sinkDatabase}" \
   -sinkTable "${sinkTable}"
