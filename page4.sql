@@ -39,6 +39,7 @@ CREATE TABLE `bdp_equity`.`entity_controller_details_new` (
   `estimated_equity_ratio_total` decimal(26,6) NOT NULL DEFAULT '0' COMMENT '预计总持股比例',
   `controlling_equity_relation_path_detail` longtext COMMENT '实际控制关系路径详情',
   `is_controller_tyc_unique_entity_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体是否为实际控制人',
+  `reason` varchar(255) NOT NULL DEFAULT '' COMMENT '判定原因',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
