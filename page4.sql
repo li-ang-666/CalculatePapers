@@ -19,8 +19,7 @@ CREATE TABLE `prism_shareholder_path`.`ratio_path_company_new` (
   `is_end` tinyint NOT NULL DEFAULT '0' COMMENT '是否是某条持股路径的终点',
   -- 其他
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create_time',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update_time',
-  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '1-deleted, 0-not deleted',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update_time'
   PRIMARY KEY (`id`),
   KEY `idx_company` (`company_id`),
   KEY `idx_shareholder` (`shareholder_id`,`company_id`)
@@ -40,6 +39,7 @@ CREATE TABLE `bdp_equity`.`entity_controller_details_new` (
   `controlling_equity_relation_path_detail` longtext COMMENT '实际控制关系路径详情',
   `is_controller_tyc_unique_entity_id` tinyint(4) NOT NULL DEFAULT '1' COMMENT '实体是否为实际控制人',
   `reason` varchar(255) NOT NULL DEFAULT '' COMMENT '判定原因',
+  `reason_detail` varchar(255) NOT NULL DEFAULT '' COMMENT '判定原因细化',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
