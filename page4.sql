@@ -19,7 +19,7 @@ CREATE TABLE `prism_shareholder_path`.`ratio_path_company_new` (
   `is_end` tinyint NOT NULL DEFAULT '0' COMMENT '是否是某条持股路径的终点',
   -- 其他
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create_time',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update_time'
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update_time',
   PRIMARY KEY (`id`),
   KEY `idx_company` (`company_id`),
   KEY `idx_shareholder` (`shareholder_id`,`company_id`)
