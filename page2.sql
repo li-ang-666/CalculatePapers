@@ -108,7 +108,12 @@ CREATE TABLE `ads`.`ads_user_distribution_user_tag_df` (
   `is_paypoint_show_28day_app_businfo_contact_same_company` string COMMENT '是否-近28天触发【企业详情页-同电话企业】痒点',
   `is_paypoint_show_7day_app_busdim_qybj_sjkzq_com` string COMMENT '是否-近7天触发【人物详情页-实际控制权】痒点',
   `is_paypoint_show_14day_app_busdim_qybj_sjkzq_com` string COMMENT '是否-近14天触发【人物详情页-实际控制权】痒点',
-  `is_paypoint_show_28day_app_busdim_qybj_sjkzq_com` string COMMENT '是否-近28天触发【人物详情页-实际控制权】痒点'
+  `is_paypoint_show_28day_app_busdim_qybj_sjkzq_com` string COMMENT '是否-近28天触发【人物详情页-实际控制权】痒点',
+  near_7days_with_coupon_days largeint COMMENT '近7天被优惠券命中天数',
+  near_14days_with_coupon_days largeint COMMENT '近14天被优惠券命中天数',
+  near_28days_with_coupon_days largeint COMMENT '近28天被优惠券命中天数',
+  near_60days_with_coupon_days largeint COMMENT '近60天被优惠券命中天数',
+  near_90days_with_coupon_days largeint COMMENT '近90天被优惠券命中天数'
 )
 UNIQUE KEY(`tyc_user_id`, `pt`)
 PARTITION BY RANGE(`pt`) ()
