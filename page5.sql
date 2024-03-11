@@ -1,3 +1,7 @@
+kafka-test.middleware.huawei
+kafka-pre.middleware.huawei
+kafka.middleware.huawei
+
 
 create external table if not exists flink.open_api_record (
   org_name string,
