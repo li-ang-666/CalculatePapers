@@ -2,7 +2,11 @@ kafka-test.middleware.huawei
 kafka-pre.middleware.huawei
 kafka.middleware.huawei
 
+kafka-console-consumer.sh --bootstrap-server kafka-test.middleware.huawei:9092 --topic open_api_record2bigdata --from-beginning
+kafka-console-consumer.sh --bootstrap-server kafka-pre.middleware.huawei:9092 --topic open_api_record2bigdata --from-beginning
+kafka-console-consumer.sh --bootstrap-server kafka.middleware.huawei:9092 --topic open_api_record2bigdata --from-beginning
 
+drop table if exists flink.open_api_record;
 create external table if not exists flink.open_api_record (
   org_name string,
   order_code string,
