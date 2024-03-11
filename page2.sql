@@ -191,3 +191,10 @@ PROPERTIES (
   "dynamic_partition.prefix" = "p",
   "dynamic_partition.buckets" = "30"
 );
+
+
+
+insert overwrite directory 'obs://hadoop-obs/hive/warehouse/flink.db/export/export' 
+row format delimited
+fields terminated by '\t'  
+select * from open_api_record;
