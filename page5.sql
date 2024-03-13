@@ -74,4 +74,4 @@ set mapred.min.split.size.per.rack=9223372036854775807;
 INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export2/'ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
 SELECT *
 FROM flink.open_api_record
-;
+LIMIT 10000000;
