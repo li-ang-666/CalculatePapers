@@ -8,23 +8,11 @@ kafka-console-consumer.sh --bootstrap-server kafka.middleware.huawei:9092 --topi
 
 drop table if exists flink.open_api_record;
 create external table if not exists flink.open_api_record (
-  org_name string,
-  order_code string,
-  -- token string,
-  -- interface_id string,
-  interface_name string,
-  billing_rules string,
-  request_ip string,
-  request_timestamp string,
-  -- request_date string,
-  response_timestamp string,
-  response_date string,
-  cost string,
-  error_code string,
-  error_message string,
-  charge_status string,
-  return_status string,
-  params string
+  
+  
+  
+  
+  org_name,order_code,token,interface_id,interface_name,billing_rules,request_ip,request_timestamp,request_date,response_timestamp,response_date,cost,error_code,error_message,charge_status,return_status,params
 )
 partitioned by(token string, interface_id string, request_date string)
 ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
@@ -74,9 +62,16 @@ group by pt
 select avg(cnt) avg from t;
 
 
-INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export/'ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
+set spark.yarn.queue=offline;
+set spark.yarn.priority=999;
+set spark.executor.memory=5g;
+set spark.executor.memoryOverhead=512m;
+set spark.driver.memory=2g;
+set spark.driver.memoryOverhead=512m;
+set mapred.max.split.size=9223372036854775807;
+set mapred.min.split.size.per.node=9223372036854775807;
+set mapred.min.split.size.per.rack=9223372036854775807;
+INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export2/'ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
 SELECT *
 FROM flink.open_api_record
-WHERE token='aaf1704a-78ee-4e1d-bb04-039a6c8c93ab' AND interface_id=1152 AND request_date='2024-03-12'
-LIMIT 10000;
-
+;
