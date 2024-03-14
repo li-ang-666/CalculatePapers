@@ -64,14 +64,16 @@ select avg(cnt) avg from t;
 
 set spark.yarn.queue=offline;
 set spark.yarn.priority=999;
-set spark.executor.memory=5g;
-set spark.executor.memoryOverhead=512m;
+set spark.executor.memory=16g;
+set spark.executor.memoryOverhead=1g;
 set spark.driver.memory=2g;
-set spark.driver.memoryOverhead=512m;
+set spark.driver.memoryOverhead=1g;
 set mapred.max.split.size=9223372036854775807;
 set mapred.min.split.size.per.node=9223372036854775807;
 set mapred.min.split.size.per.rack=9223372036854775807;
-INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export2/'ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
+set mapred.reduce.tasks=1;
+set hive.output.file.extension=.abc.def.csv;
+INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export/'ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
 SELECT *
 FROM flink.open_api_record
 LIMIT 10000000;
