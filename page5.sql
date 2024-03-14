@@ -73,7 +73,7 @@ set mapred.min.split.size.per.node=9223372036854775807;
 set mapred.min.split.size.per.rack=9223372036854775807;
 set mapred.reduce.tasks=1;
 set hive.output.file.extension=.abc.def.csv;
-INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export/'ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
+INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
 SELECT *
 FROM flink.open_api_record
 LIMIT 10000000;
