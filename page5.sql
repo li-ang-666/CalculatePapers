@@ -72,8 +72,40 @@ set mapred.max.split.size=9223372036854775807;
 set mapred.min.split.size.per.node=9223372036854775807;
 set mapred.min.split.size.per.rack=9223372036854775807;
 set mapred.reduce.tasks=1;
-set hive.output.file.extension=.abc.def.csv;
+set hive.output.file.extension=.txt;
+with t1 as(
+  select 'org_name' c1,'org_name' c2,'org_name' c3,'org_name' c4,'org_name' c5
+),t2 as(
+  SELECT 1 c1,2 c2,3 c3,4 c4,5 c5 limit 1
+),t as(
+  select * from t1
+union all
+select * from t2
+)
 INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
-SELECT *
-FROM flink.open_api_record
-LIMIT 10000000;
+select * from t
+;
+
+"set spark.yarn.queue=offline",
+"set spark.yarn.priority=999",
+"set spark.executor.memory=16g",
+"set spark.executor.memoryOverhead=1g",
+"set spark.driver.memory=2g",
+"set spark.driver.memoryOverhead=1g",
+"set mapred.max.split.size=9223372036854775807",
+"set mapred.min.split.size.per.node=9223372036854775807",
+"set mapred.min.split.size.per.rack=9223372036854775807",
+"set mapred.reduce.tasks=1",
+
+
+
+flink run -t yarn-per-job -d \
+-D yarn.application.queue=online \
+-D parallelism.default=1 \
+-D jobmanager.memory.process.size=2g \
+-D taskmanager.memory.process.size=3g \
+-D taskmanager.numberOfTaskSlots=1 \
+-D yarn.application.name=company_bid_parsed_info \
+-c com.tyc.darwin.transform.JobStart ./transform-1.0-SNAPSHOT.jar \
+--conf one_data/operating_info/one_data_new_operating_info_company_bid_parsed_info.properties \
+--sourceKafkaOffsetResetDate 2024-03-15T17:00:00

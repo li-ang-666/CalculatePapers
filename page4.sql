@@ -4,6 +4,7 @@ CREATE TABLE `prism_shareholder_path`.`ratio_path_company_new` (
   -- 公司
   `company_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '公司id',
   `company_name` varchar(255) NOT NULL DEFAULT '' COMMENT '公司名称',
+  `company_is_listed` tinyint NOT NULL DEFAULT '0' COMMENT '公司是否上市',
   -- 股东
   `shareholder_entity_type` tinyint NOT NULL DEFAULT '0' COMMENT '1-company,2-human',
   `shareholder_id` varchar(50) NOT NULL DEFAULT '' COMMENT '股东id,人存human_pid,公司存储company_gid',
