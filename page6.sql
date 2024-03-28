@@ -48,3 +48,18 @@ partitioned by(request_date string)
 ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
 STORED AS TEXTFILE;
 
+
+-D yarn.ship-files=${configName} \
+-c com.liang.flink.job.${className} flink-1.0-jar-with-dependencies.jar ${configName}
+
+
+公司
+Q 控制企业：实际控制企业数及累计股权关联路径数
+A select count(1) from ratio_path_company where shareholder_id = '22822' and investment_ratio_total >= 0.05
+  select sum(json_length(equity_holding_path)) from ratio_path_company where shareholder_id = '22822' and investment_ratio_total >= 0.05
+人
+Q 实际控制权：实际控制企业数
+A select count(1) from ratio_path_company where shareholder_id = 'V0M9EM200ND6FPNUP' and is_controller in (1,2)
+A select sum(json_length(equity_holding_path)) from ratio_path_company where shareholder_id = 'V0M9EM200ND6FPNUP' and is_controller in (1,2)
+
+

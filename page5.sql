@@ -73,15 +73,6 @@ set mapred.min.split.size.per.node=9223372036854775807;
 set mapred.min.split.size.per.rack=9223372036854775807;
 set mapred.reduce.tasks=1;
 set hive.output.file.extension=.txt;
-with t1 as(
-  select 'org_name' c1,'org_name' c2,'org_name' c3,'org_name' c4,'org_name' c5
-),t2 as(
-  SELECT 1 c1,2 c2,3 c3,4 c4,5 c5 limit 1
-),t as(
-  select * from t1
-union all
-select * from t2
-)
 INSERT OVERWRITE DIRECTORY 'obs://hadoop-obs/export/' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE
 select * from t
 ;
