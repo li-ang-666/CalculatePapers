@@ -16,7 +16,7 @@ CREATE TABLE `bdp_equity`.`entity_controller_details_new` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_company` (`company_id_controlled`),
-  KEY `idx_shareholder` (`tyc_unique_entity_id`,`company_id_controlled`)
+  KEY `idx_shareholder` (`tyc_unique_entity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='实际控制人/对外控制企业';
 
 
