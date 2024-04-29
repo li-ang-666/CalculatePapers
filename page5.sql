@@ -14,7 +14,7 @@ diff as (
   where t2.id is null or t1.id is null
 ),
 latest as (
-  select distinct company_id_invested company_id from hudi_ods.company_equity_relation_details where op_ts between '2024-04-26 15:00:00' and '2024-04-27 17:00:00'
+  select distinct company_id_invested company_id from hudi_ods.company_equity_relation_details where op_ts between '2024-04-26 15:00:00' and '2024-04-27 13:00:00'
 ),
 union_all as(
   select distinct company_id from diff
