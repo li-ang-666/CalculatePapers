@@ -5,7 +5,7 @@ with equity_ratio as(
 company_equity_relation_details as(
   -- select * from ods.ods_graph_data_company_equity_relation_details_df where reference_pt_year = 2024 and pt >= 20240420 and dw_is_del = 0
   select * from hudi_ods.company_equity_relation_details where reference_pt_year = 2024
-),
+)
 -- insert overwrite table test.abc
 select distinct if(t1.id is not null,t1.company_graph_id,t2.company_id_invested) company_id
 from equity_ratio t1
