@@ -1,6 +1,6 @@
 set hive.input.format=org.apache.hadoop.hive.ql.io.HiveInputFormat;
 with equity_ratio as(
-  select * from ods.ods_prism1_equity_ratio_df where deleted = 0 and pt = 20240505 and dw_is_del = 0
+  select * from ods.ods_prism1_equity_ratio_df where deleted = 0 and pt = 20240506 and dw_is_del = 0
 ),
 company_equity_relation_details as(
   -- select * from ods.ods_graph_data_company_equity_relation_details_df where reference_pt_year = 2024 and pt >= 20240420 and dw_is_del = 0
