@@ -18,4 +18,4 @@
 
 
 alter table hudi_ads.cooperation_partner drop partition(pt=0);
-alter table hudi_ads.cooperation_partner partition(pt=20240511) rename to partition(pt=0);
+alter table hudi_ads.cooperation_partner partition(pt=1) rename to partition(pt=0);
