@@ -56,35 +56,5 @@ select boss_human_pid,boss_human_pid from hudi_ads.cooperation_partner_diff wher
 and boss_human_pid = 'Q0Q9YMV00KENQH40U'
 and partner_human_pid = '90FDRML09G1L2NTN2'
 and company_gid = 289862943;
-
-
-drop table hudi_ads.cooperation_partner_diff;
-CREATE TABLE `cooperation_partner_diff`(     
-  boss_human_pid string,
-  partner_human_pid string,
-  company_gid decimal(20,0),                                       
-  `_boss_human_gid_` decimal(20,0) COMMENT '老板gid',                          
-  `_boss_human_pid_` string COMMENT '老板pid',                                 
-  `_boss_human_name_` string COMMENT '老板名称',                               
-  `_boss_identity_` string COMMENT '老板身份',                                 
-  `_boss_shares_` decimal(32,12) COMMENT '老板持股(分)',                       
-  `_company_gid_` decimal(20,0) COMMENT '公司gid',                             
-  `_company_name_` string COMMENT '公司名称',                                  
-  `_company_registered_status_` string COMMENT '公司经营状态',                 
-  `_company_registered_capital_` decimal(20,0) COMMENT '公司注册资本(分)',     
-  `_s_` int COMMENT '计算公式中的S, 公司为注吊销, 则为0, 否则为1',             
-  `_partner_human_gid_` decimal(20,0) COMMENT '合作伙伴gid',                   
-  `_partner_human_pid_` string COMMENT '合作伙伴pid',                          
-  `_partner_human_name_` string COMMENT '合作伙伴名称',                        
-  `_partner_identity_` string COMMENT '合作伙伴身份',                          
-  `_partner_shares_` decimal(32,12) COMMENT '合作伙伴持股(分)',                
-  `_single_cooperation_score_` decimal(32,12) COMMENT '单次合作深度',          
-  `_multi_cooperation_score_` decimal(32,12) COMMENT '综合合作深度',           
-  `_single_cooperation_row_number_` int COMMENT '单次合作深度排序',            
-  `_multi_cooperation_dense_rank_` int COMMENT '综合合作深度排序',             
-  `_cooperation_times_with_this_partner_` int COMMENT '老板与该伙伴合作次数',  
-  `_cooperation_times_with_all_partner_` int COMMENT '老板与所有伙伴合作次数', 
-  `_total_partners_` int COMMENT '老板所有合作伙伴数')                         
-PARTITIONED BY (                                                             
-  `pt` int COMMENT 'yyyyMMdd')                                               
+                                             
 
