@@ -29,3 +29,20 @@ create external table test.lt
 )ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
 STORED AS TEXTFILE
 LOCATION 'obs://hadoop-obs/flink/test';
+
+
+
+drop table test.group_empty;
+create external table test.group_empty
+(
+company_id string,
+company_name string
+)ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
+STORED AS TEXTFILE
+LOCATION 'obs://hadoop-obs/flink/group';
+
+
+select t1.*,t2.* from test.group_empty t1 left join test.tyc_group t2 on t1.company_id = t2.company_id order by t1.company_name;
+
+select t1.*,t2.* from test.group_empty t1 left join test.tyc_group t2 on t1.company_id = t2.group_id order by t1.company_name;
+
