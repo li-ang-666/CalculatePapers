@@ -60,7 +60,8 @@ create external table test.lt2
     update_time                         string
 )
 STORED AS parquet
-LOCATION 'obs://hadoop-obs/flink/pqt';
+LOCATION 'obs://hadoop-obs/flink/pqt'
+tblproperties('parquet.compression'='GZIP');
 
 
 
