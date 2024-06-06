@@ -64,6 +64,15 @@ LOCATION 'obs://hadoop-obs/flink/pqt'
 tblproperties('parquet.compression'='GZIP');
 
 
+drop table test.lt3;
+create external table test.lt3
+(
+    mobile                                  string
+)
+LOCATION 'obs://hadoop-obs/hive/warehouse/dmp.db/dmp_user_portrait_enterprise_label_di/pt=20230429';
+
+
+
 
 drop table test.group_empty;
 create external table test.group_empty
