@@ -1,6 +1,6 @@
 drop table company_patent_basic_info_index_split;
 CREATE TABLE `company_patent_basic_info_index_split` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `company_patent_basic_info_index_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'company_patent_basic_info_index表的主键id',
   `company_patent_basic_info_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'company_patent_basic_info表的主键id',
   `company_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '公司id',
@@ -19,10 +19,24 @@ CREATE TABLE `company_patent_basic_info_index_split` (
   KEY `idx_company_patent_basic_info_id` (`company_patent_basic_info_id`) COMMENT 'company_patent_basic_info_id',
   KEY `idx_patent_application_number` (`patent_application_number`) COMMENT 'patent_application_number',
   KEY `idx_patent_announce_number` (`patent_announce_number`) COMMENT 'patent_announce_number',
-  KEY `idx_company_id_patent_type_pub_year` (`company_id`,`patent_type`,`patent_publish_year`) COMMENT 'company_id,patent_type,patent_publish_year',
-  KEY `idx_company_id_patent_type_app_year` (`company_id`,`patent_type`,`patent_application_year`) COMMENT 'company_id,patent_type,patent_application_year',
-  KEY `idx_company_id_patent_status_detail` (`company_id`,`patent_status_detail`) COMMENT 'company_id,patent_status_detail'
+  KEY `idx_company_id` (`company_id`) COMMENT 'company_id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='专利索引拆分表';
+
+
+
+drop table company_patent_basic_info_index_split_statistic;
+CREATE TABLE `company_patent_basic_info_index_split_statistic` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `company_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '公司id',
+  `app_year_statistic` longtext NOT NULL COMMENT '申请日期图表',
+  `pub_year_statistic` longtext NOT NULL COMMENT '公布日期图表',
+  `type_statistic` longtext NOT NULL COMMENT '类型图表',
+  `status_statistic` longtext NOT NULL COMMENT '状态图表',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_company_id` (`company_id`) COMMENT 'company_id'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='专利统计表';
 
 
 
