@@ -19,7 +19,7 @@ CREATE TABLE `company_patent_basic_info_index_split` (
   KEY `idx_company_patent_basic_info_id` (`company_patent_basic_info_id`) COMMENT 'company_patent_basic_info_id',
   KEY `idx_patent_application_number` (`patent_application_number`) COMMENT 'patent_application_number',
   KEY `idx_patent_announce_number` (`patent_announce_number`) COMMENT 'patent_announce_number',
-  KEY `idx_company_id` (`company_id`) COMMENT 'company_id'
+  KEY `idx_company_id_dim` (`company_id`,`patent_application_year`,`patent_publish_year`,`patent_type`,`patent_status_detail`) COMMENT 'company_id_dim'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='专利索引拆分表';
 
 
