@@ -39,4 +39,3 @@ CREATE TABLE `company_patent_basic_info_index_split_statistic` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='专利统计表';
 
 
-
