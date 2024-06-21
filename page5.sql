@@ -39,3 +39,38 @@ CREATE TABLE `company_patent_basic_info_index_split_statistic` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='专利统计表';
 
 
+drop table company_equity_relation_details_tmp;
+CREATE TABLE `company_equity_relation_details_tmp` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `company_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '公司gid',
+  `company_name` varchar(255) NOT NULL DEFAULT '' COMMENT '公司名称',
+  `shareholder_type` int(11) NOT NULL DEFAULT '0' COMMENT '股东类型，1代表人，2代表公司，3代表其他（非人非公司）',
+  `shareholder_type_show` int(11) NOT NULL DEFAULT '0' COMMENT '股东类型(包含公示类型)，1企业法人，2事业法人，3社团法人，4机关法人，5外商投资企业，6自然人股东，7外国(地区)投资者，8合伙企业，9个人独资企业，10其他投资者',
+  `shareholder_name_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '股东gid',
+  `shareholder_id` varchar(50) NOT NULL DEFAULT '' COMMENT '股东pid',
+  `shareholder_name` varchar(255) NOT NULL DEFAULT '' COMMENT '股东名称',
+  `equity_ratio` decimal(32,12) NOT NULL DEFAULT '0' COMMENT '持股比例',
+  `data_source` int(11) NOT NULL DEFAULT '0' COMMENT '出资比例计算的来源和规则（用于查错），100：数据来源于上市公司股东数据（包括十大股东和十大流通股东），非100:数据来源于工商或其他',
+  `investment_start_time` datetime COMMENT '首次参股时间',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `company_id_invested` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被投资企业ID',
+  `tyc_unique_entity_id_invested` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被投资方的天眼查唯一商查ID',
+  `tyc_unique_entity_name_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资方的天眼查唯一商查名称',
+  `investor_identity_type` int(11) NOT NULL DEFAULT '0' COMMENT '投资方身份属性',
+  `company_id_investor` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '投资企业ID',
+  `tyc_unique_entity_id_investor` varchar(255) NOT NULL DEFAULT '' COMMENT '投资方的天眼查唯一商查ID',
+  `tyc_unique_entity_name_investor` varchar(255) NOT NULL DEFAULT '' COMMENT '投资方的天眼查唯一商查名称',
+  `equity_amount` decimal(32,12) NOT NULL DEFAULT '0' COMMENT '认缴出资金额',
+  `equity_amount_currency` varchar(50) NOT NULL DEFAULT '' COMMENT '金额单位币种',
+  `equity_relation_validation_year` int(11) NOT NULL DEFAULT '0' COMMENT '股权关系生效年份',
+  `reference_pt_year` int(11) NOT NULL DEFAULT '0' COMMENT '股权关系生效年份',
+  PRIMARY KEY (`id`),
+  KEY `idx_company_id` (`company_id`),
+  KEY `idx_shareholder_name_id` (`shareholder_name_id`),
+  KEY `idx_shareholder_id` (`shareholder_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='股权明细';
+
+
+
+
