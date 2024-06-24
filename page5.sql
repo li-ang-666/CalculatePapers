@@ -69,7 +69,7 @@ CREATE TABLE `company_equity_relation_details_tmp` (
   KEY `idx_company_id` (`company_id`),
   KEY `idx_shareholder_name_id` (`shareholder_name_id`),
   KEY `idx_shareholder_id` (`shareholder_id`),
-  KEY `uniq_invested` (`company_id_invested`,`reference_pt_year`,`company_id_investor`,`tyc_unique_entity_name_investor`),
+  KEY `idx_invested` (`company_id_invested`,`reference_pt_year`,`company_id_investor`,`tyc_unique_entity_name_investor`),
   KEY `idx_investor` (`tyc_unique_entity_id_investor`,`tyc_unique_entity_id_invested`,`reference_pt_year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='股权明细';
 
