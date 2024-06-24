@@ -56,7 +56,7 @@ CREATE TABLE `company_equity_relation_details_tmp` (
   `company_id_invested` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被投资企业ID',
   `tyc_unique_entity_id_invested` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被投资方的天眼查唯一商查ID',
   `tyc_unique_entity_name_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资方的天眼查唯一商查名称',
-  `investor_identity_type` int(11) NOT NULL DEFAULT '0' COMMENT '投资方身份属性',
+  `investor_identity_type` int(11) NOT NULL DEFAULT '0' COMMENT '投资方身份属性，1代表人，2代表公司，3代表其他（非人非公司）',
   `company_id_investor` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '投资企业ID',
   `tyc_unique_entity_id_investor` varchar(255) NOT NULL DEFAULT '' COMMENT '投资方的天眼查唯一商查ID',
   `tyc_unique_entity_name_investor` varchar(255) NOT NULL DEFAULT '' COMMENT '投资方的天眼查唯一商查名称',
@@ -66,10 +66,11 @@ CREATE TABLE `company_equity_relation_details_tmp` (
   `equity_relation_validation_year` int(11) NOT NULL DEFAULT '0' COMMENT '股权关系生效年份',
   `reference_pt_year` int(11) NOT NULL DEFAULT '0' COMMENT '股权关系生效年份',
   PRIMARY KEY (`id`),
-  KEY `idx_old` (`company_id_invested`,`tyc_unique_entity_id_investor`,`tyc_unique_entity_name_investor`,`equity_ratio`),
   KEY `idx_company_id` (`company_id`),
   KEY `idx_shareholder_name_id` (`shareholder_name_id`),
-  KEY `idx_shareholder_id` (`shareholder_id`)
+  KEY `idx_shareholder_id` (`shareholder_id`),
+  KEY `uniq_invested` (`company_id_invested`,`reference_pt_year`,`company_id_investor`,`tyc_unique_entity_name_investor`),
+  KEY `idx_investor` (`tyc_unique_entity_id_investor`,`tyc_unique_entity_id_invested`,`reference_pt_year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='股权明细';
 
 
