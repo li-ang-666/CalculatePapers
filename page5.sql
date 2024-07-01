@@ -71,3 +71,5 @@ CREATE TABLE `company_equity_relation_details_tmp` (
   KEY `idx_investor` (`tyc_unique_entity_id_investor`,`tyc_unique_entity_id_invested`,`reference_pt_year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='股权明细';
 
+
+
