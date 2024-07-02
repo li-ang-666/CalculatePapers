@@ -41,6 +41,7 @@ CREATE TABLE `company_patent_basic_info_index_split_statistic` (
 
 drop table company_equity_relation_details_tmp;
 CREATE TABLE `company_equity_relation_details_tmp` (
+  -- new
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `company_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '公司gid',
   `company_name` varchar(255) NOT NULL DEFAULT '' COMMENT '公司名称',
@@ -50,8 +51,13 @@ CREATE TABLE `company_equity_relation_details_tmp` (
   `shareholder_id` varchar(50) NOT NULL DEFAULT '' COMMENT '股东pid',
   `shareholder_name` varchar(255) NOT NULL DEFAULT '' COMMENT '股东名称',
   `equity_ratio` decimal(32,12) NOT NULL DEFAULT '0' COMMENT '持股比例',
+  `equity_amount` decimal(32,12) NOT NULL DEFAULT '0' COMMENT '认缴出资金额',
+  `equity_amount_currency` varchar(255) NOT NULL DEFAULT '' COMMENT '金额单位币种',
+  `share_type` varchar(255) NOT NULL DEFAULT '' COMMENT '股份类型',
+  `data_source` int(11) NOT NULL DEFAULT '0' COMMENT '出资比例计算的来源和规则（用于查错），100：数据来源于上市公司股东数据（包括十大股东和十大流通股东），非100:数据来源于工商或其他',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  -- old
   `company_id_invested` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被投资企业ID',
   `tyc_unique_entity_id_invested` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '被投资方的天眼查唯一商查ID',
   `tyc_unique_entity_name_invested` varchar(255) NOT NULL DEFAULT '' COMMENT '被投资方的天眼查唯一商查名称',
@@ -59,8 +65,6 @@ CREATE TABLE `company_equity_relation_details_tmp` (
   `company_id_investor` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '投资企业ID',
   `tyc_unique_entity_id_investor` varchar(255) NOT NULL DEFAULT '' COMMENT '投资方的天眼查唯一商查ID',
   `tyc_unique_entity_name_investor` varchar(255) NOT NULL DEFAULT '' COMMENT '投资方的天眼查唯一商查名称',
-  `equity_amount` decimal(32,12) NOT NULL DEFAULT '0' COMMENT '认缴出资金额',
-  `equity_amount_currency` varchar(50) NOT NULL DEFAULT '' COMMENT '金额单位币种',
   `equity_relation_validation_year` int(11) NOT NULL DEFAULT '0' COMMENT '股权关系生效年份',
   `reference_pt_year` int(11) NOT NULL DEFAULT '0' COMMENT '股权关系生效年份',
   PRIMARY KEY (`id`),
