@@ -54,7 +54,7 @@ CREATE TABLE `company_equity_relation_details_tmp` (
   `equity_amount` decimal(32,12) NOT NULL DEFAULT '0' COMMENT '认缴出资金额',
   `equity_amount_currency` varchar(255) NOT NULL DEFAULT '' COMMENT '金额单位币种',
   `share_type` varchar(255) NOT NULL DEFAULT '' COMMENT '股份类型',
-  `data_source` int(11) NOT NULL DEFAULT '0' COMMENT '出资比例计算的来源和规则（用于查错），100：数据来源于上市公司股东数据（包括十大股东和十大流通股东），非100:数据来源于工商或其他',
+  `data_source` int(11) NOT NULL DEFAULT '0' COMMENT '出资比例计算的来源和规则（用于查错），-100：港股上市，100：数据来源于上市公司股东数据（包括十大股东和十大流通股东），非100:数据来源于工商或其他',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   -- old
@@ -74,6 +74,17 @@ CREATE TABLE `company_equity_relation_details_tmp` (
   KEY `idx_invested` (`company_id_invested`,`reference_pt_year`,`company_id_investor`,`tyc_unique_entity_name_investor`),
   KEY `idx_investor` (`tyc_unique_entity_id_investor`,`tyc_unique_entity_id_invested`,`reference_pt_year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='股权明细';
+
+with equity_ratio as(
+    select * from ods_prism1_equity_ratio_df where pt = 20240703
+),hk as(
+    select * from ods_prism_stock_source_hk_stock_main_shareholder_df where pt = 20240703
+)
+select distinct company_id from(
+  select distinct company_graph_id company_id from equity_ratio where source = 100
+  union all
+  select distinct org_id company_id from hk
+)t;
 
 
 
