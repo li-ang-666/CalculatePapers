@@ -21,3 +21,11 @@ create table bid_ai_interface_v2(
   UNIQUE KEY `uniq_uuid` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='招投标算法接口V2';
 
+CREATE TABLE `test` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(255) DEFAULT NULL,
+  `dt` date DEFAULT NULL,
+  `dtm` datetime DEFAULT NULL,
+  `tmsp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
