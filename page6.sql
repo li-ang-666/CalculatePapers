@@ -29,3 +29,23 @@ CREATE TABLE `test` (
   `tmsp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+# For Spark versions: 3.0 - 3.1
+export SPARK_VERSION=3.1 # or 3.0
+spark-shell --packages org.apache.hudi:hudi-spark$SPARK_VERSION-bundle_2.12:0.15.0 \
+--conf 'spark.serializer=org.apache.spark.serializer.KryoSerializer' \
+--conf 'spark.sql.extensions=org.apache.spark.sql.hudi.HoodieSparkSessionExtension' \
+--conf 'spark.kryo.registrator=org.apache.spark.HoodieSparkKryoRegistrar'
+
+hudi_compaction_company_bond_plates
+hudi_compaction_company_clean_info
+hudi_compaction_company_equity_relation_details
+hudi_compaction_company_human_relation
+hudi_compaction_company_index
+hudi_compaction_company_legal_person
+hudi_compaction_entity_controller_details_new
+hudi_compaction_personnel
+hudi_compaction_senior_executive
+hudi_compaction_senior_executive_hk
+
+
