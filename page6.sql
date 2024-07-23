@@ -7,18 +7,46 @@
 }
 
 
-create table bid_ai_interface_v2(
+
+drop table bid_ai_v1;
+create table bid_ai_v1(
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `uuid` varchar(255) NOT NULL DEFAULT '' COMMENT '招投标uuid',
+  `title` varchar(500) NOT NULL DEFAULT '' COMMENT '标题',
+  `province` varchar(255) NOT NULL DEFAULT '' COMMENT '省',
+  `city` varchar(255) NOT NULL DEFAULT '' COMMENT '市',
+  `v1` varchar(255) NOT NULL DEFAULT '' COMMENT '一级信息类型',
+  `v2` varchar(255) NOT NULL DEFAULT '' COMMENT '二级信息类型',
+  `bid_type` varchar(255) NOT NULL DEFAULT '' COMMENT '招标方式',
+  `bid_info` text COMMENT '算法解析原始json',
+  `contract_no` text COMMENT '合同编号',
+  `candidates` text COMMENT '候选机构',
+  `winners` text COMMENT '中标机构',
+  `winner_raw_amounts` text COMMENT '中标金额',
+  `winner_amounts` text COMMENT '中标金额',
+  `budget_raw_amounts` text COMMENT '预算金额',
+  `budget_amounts` text COMMENT '预算金额',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_uuid` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='招投标算法接口V1';
+
+
+create table bid_ai_v2(
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `uuid` varchar(255) NOT NULL DEFAULT '' COMMENT '招投标uuid',
+  `title` varchar(500) NOT NULL DEFAULT '' COMMENT '招投标title',
+  `content` text COMMENT '招投标content',
   `bidding_unit` text COMMENT '招标单位',
-  `tendering_proxy_agent` text COMMENT '招标代理',
+  `tendering_proxy_agent` text COMMENT '代理单位',
   `bid_submission_deadline` text COMMENT '招标截止时间',
   `tender_document_acquisition_deadline` text COMMENT '标书下载截止时间',
   `project_number` text COMMENT '项目编号',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_uuid` (`uuid`)
+  KEY `idx_uuid` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='招投标算法接口V2';
 
 
