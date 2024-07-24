@@ -33,6 +33,7 @@ create table bid_ai_v2(
   `uuid` varchar(255) NOT NULL DEFAULT '' COMMENT '招投标uuid',
   `title` varchar(500) NOT NULL DEFAULT '' COMMENT '招投标title',
   `type` varchar(255) NOT NULL DEFAULT '' COMMENT '招投标type',
+  `post_result` text COMMENT 'http接口返回结果',
   `bidding_unit` text COMMENT '投标单位',
   `tendering_proxy_agent` text COMMENT '代理单位',
   `bid_submission_deadline` text COMMENT '招标截止时间',
@@ -62,6 +63,7 @@ create table company_bid_parsed_info_patch(
   `purchaser` text COMMENT '招标单位、采购人',
   `winner` text COMMENT '中标单位、供应商',
   `winner_amount` text COMMENT '中标金额',
+  `post_result` text COMMENT 'http接口返回结果',
   `bidding_unit` text COMMENT '投标单位',
   `tendering_proxy_agent` text COMMENT '代理单位',
   `bid_submission_deadline` text COMMENT '招标截止时间',
@@ -73,5 +75,7 @@ create table company_bid_parsed_info_patch(
   KEY `idx_uuid` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='招投标线上表';
 
-
+select * from bid_ai_v1\G
+select * from bid_ai_v2\G
+select * from company_bid_parsed_info_patch\G
 
