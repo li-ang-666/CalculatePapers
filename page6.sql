@@ -11,7 +11,7 @@
 drop table bid_ai_v1;
 create table bid_ai_v1(
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `uuid` varchar(255) NOT NULL DEFAULT '' COMMENT '招投标uuid',
+  `uuid` varchar(255) NOT NULL DEFAULT '' COMMENT 'uuid',
   `title` varchar(500) NOT NULL DEFAULT '' COMMENT '标题',
   `province` varchar(255) NOT NULL DEFAULT '' COMMENT '省',
   `city` varchar(255) NOT NULL DEFAULT '' COMMENT '市',
@@ -30,9 +30,9 @@ create table bid_ai_v1(
 drop table bid_ai_v2;
 create table bid_ai_v2(
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `uuid` varchar(255) NOT NULL DEFAULT '' COMMENT '招投标uuid',
-  `title` varchar(500) NOT NULL DEFAULT '' COMMENT '招投标title',
-  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '招投标type',
+  `uuid` varchar(255) NOT NULL DEFAULT '' COMMENT 'uuid',
+  `title` varchar(500) NOT NULL DEFAULT '' COMMENT '标题',
+  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型',
   `post_result` text COMMENT 'http接口返回结果',
   `bidding_unit` text COMMENT '投标单位',
   `tendering_proxy_agent` text COMMENT '代理单位',
