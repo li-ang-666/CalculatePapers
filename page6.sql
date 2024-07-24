@@ -1,12 +1,3 @@
-{
-  "bidding_unit":[{"company_id":22822,"company_name":"北京百度网讯科技有限公司","company_name_raw":"百度公司"},{"company_id":2318455639,"company_name":"北京金堤科技有限公司"}],
-  "tendering_proxy_agent":[{"company_id":22822,"company_name":"北京百度网讯科技有限公司"},{"company_id":2318455639,"company_name":"北京金堤科技有限公司","company_name_raw":"金堤天眼查"}],
-  "bid_submission_deadline":["2024-01-01","2024-01-01"],
-  "tender_document_acquisition_deadline":["2023-12-31","2024-01-01"],
-  "project_number":["IB98IJB89UJKN","IB98IJB89UJKN"]
-}
-
-
 
 drop table bid_ai_v1;
 create table bid_ai_v1(
