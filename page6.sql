@@ -44,7 +44,7 @@ create table company_bid_parsed_info_patch(
   `link` varchar(500) NOT NULL DEFAULT '' COMMENT '链接',
   `publish_time` datetime NULL COMMENT '发布时间',
   `type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型',
-  `content_obs_index` varchar(255) NOT NULL DEFAULT '' COMMENT '类型',
+  `content_obs_index` varchar(255) NOT NULL DEFAULT '' COMMENT 'obs地址',
   `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否 删除or屏蔽',
   `province` varchar(255) NOT NULL DEFAULT '' COMMENT '省',
   `city` varchar(255) NOT NULL DEFAULT '' COMMENT '市',
