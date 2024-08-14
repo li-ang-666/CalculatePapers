@@ -70,3 +70,26 @@ select * from bid_ai_v1\G
 select * from bid_ai_v2\G
 select * from company_bid_parsed_info_patch\G
 
+
+CREATE TABLE `shareholder_investment_ratio_total_new` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `company_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '公司id',
+  `company_name` varchar(255) NOT NULL DEFAULT '' COMMENT '公司名称',
+  `shareholder_entity_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1-company,2-human',
+  `shareholder_id` varchar(50) NOT NULL DEFAULT '' COMMENT '股东id,人存human_pid,公司存储company_gid',
+  `shareholder_name` varchar(255) NOT NULL DEFAULT '' COMMENT '股东名称',
+  `shareholder_name_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '股东内链中的human_name_id',
+  `shareholder_master_company_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '股东内链中的company_id',
+  `investment_ratio_total` decimal(26,6) NOT NULL DEFAULT '0.000000' COMMENT '总持股比例',
+  `investment_ratio_direct` decimal(26,6) NOT NULL DEFAULT '0.000000' COMMENT '直接持股比例',
+  `investment_ratio_indirect` decimal(26,6) NOT NULL DEFAULT '0.000000' COMMENT '间接持股比例',
+  `equity_holding_path` longtext COMMENT '持股路径json',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create_time',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update_time',
+  PRIMARY KEY (`id`),
+  KEY `idx_company` (`company_id`),
+  KEY `idx_shareholder` (`shareholder_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='最终受益股份表';
+
+
+
