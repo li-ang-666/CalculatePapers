@@ -71,7 +71,7 @@ select * from bid_ai_v2\G
 select * from company_bid_parsed_info_patch\G
 
 drop table shareholder_investment_ratio_total_new;
-CREATE TABLE `shareholder_investment_ratio_total_new` (
+CREATE TABLE `shareholder_investment_ratio_total_new_tmp` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `company_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '公司id',
   `company_name` varchar(255) NOT NULL DEFAULT '' COMMENT '公司名称',
@@ -86,7 +86,7 @@ CREATE TABLE `shareholder_investment_ratio_total_new` (
   `investment_ratio_direct` decimal(26,6) NOT NULL DEFAULT '0.000000' COMMENT '直接持股比例',
   `investment_ratio_indirect` decimal(26,6) NOT NULL DEFAULT '0.000000' COMMENT '间接持股比例',
   `equity_holding_path` longtext COMMENT '持股路径json',
-  `equity_holding_path_count` int(11) DEFAULT NULL COMMENT '持股路径json count',
+  `equity_holding_path_count` int(11) NOT NULL DEFAULT '0' COMMENT '持股路径json count',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create_time',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update_time',
   PRIMARY KEY (`id`),
