@@ -1,55 +1,131 @@
-INFO  : State: Compiling.
-INFO  : Compiling command(queryId=omm_20240812193902_a64f4e9a-c881-4bc7-9f07-b22f6a9dc90e): select * from origindb_company_base_company_index_hi where pt >= 20240700 and company_id = 3169244252; Current sessionId=23fdddef-e637-4de1-a716-796840581c11
-INFO  : hive.compile.auto.avoid.cbo=true
-INFO  : Insert table not follow columns
-INFO  : Concurrency mode is disabled, not creating a lock manager
-INFO  : Current sql is not contains insert syntax, not need record dest table flag
-INFO  : Semantic Analysis Completed (retrial = false)
-INFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:origindb_company_base_company_index_hi.id, type:bigint, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_id, type:bigint, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_type, type:int, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_name, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_name_english, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.establish_date, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.register_addr, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.register_capital_amt, type:bigint, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.register_capital_currency, type:int, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.actual_capital_amt, type:bigint, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.actual_capital_currency, type:int, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_registation_status, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_logo_url, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_shortname, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_phone, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_email, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.company_website, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.social_security_headcount, type:int, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.business_type_id, type:bigint, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.original_type, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.tyc_credit_rating, type:int, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.longitude_by_baidu_api, type:decimal(20,15), comment:null), FieldSchema(name:origindb_company_base_company_index_hi.latitude_by_baidu_api, type:decimal(20,15), comment:null), FieldSchema(name:origindb_company_base_company_index_hi.unified_social_credit_code, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.org_type, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.is_micro_enterprise, type:int, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.industry_national_std_lv1_code, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.industry_national_std_lv2_code, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.industry_national_std_lv3_code, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.business_areacode_00, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.business_areacode_01, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.business_areacode_02, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.crawl_time, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.province_base_by_register_institute, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.create_time, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.update_time, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.partition_detail, type:int, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.offset_detail, type:bigint, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.timestamp_detail, type:bigint, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.before_column_list, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.dw_update_time, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.dw_is_del, type:int, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.dw_opt_type, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.pt, type:string, comment:null), FieldSchema(name:origindb_company_base_company_index_hi.hh, type:string, comment:null)], properties:null)
-INFO  : Completed compiling command(queryId=omm_20240812193902_a64f4e9a-c881-4bc7-9f07-b22f6a9dc90e); Time taken: 1.187 seconds
-INFO  : Concurrency mode is disabled, not creating a lock manager
-INFO  : State: Executing.
-INFO  : Executing command(queryId=omm_20240812193902_a64f4e9a-c881-4bc7-9f07-b22f6a9dc90e): select * from origindb_company_base_company_index_hi where pt >= 20240700 and company_id = 3169244252; Current sessionId=23fdddef-e637-4de1-a716-796840581c11
-INFO  : Query ID = omm_20240812193902_a64f4e9a-c881-4bc7-9f07-b22f6a9dc90e, Current sessionId=23fdddef-e637-4de1-a716-796840581c11
-INFO  : Total jobs = 1
-INFO  : Launching Job 1 out of 1
-INFO  : Starting task [Stage-1:MAPRED] in serial mode
-INFO  : Hive on Spark State: STARTED
-INFO  : Running with YARN Application = application_1701157926107_4789414
-INFO  : Kill Command = /opt/Bigdata/FusionInsight_HD_8.1.2.1/install/FusionInsight-Hive-3.1.0/hive-3.1.0/bin/..//../hadoop/bin/yarn application -kill application_1701157926107_4789414
-INFO  : Hive on Spark Session Web UI URL: http://node-group-1mlrQ.mrs-68gj.com:22779
-INFO  : Query Hive on Spark job[2] stages: [2]
-INFO  : Spark job[2] status = RUNNING
-INFO  : Job Progress Format
-CurrentTime StageId_StageAttemptId: SucceededTasksCount(+RunningTasksCount-FailedTasksCount)/TotalTasksCount
-INFO  : 2024-08-12 19:40:07,189	Stage-2_0: 0/330	
-INFO  : 2024-08-12 19:40:10,194	Stage-2_0: 0(+1)/330	
-INFO  : 2024-08-12 19:40:13,199	Stage-2_0: 0(+8)/330	
-INFO  : 2024-08-12 19:40:16,204	Stage-2_0: 0(+36)/330	
-INFO  : 2024-08-12 19:40:19,209	Stage-2_0: 1(+100)/330	
-INFO  : 2024-08-12 19:40:22,214	Stage-2_0: 1(+100)/330	
-INFO  : 2024-08-12 19:40:25,219	Stage-2_0: 2(+101)/330	
-INFO  : 2024-08-12 19:40:28,226	Stage-2_0: 9(+101)/330	
-INFO  : 2024-08-12 19:40:31,232	Stage-2_0: 41(+101)/330	
-INFO  : 2024-08-12 19:40:34,237	Stage-2_0: 85(+101)/330	
-INFO  : 2024-08-12 19:40:37,242	Stage-2_0: 104(+100)/330	
-INFO  : 2024-08-12 19:40:40,247	Stage-2_0: 128(+101)/330	
-INFO  : 2024-08-12 19:40:43,252	Stage-2_0: 168(+101)/330	
-INFO  : 2024-08-12 19:40:46,258	Stage-2_0: 192(+100)/330	
-INFO  : 2024-08-12 19:40:49,263	Stage-2_0: 214(+100)/330	
-INFO  : 2024-08-12 19:40:52,268	Stage-2_0: 264(+66)/330	
-INFO  : 2024-08-12 19:40:55,272	Stage-2_0: 285(+45)/330	
-INFO  : 2024-08-12 19:40:58,277	Stage-2_0: 306(+24)/330	
-INFO  : 2024-08-12 19:41:01,281	Stage-2_0: 330/330 Finished	
-INFO  : Hive on Spark State: SUCCEEDED
-INFO  : Spark job[2] finished successfully in 117.10 second(s)
-INFO  : Completed executing command(queryId=omm_20240812193902_a64f4e9a-c881-4bc7-9f07-b22f6a9dc90e); Time taken: 117.205 seconds
-INFO  : OK
-INFO  : Concurrency mode is disabled, not creating a lock manager
-+--------------------------------------------+----------------------------------------------------+------------------------------------------------------+------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------+-------------------------------------------------------+--------------------------------------------------------------+-------------------------------------------------------------------+------------------------------------------------------------+-----------------------------------------------------------------+--------------------------------------------------------------------+----------------------------------------------------------+-----------------------------------------------------------+-------------------------------------------------------+-------------------------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+----------------------------------------------------------+-------------------------------------------------------+-----------------------------------------------------------+----------------------------------------------------------------+---------------------------------------------------------------+--------------------------------------------------------------------+--------------------------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+------------------------------------------------------------------------+------------------------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------+----------------------------------------------------------+-------------------------------------------------------+----------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+---------------------------------------------------+-----------------------------------------------------+--------------------------------------------+--------------------------------------------+
-| origindb_company_base_company_index_hi.id  | origindb_company_base_company_index_hi.company_id  | origindb_company_base_company_index_hi.company_type  | origindb_company_base_company_index_hi.company_name  | origindb_company_base_company_index_hi.company_name_english  | origindb_company_base_company_index_hi.establish_date  | origindb_company_base_company_index_hi.register_addr  | origindb_company_base_company_index_hi.register_capital_amt  | origindb_company_base_company_index_hi.register_capital_currency  | origindb_company_base_company_index_hi.actual_capital_amt  | origindb_company_base_company_index_hi.actual_capital_currency  | origindb_company_base_company_index_hi.company_registation_status  | origindb_company_base_company_index_hi.company_logo_url  | origindb_company_base_company_index_hi.company_shortname  | origindb_company_base_company_index_hi.company_phone  | origindb_company_base_company_index_hi.company_email  | origindb_company_base_company_index_hi.company_website  | origindb_company_base_company_index_hi.social_security_headcount  | origindb_company_base_company_index_hi.business_type_id  | origindb_company_base_company_index_hi.original_type  | origindb_company_base_company_index_hi.tyc_credit_rating  | origindb_company_base_company_index_hi.longitude_by_baidu_api  | origindb_company_base_company_index_hi.latitude_by_baidu_api  | origindb_company_base_company_index_hi.unified_social_credit_code  | origindb_company_base_company_index_hi.org_type  | origindb_company_base_company_index_hi.is_micro_enterprise  | origindb_company_base_company_index_hi.industry_national_std_lv1_code  | origindb_company_base_company_index_hi.industry_national_std_lv2_code  | origindb_company_base_company_index_hi.industry_national_std_lv3_code  | origindb_company_base_company_index_hi.business_areacode_00  | origindb_company_base_company_index_hi.business_areacode_01  | origindb_company_base_company_index_hi.business_areacode_02  | origindb_company_base_company_index_hi.crawl_time  | origindb_company_base_company_index_hi.province_base_by_register_institute  | origindb_company_base_company_index_hi.create_time  | origindb_company_base_company_index_hi.update_time  | origindb_company_base_company_index_hi.partition_detail  | origindb_company_base_company_index_hi.offset_detail  | origindb_company_base_company_index_hi.timestamp_detail  |                                                                                                                                                                                                                              origindb_company_base_company_index_hi.before_column_list                                                                                                                                                                                                                               | origindb_company_base_company_index_hi.dw_update_time  | origindb_company_base_company_index_hi.dw_is_del  | origindb_company_base_company_index_hi.dw_opt_type  | origindb_company_base_company_index_hi.pt  | origindb_company_base_company_index_hi.hh  |
-+--------------------------------------------+----------------------------------------------------+------------------------------------------------------+------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------+-------------------------------------------------------+--------------------------------------------------------------+-------------------------------------------------------------------+------------------------------------------------------------+-----------------------------------------------------------------+--------------------------------------------------------------------+----------------------------------------------------------+-----------------------------------------------------------+-------------------------------------------------------+-------------------------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+----------------------------------------------------------+-------------------------------------------------------+-----------------------------------------------------------+----------------------------------------------------------------+---------------------------------------------------------------+--------------------------------------------------------------------+--------------------------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+------------------------------------------------------------------------+------------------------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------+----------------------------------------------------------+-------------------------------------------------------+----------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+---------------------------------------------------+-----------------------------------------------------+--------------------------------------------+--------------------------------------------+
-| 153349077                                  | 3169244252                                         | 1                                                    | 上海明磊邦森生物科技（登封）有限公司                   | Shanghai Minglei Bangsen Biotechnology (Dengfeng) Co., Ltd   | 2015-06-25 00:00:00                                    | 登封市大冶镇川口村                                    | 3000000000                                                   | 1                                                                 | 3000000000                                                 | 1                                                               | 存续                                                               | logo/lll/18e89c1d2849dd6907226f3b58d143ab.png            | 明磊邦森                                                  | 15038376598                                           | 2100787740@qq.com                                     | http://www.bangsenkeji88.com                            | 5                                                                 | 7                                                        | 1153                                                  | 7985                                                      | 113.222147084787850                                            | 34.427485825895530                                            | 91410185337241918P                                                 | 有限责任公司（非自然人投资或控股的法人独资）       | 1                                                           | M                                                                      | 75                                                                     | 759                                                                    | 00410185                                                     |                                                              |                                                              | 2024-05-12 23:29:15                                | hen                                                                         | 2022-12-23 22:26:10                                 | 2024-07-25 18:41:27                                 | 3                                                        | 220105646                                             | 1721904087025                                            | {"company_phone":"15038376598","company_type":"1","company_logo_url":"logo/lll/18e89c1d2849dd6907226f3b58d143ab.png","tyc_credit_rating":"7985","company_website":"http://www.bangsenkeji88.com","actual_capital_currency":"1","company_email":"2100787740@qq.com","is_micro_enterprise":"1","crawl_time":"2024-05-12 23:29:15","update_time":"2024-06-04 16:25:32","register_addr":"登封市大冶镇川口村","industry_national_std_lv3_code":"759","id":"153349077","establish_date":"2015-06-25 00:00:00","actual_capital_amt":"3000000000","company_name_english":"","social_security_headcount":"5","company_id":"3169244252","create_time":"2022-12-23 22:26:10","business_areacode_00":"00410185","company_shortname":"明磊邦森","business_areacode_01":"","org_type":"有限责任公司（非自然人投资或控股的法人独资）","business_areacode_02":"","company_registation_status":"存续","latitude_by_baidu_api":"34.427485825895530","industry_national_std_lv1_code":"M","longitude_by_baidu_api":"113.222147084787850","industry_national_std_lv2_code":"75","province_base_by_register_institute":"hen","register_capital_currency":"1","company_name":"上海明磊邦森生物科技（登封）有限公司","original_type":"1153","unified_social_credit_code":"91410185337241918P","register_capital_amt":"3000000000","business_type_id":"7"} | 2024-07-25 18:41:27.025                                | 0                                                 | UPDATE                                              | 20240725                                   | 18                                         |
-+--------------------------------------------+----------------------------------------------------+------------------------------------------------------+------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------+-------------------------------------------------------+--------------------------------------------------------------+-------------------------------------------------------------------+------------------------------------------------------------+-----------------------------------------------------------------+--------------------------------------------------------------------+----------------------------------------------------------+-----------------------------------------------------------+-------------------------------------------------------+-------------------------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------+----------------------------------------------------------+-------------------------------------------------------+-----------------------------------------------------------+----------------------------------------------------------------+---------------------------------------------------------------+--------------------------------------------------------------------+--------------------------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+------------------------------------------------------------------------+------------------------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------+-----------------------------------------------------------------------------+-----------------------------------------------------+-----------------------------------------------------+----------------------------------------------------------+-------------------------------------------------------+----------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------+---------------------------------------------------+-----------------------------------------------------+--------------------------------------------+--------------------------------------------+
-1 row selected (119.588 seconds)
-0: jdbc:hive2://10.99.198.86:10000/> 
+南京熊猫电子股份有限公司
+中信证券股份有限公司
+中国铁建股份有限公司
+中国石油化工股份有限公司
+中国中煤能源股份有限公司
+红星美凯龙家居集团股份有限公司
+华能国际电力股份有限公司
+中国人民保险集团股份有限公司
+中国冶金科工股份有限公司
+中国外运股份有限公司
+华新水泥股份有限公司
+上海复星医药（集团）股份有限公司
+中国神华能源股份有限公司
+中国交通建设股份有限公司
+青岛啤酒股份有限公司
+中国南方航空股份有限公司
+中国东方航空股份有限公司
+中国石油天然气股份有限公司
+北京北辰实业股份有限公司
+国泰君安证券股份有限公司
+紫金矿业集团股份有限公司
+金风科技股份有限公司
+重庆农村商业银行股份有限公司
+比亚迪股份有限公司
+广深铁路股份有限公司
+北京京城机电股份有限公司
+浙江世宝股份有限公司
+中国中铁股份有限公司
+万科企业股份有限公司
+大唐国际发电股份有限公司
+中国铁路通信信号股份有限公司
+马鞍山钢铁股份有限公司
+上海复旦微电子集团股份有限公司
+中国国际航空股份有限公司
+龙源电力集团股份有限公司
+中国人寿保险股份有限公司
+中国能源建设股份有限公司
+广发证券股份有限公司
+海通证券股份有限公司
+中国电信股份有限公司
+中国银河证券股份有限公司
+中国光大银行股份有限公司
+中国工商银行股份有限公司
+中铝国际工程股份有限公司
+中国银行股份有限公司
+中国农业银行股份有限公司
+北京昭衍新药研究中心股份有限公司
+北京市春立正达医疗器械股份有限公司
+广州汽车集团股份有限公司
+中国国际海运集装箱（集团）股份有限公司
+招商证券股份有限公司
+中原证券股份有限公司
+华泰证券股份有限公司
+第一拖拉机股份有限公司
+丽珠医药集团股份有限公司
+绿色动力环保集团股份有限公司
+新天绿色能源股份有限公司
+福耀玻璃工业集团股份有限公司
+鞍钢股份有限公司
+兖矿能源集团股份有限公司
+杭州泰格医药科技股份有限公司
+中国石化上海石油化工股份有限公司
+山东晨鸣纸业集团股份有限公司
+安徽海螺水泥股份有限公司
+东江环保股份有限公司
+上海医药集团股份有限公司
+福莱特玻璃集团股份有限公司
+招商银行股份有限公司
+安徽皖通高速公路股份有限公司
+天津创业环保集团股份有限公司
+中国民生银行股份有限公司
+中信银行股份有限公司
+四川成渝高速公路股份有限公司
+重庆银行股份有限公司
+长飞光纤光缆股份有限公司
+重庆钢铁股份有限公司
+凯盛新能源股份有限公司
+郑州煤矿机械集团股份有限公司
+中海油田服务股份有限公司
+交通银行股份有限公司
+山东新华制药股份有限公司
+申万宏源集团股份有限公司
+中国太平洋保险（集团）股份有限公司
+中国平安保险（集团）股份有限公司
+中国邮政储蓄银行股份有限公司
+东方证券股份有限公司
+光大证券股份有限公司
+烟台北方安德利果汁股份有限公司
+上海电气集团股份有限公司
+秦皇岛港股份有限公司
+江西赣锋锂业集团股份有限公司
+洛阳栾川钼业集团股份有限公司
+凯莱英医药集团（天津）股份有限公司
+上海大众公用事业（集团）股份有限公司
+弘业期货股份有限公司
+深圳高速公路集团股份有限公司
+青岛港国际股份有限公司
+中船海洋与防务装备股份有限公司
+郑州银行股份有限公司
+江西金力永磁科技股份有限公司
+国联证券股份有限公司
+上海昊海生物科技股份有限公司
+上海复旦张江生物医药股份有限公司
+上海君实生物医药科技股份有限公司
+北京亿华通科技股份有限公司
+中国国际金融股份有限公司
+广州白云山医药集团股份有限公司
+东北电气发展股份有限公司
+中国中车股份有限公司
+中石化石油工程技术服务股份有限公司
+浙商银行股份有限公司
+青岛银行股份有限公司
+株洲中车时代电气股份有限公司
+彩虹集团新能源股份有限公司
+天齐锂业股份有限公司
+中远海运能源运输股份有限公司
+中远海运控股股份有限公司
+康龙化成（北京）新药技术股份有限公司
+中远海运发展股份有限公司
+康希诺生物股份公司
+深圳市海普瑞药业集团股份有限公司
+无锡药明康德新药开发股份有限公司
+中国建设银行股份有限公司
+北京金隅集团股份有限公司
+中国海洋石油有限公司
+中国移动有限公司
+海信家电集团股份有限公司
+海尔智家股份有限公司
+诺诚健华医药有限公司
+荣昌生物制药（烟台）股份有限公司
+中国旅游集团中免股份有限公司
