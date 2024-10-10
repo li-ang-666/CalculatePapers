@@ -49,6 +49,6 @@ CREATE TABLE `relation_edge` (
   `relation` varchar(50) NOT NULL DEFAULT '' COMMENT 'relation',
   `other` varchar(255) NOT NULL DEFAULT '' COMMENT 'other',
   PRIMARY KEY (`id`),
-  KEY `idx_source` (`source_id`) COMMENT 'idx_source'
+  KEY `idx_source` (`source_id`) COMMENT 'idx_source',
   KEY `idx_target` (`target_id`) COMMENT 'idx_target'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='查关系';
