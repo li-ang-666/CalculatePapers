@@ -43,9 +43,9 @@ CREATE TABLE `company_patent_basic_info_index_split_statistic` (
 drop table relation_edge;
 CREATE TABLE `relation_edge` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `source_id` varchar(50) NOT NULL DEFAULT '' COMMENT 'source',
+  `source_id` varchar(50) NOT NULL DEFAULT '' COMMENT 'source id',
   `source_name` varchar(255) NOT NULL DEFAULT '' COMMENT 'source name',
-  `target_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'target',
+  `target_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'target id',
   `relation` varchar(50) NOT NULL DEFAULT '' COMMENT 'relation',
   `other` varchar(255) NOT NULL DEFAULT '' COMMENT 'other',
   PRIMARY KEY (`id`),
