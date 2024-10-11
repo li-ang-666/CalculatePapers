@@ -46,8 +46,11 @@ CREATE TABLE `relation_edge` (
   `source_id` varchar(50) NOT NULL DEFAULT '' COMMENT 'source id',
   `source_name` varchar(255) NOT NULL DEFAULT '' COMMENT 'source name',
   `target_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'target id',
+  `target_name` varchar(255) NOT NULL DEFAULT '' COMMENT 'target name',
   `relation` varchar(50) NOT NULL DEFAULT '' COMMENT 'relation',
   `other` varchar(255) NOT NULL DEFAULT '' COMMENT 'other',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_source` (`source_id`) COMMENT 'idx_source',
   KEY `idx_target` (`target_id`) COMMENT 'idx_target'
