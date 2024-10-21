@@ -34,3 +34,10 @@ ROW FORMAT DELIMITED
   LINES TERMINATED BY '\n'
 SELECT /*+ REPARTITION(128) */ distinct * FROM test.relation_node_company;
 
+drop table if exists test.company_bid;
+create external table if not exists test.company_bid (
+  id s
+  content string
+)
+ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
+STORED AS TEXTFILE location 'obs://hadoop-obs/flink/test/';
